@@ -1,0 +1,54 @@
+.headerBorderColor{
+      /* border-image: linear-gradient(to right, #cf0fff, #eb00f7, rgb(255, 0, 157)) 1; */
+      border-image: linear-gradient(to right, rgb(197, 9, 235), rgba(255,0,0,1), rgb(68, 0, 255), rgb(248, 232, 7))4;
+      }
+.btnh{
+  border: 1px solid #ff0783;
+  background: blur(1px);
+}
+.btnh:hover{
+      background-color: rgba(0, 0, 0, 0.894);
+      box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
+    }
+
+.leftInteractivePanel{
+      background-color: #4a2b55;
+    }
+.link {
+      position: relative;
+      /* overflow: hidden; */
+    }
+    
+.link:hover::after{
+      width: 100%;
+      
+  }
+  .link:hover{
+      text-shadow: 0 0 10px #fffcfea0, 0 0 15px #ff0080d8;
+  }
+  .link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      border-bottom-width: 2px;
+      box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
+      border-image: linear-gradient(to right, #cf0fff, #eb00f7, rgb(255, 0, 157)) 1;
+      transition:0.2s ease-in;
+  }
+  .mLink {
+    position: relative;
+  }
+  
+  .mLink::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid #ff00c399;
+    filter: blur(1px);
+  
+  }
