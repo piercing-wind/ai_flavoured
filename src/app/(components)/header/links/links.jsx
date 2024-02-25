@@ -5,6 +5,7 @@ import Styles from "../header.module.css";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
+// for desktop
 const InteractiveLinkType1 = ({ href, children }) => {
   return (
     <Link href={href} className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}>
@@ -12,6 +13,7 @@ const InteractiveLinkType1 = ({ href, children }) => {
     </Link>
   );
 };
+
 // for mobile
 const InteractiveLinkType2 = ({ idxs, href, children }) => {
   return (

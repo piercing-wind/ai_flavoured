@@ -1,8 +1,7 @@
-import { options } from "../../api/auth/[...nextauth]/options";
-import { getServerSession } from "next-auth";
+import { auth } from "../../../../auth";
 
 export const UserData = async () => {
-  const session = await getServerSession(options);
+  const session = await auth();
   const user = session?.user;
 
   if (session) {

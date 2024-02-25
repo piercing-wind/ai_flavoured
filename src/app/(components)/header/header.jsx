@@ -7,9 +7,8 @@ config.autoAddCss = false;
 import Styles from "./header.module.css";
 import { cn } from "../../../lib/utils";
 import {Links} from "./links/links";
-import { getServerSession } from "next-auth";
-import { options } from "../../api/auth/[...nextauth]/options";
-import MobileMenu from "./hamburgerAndNav";
+import { auth } from "../../../../auth";
+import {MobileMenu} from "./hamburgerAndNav";
 const Logo = () => {
   return (
     <>
@@ -20,8 +19,8 @@ const Logo = () => {
   );
 };
 
-const Header = async () => {
-  const session = await getServerSession(options);
+export const Header = async () => {
+  const session = await auth();
   return (
     <div
       className={[
@@ -47,4 +46,4 @@ const Header = async () => {
     </div>
   );
 };
-export default Header;
+
