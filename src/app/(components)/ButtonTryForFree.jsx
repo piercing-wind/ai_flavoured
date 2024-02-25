@@ -1,7 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import Styles from "./header/header.module.css";
-import { buttonVariants } from "../{components}/ui/button";
+import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 export const TryForFreeButton = () => {
   return (

@@ -5,7 +5,7 @@ import { Twirl as Hamburger } from "hamburger-react";
 import { motion } from "framer-motion";
 import { Links } from "./links/links";
 import { TryForFreeButton } from "../ButtonTryForFree";
-const MobileMenu = () => {
+export const MobileMenu = () => {
   const [isOpen, setOpen] = useState(false);
   if (isOpen) {
     console.log("MobileMenu: isOpen:", isOpen);
@@ -36,4 +36,4 @@ const MobileMenu = () => {
     </>
   );
 };
-export default MobileMenu;
+

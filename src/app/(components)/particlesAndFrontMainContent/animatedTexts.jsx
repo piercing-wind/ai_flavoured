@@ -1,10 +1,11 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styles from './welcomeContent.module.css'; // Import your CSS module
 
 function AnimationText({classNames}) {
-      
-      const texts = ['PDF-Reader', 'Presentation', 'ImageChat', 'Chat', 'Doc Manager', 'Text to Audio']; // Define your texts in an array
+
+      const texts = useMemo(() => ['PDF-Reader', 'Presentation', 'ImageChat', 'Chat', 'Doc Manager', 'Text to Audio'], []); // Define your texts in an array  
+      //const texts = ['PDF-Reader', 'Presentation', 'ImageChat', 'Chat', 'Doc Manager', 'Text to Audio']; // Define your texts in an array
       const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
