@@ -1,10 +1,9 @@
 "use client";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Styles from "../header.module.css";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-
+import { useSession } from "next-auth/react";
 // for desktop
 const InteractiveLinkType1 = ({ href, children }) => {
   return (
@@ -18,34 +17,41 @@ const InteractiveLinkType1 = ({ href, children }) => {
 const InteractiveLinkType2 = ({ idxs, href, children }) => {
   return (
     <Link className={cn("w-full h-full text-center", Styles.link)} href={href}>
-    <motion.div
-      className={cn("ml-6 mr-6 py-4 px-12 text-xl text-center cursor-pointer",Styles.mLink )}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        delay: 0.1 + idxs / 10,
-      }}
-    >
-      {children}
-    </motion.div>
+      <motion.div
+        className={cn(
+          "ml-6 mr-6 py-4 px-12 text-xl text-center cursor-pointer",
+          Styles.mLink
+        )}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+          delay: 0.1 + idxs / 10,
+        }}
+      >
+        {children}
+      </motion.div>
     </Link>
   );
 };
 
 export const Links = ({ type }) => {
-  const { data: session } = useSession();
+  const {status:session} = useSession();
+  // const sessionStatus = localStorage.getItem("sessionStatus");
+  // if (sessionStatus === "authenticated") {
+  //   console.log("Session is authenticated");
+  // }
+  // console.log(session);
   const links = [
     { href: "/products", text: "Products" },
     { href: "/howtouse", text: "How to" },
     { href: "/about", text: "About" },
     { href: "/pricing", text: "Pricing" },
-    {
-      href: session ? "/api/auth/signout?callbackUrl=/" : "/api/auth/signin",
-      text: session ? "Logout" : "Sign Up/Login",
-    },
+    session === "authenticated" || session === "loading"
+      ? { href: "/api/auth/signout?callbackUrl=/", text: "Logout" }
+      : { href: "/login", text: "Sign Up/Login" },
   ];
 
   if (type === "HeaderNav") {

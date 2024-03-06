@@ -1,18 +1,19 @@
 import Link from "next/link";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import {TryForFreeButton} from '../ButtonTryForFree'
-
+import { TryForFreeButton } from "../ButtonTryForFree";
 config.autoAddCss = false;
 
 import Styles from "./header.module.css";
 import { cn } from "../../../lib/utils";
-import {Links} from "./links/links";
-import { auth } from "../../../../auth";
-import {MobileMenu} from "./hamburgerAndNav";
+import { Links } from "./links/links";
+import { MobileMenu } from "./hamburgerAndNav";
 const Logo = () => {
   return (
     <>
-      <Link href="/" className=" text-4xl font-bold glow md:ml-6 whitespace-nowrap sm:text-5xl ml-2 mr-2 lg:text-7xl">
+      <Link
+        href="/"
+        className="text-4xl font-bold glow md:ml-6 whitespace-nowrap sm:text-5xl ml-2 mr-2 lg:text-7xl"
+      >
         Ai Flavoured
       </Link>
     </>
@@ -20,7 +21,7 @@ const Logo = () => {
 };
 
 export const Header = async () => {
-  const session = await auth();
+  // console.log(session);
   return (
     <div
       className={[
@@ -32,18 +33,17 @@ export const Header = async () => {
         <Logo />
       </div>
       <MobileMenu />
-      
+
       <div className="hidden xl:flex items-center justify-center">
         <nav className={"items-center justify-center flex"}>
           <div className="items-center sm:flex text-xl sd:text-sm text-white">
-            <Links type="HeaderNav" /> 
+            <Links type="HeaderNav" />
           </div>
         </nav>
       </div>
       <div className="hidden xl:flex">
-       <TryForFreeButton/>
+        <TryForFreeButton />
       </div>
     </div>
   );
 };
-
