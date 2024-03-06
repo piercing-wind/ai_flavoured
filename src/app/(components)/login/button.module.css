@@ -1,0 +1,9 @@
+.buttonStyle{
+     
+      border: 1px solid #ffffff;
+      background: blur(1px);
+}
+.buttonStyle:hover{
+      background-color: rgba(0, 0, 0, 0.894);
+      box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
+}

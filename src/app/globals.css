@@ -20,6 +20,7 @@ color:rgb(255, 255, 255)
 }
 body {
   font-family: Helvetica, Arial, sans-serif;
+  height: 100%;
   /* Add other global styles as needed */
 
 }

@@ -1,6 +1,5 @@
 import { pool } from "./databaseConfig";
 
-
 const dataBaseConnectorAndQueryExecutor = async (queries) => {
   const client = await pool.connect();
   console.log("Connected to database");

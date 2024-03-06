@@ -1,7 +1,9 @@
 import { getData, postData } from "./databaseController";
-
+import {auth} from '../../../../../auth'
 
 export async function GET() {
+  const session = await auth();
+  console.log("Session : ", session);
   try {
     const result = await getData();
     return Response.json(result);
@@ -11,7 +13,7 @@ export async function GET() {
   }
 }
 export async function POST(req, res) {
-  const {id,country, flag} = await req.json();
+
   try{
     const result = await postData(id,country,flag);
     return Response.json(result);
