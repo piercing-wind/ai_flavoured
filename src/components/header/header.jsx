@@ -4,7 +4,7 @@ import { TryForFreeButton } from "../ButtonTryForFree";
 config.autoAddCss = false;
 
 import Styles from "./header.module.css";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Links } from "./links/links";
 import { MobileMenu } from "./hamburgerAndNav";
 const Logo = () => {

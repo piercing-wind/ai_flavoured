@@ -1,4 +1,4 @@
-import { pool } from "./databaseConfig";
+import { pool } from "@/src/db/db";
 
 const dataBaseConnectorAndQueryExecutor = async (queries) => {
   const client = await pool.connect();
