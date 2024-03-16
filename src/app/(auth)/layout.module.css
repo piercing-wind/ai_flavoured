@@ -3,3 +3,7 @@
       background-color: rgba(12, 11, 11, 0.588);
 
 }
+.borderColor{
+      /* border-image: linear-gradient(to right, #cf0fff, #eb00f7, rgb(255, 0, 157)) 1; */
+      border-image: linear-gradient(to right, rgb(197, 9, 235), rgba(255,0,0,1), rgb(68, 0, 255), rgb(248, 232, 7))4;
+      }

@@ -1,9 +1,9 @@
-import { auth } from "../../../../auth";
+import { auth } from "@/auth";
 
 export const UserData = async () => {
   const session = await auth();
   const user = session?.user;
-  // console.log("Session : ", session);
+   console.log("Session : ", session);
 
   if (session) {
     // console.log("User : ", user.email);
@@ -11,9 +11,9 @@ export const UserData = async () => {
     return (
       <>
         <p>
-          {user.roles === "Admin" || user.roles === "GitHub User" ? user.login : user.email}
+          {user.email}
         </p>
-        <p>{user.roles}</p>
+        <p>{user.role}</p>
       </>
     );
   } else {

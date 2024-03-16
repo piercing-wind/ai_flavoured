@@ -1,7 +1,7 @@
 import Animation from './particalsAnimation'
 import Styles from './welcomeContent.module.css'
 import AnimatedText from "./animatedTexts"
-import {cn} from "../../../lib/utils";
+import {cn} from "@/lib/utils";
 
 export const WelcomeContent = () => {
       const classNames = cn("text-2xl sm:text-3xl md:text-4xl  xl:text-4xl 2xl:text-4xl font-bold p-3", Styles.gradiantForText);

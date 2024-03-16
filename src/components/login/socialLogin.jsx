@@ -1,18 +1,17 @@
 //Code for social login buttons
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { AuthError } from "next-auth";
-import Styles from "./button.module.css";
-import { signIn } from "../../../../auth";
+import { signIn } from "@/auth";
 
-export const SocialLogin = ({}) => {
+export const SocialLogin = ({label}) => {
   return (
-    <div className="sm:flex gap-4">
+    <div className="sm:flex gap-4 w-full mt-4">
       {/* <SocialButton icon={<FcGoogle className="h-5 w-5"/>} type="Google" styles={styles}/>
           <SocialButton icon={<FaGithub className="h-5 w-5"/>} type="Github" styles={styles}/> */}
       <form
+      className="w-full"
         action={async () => {
           "use server";
           try {
@@ -27,14 +26,15 @@ export const SocialLogin = ({}) => {
       >
         <Button
           size="lg"
-          className={cn("w-full", Styles.buttonStyle)}
+          className="w-full px-0"
           variant="glow"
         >
           <FcGoogle className="h-5 w-5" />
-          &nbsp;Sign in with Google
+          &nbsp;{label} Google
         </Button>
       </form>
       <form
+      className="w-full mt-4 sm:mt-0"
         action={async () => {
           "use server";
           try {
@@ -50,11 +50,11 @@ export const SocialLogin = ({}) => {
       >
         <Button
           size="lg"
-          className={cn("w-full", Styles.buttonStyle)}
+          className="w-full px-0"
           variant="glow"
         >
           <FaGithub className="h-5 w-5" />
-          &nbsp;Sign in with Github
+          &nbsp;{label} Github
         </Button>
       </form>
     </div>
