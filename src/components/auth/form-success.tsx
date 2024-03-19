@@ -7,8 +7,8 @@ interface FormSuccessProps {
 export const FormSuccess = ({ message }: FormSuccessProps) => {
   if (!message) return null;
   return (
-    <div className="mt-5 flex items-center text-green-500 bg-destructive/15 rounded-md gap-x-2 text-sm text-destructive">
-      <FaRegCircleCheck className=" h-5 w-5" />
+    <div className="mt-4 block text-center items-center text-green-600 bg-destructive/15  border-green-600 border p-4 rounded-md gap-x-2 text-base text-destructive">
+      <FaRegCircleCheck className=" h-5 w-5 inline" />&nbsp;&nbsp;  
       <span className="text-md">{message}</span>
     </div>
   );

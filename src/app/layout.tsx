@@ -16,11 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
       <body className={cn("antialiased",
             "font-helvetica")}>{children}
       </body>
-      </AuthProvider>
     </html>
   );
 }

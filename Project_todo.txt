@@ -1,4 +1,3 @@
-{Important} Change the way of DB file its import modules are causing aplpication to break/
-
+Danger : Social login emails from google also receving password reset mail
 
 Fix the Products page in Production / Build.
