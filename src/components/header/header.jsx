@@ -7,6 +7,7 @@ import Styles from "./header.module.css";
 import { cn } from "@/lib/utils";
 import { Links } from "./links/links";
 import { MobileMenu } from "./hamburgerAndNav";
+import AuthProvider from "../AuthProvider";
 const Logo = () => {
   return (
     <>
@@ -23,6 +24,7 @@ const Logo = () => {
 export const Header = async () => {
   // console.log(session);
   return (
+    <AuthProvider>
     <div
       className={[
         "top-0 inset-x-0 h-20 flex items-center justify-between xl:px-20 border-b relative",
@@ -45,5 +47,6 @@ export const Header = async () => {
         <TryForFreeButton />
       </div>
     </div>
+    </AuthProvider>
   );
 };

@@ -5,6 +5,7 @@ An Array of routes which are accessible to the public and
 */
 export const publicRoutes = [
       '/',
+      '/new-verification',
 ];
 
 /*
@@ -17,6 +18,8 @@ export const authRoutes = [
       '/login',
       '/register', 
       '/error',
+      '/reset-password',
+      '/new-password',
 ];
 
 /*

@@ -37,8 +37,8 @@ const InteractiveLinkType2 = ({ idxs, href, children }) => {
   );
 };
 
-export const Links = ({ type }) => {
-  const {status:session} = useSession();
+export const Links =  ({ type }) => {
+  const { status: session } = useSession();
   // const sessionStatus = localStorage.getItem("sessionStatus");
   // if (sessionStatus === "authenticated") {
   //   console.log("Session is authenticated");

@@ -1,6 +1,6 @@
 import React from "react";
 import { RegisterForm } from "./register-form";
-import { SocialLogin } from "@/components/login/socialLogin";
+import { SocialLogin } from "@/components/auth/socialLogin";
 import Styles from "../layout.module.css";
 import { cn } from "@/lib/utils";
 import { BackButtonLink } from "../backbuttonLink";

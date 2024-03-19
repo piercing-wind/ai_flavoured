@@ -13,6 +13,9 @@ html {
   scrollbar-width: none;  /* Firefox */
 }
 
+w{
+  color:#ff0783
+}
 
 :root {
 color:rgb(255, 255, 255)

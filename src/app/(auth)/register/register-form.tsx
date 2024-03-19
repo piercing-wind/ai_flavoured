@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { RegisterUserSchema } from "@/schemas";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/components/login/form-error";
-import { FormSuccess } from "@/components/login/form-success";
+import { FormError } from "@/components/auth/form-error";
+import { FormSuccess } from "@/components/auth/form-success";
 import { useState, useTransition } from "react";
 import { Register } from "@/actions/register";
 export const RegisterForm = () => {
@@ -29,6 +29,7 @@ export const RegisterForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      isTwoFAEnabled: false,
     },
   });
   const onSubmit = (values: z.infer<typeof RegisterUserSchema>) => {
@@ -64,24 +65,6 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="userName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg">Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="unique Name"
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="email"
@@ -136,8 +119,34 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
+            
           </div>
-
+          <div className="flex items-center mt-6 text-sm text-pink-100">
+          <FormField
+              control={form.control}
+              name="isTwoFAEnabled"
+              render={({ field }) => (
+                <FormItem>
+                  {/* <FormLabel className="text-lg">Confirm Password</FormLabel> */}
+                  <FormControl>
+                    <input 
+                    style={{backgroundColor: "pink"}}
+                    className="h-4 w-4 bg-transparent text-pink-600 flex "
+                      {...field}
+                      disabled={isPending}
+                      placeholder=""
+                      type="checkbox"
+                      value={field.value ? "true" : "false"} // Fix: Convert boolean value to string
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            &nbsp;
+            &nbsp;
+            <p> Would you like to Enable Two Factor Authenticaion?</p>
+            </div>
           <Button
             type="submit"
             variant="glow"

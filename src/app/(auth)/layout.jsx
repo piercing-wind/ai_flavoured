@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import Styles from "./layout.module.css";
-import { SocialLogin } from "../../components/login/socialLogin";
+import { SocialLogin } from "../../components/auth/socialLogin";
 
 const AuthLayout = ({ children }) => {
   return (

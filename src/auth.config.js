@@ -64,4 +64,6 @@ export default {
       clientSecret: process.env.AUTH_FACEBOOK_SECRET,
     }),
   ],
+  trustHostedDomain: true,
+  trustHost: true,
 };

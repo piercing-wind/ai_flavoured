@@ -2,33 +2,51 @@ import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
 import { getUserById } from "./db/users";
 import { db } from "@/lib/db";
-import {PrismaAdapter} from "@auth/prisma-adapter";
-
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { getTwoFAConfirmationByUserId } from "./data/twoFAConfirmation";
 export const {
   handlers: { GET, POST },
   auth,
   signIn,
   signOut,
 } = NextAuth({
-  trustHost: true,
-  trustHostedDomain: true,
   pages: {
     signIn: "/login",
-    error : "/error",
+    error: "/error",
   },
   events: {
-    async linkAccount({user}){
+    async linkAccount({ user }) {
       await db.user.update({
-        where :{id: user.id},
-        data:{emailVerified: new Date() }
-      }) // update user
-    }
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      }); // update user
+    },
   },
   adapter: PrismaAdapter(db),
   callbacks: {
+    async signIn({ user, account }) {
+      //allow only verified users to sign in
+      const existingUser = await getUserById(user.id);
+      if (account.provider === "credentials"){
+      
+      if (!existingUser.emailVerified) return false;
+      }
+      if(existingUser.isTwoFAEnabled){
+        const twoFAConfirmation = await getTwoFAConfirmationByUserId(existingUser.id);
+        if(!twoFAConfirmation){
+          return false;
+        }
+        await db.twoFAConfirmation.delete({
+          where: {
+            id: twoFAConfirmation.id,
+          },});
+      };
+
+      return true;
+    },
     async jwt({ token, user }) {
-      console.log("User : ", user);
-      console.log("JWT : ", token);
+      // console.log("User : ", user);
+      // console.log("JWT : ", token);
 
       if (!token.sub) return token; // if no user, return empty token
       const existingUser = await getUserById(token.sub);
@@ -40,7 +58,7 @@ export const {
       return token;
     },
     async session({ session, token }) {
-      console.log("Session : ", token);
+      // console.log("Session : ", token);
       if (session?.user) {
         session.user.role = token.role;
         session.user.subscription = token.subscription;
@@ -51,4 +69,6 @@ export const {
   },
   session: { strategy: "jwt" },
   ...authConfig,
+  trustHost: true,
+  trustHostedDomain: true,
 });
