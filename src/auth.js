@@ -69,6 +69,4 @@ export const {
   },
   session: { strategy: "jwt" },
   ...authConfig,
-  trustHost: true,
-  trustHostedDomain: true,
 });

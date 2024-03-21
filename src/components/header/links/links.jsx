@@ -3,18 +3,17 @@ import Link from "next/link";
 import Styles from "../header.module.css";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-// for desktop
-const InteractiveLinkType1 = ({ href, children }) => {
-  return (
-    <Link href={href} className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}>
-      {children}
-    </Link>
-  );
-};
+import { UserProfile } from "./userProfile";
+import {CurrentUser} from "@/hooks/useCurrentUser"
 
+// import { useSession } from "next-auth/react";
+// import { Button } from "@/components/ui/button";..
 // for mobile
-const InteractiveLinkType2 = ({ idxs, href, children }) => {
+const InteractiveLinkType2 = ({
+  idxs,
+  href,
+  children,
+}) => {
   return (
     <Link className={cn("w-full h-full text-center", Styles.link)} href={href}>
       <motion.div
@@ -37,31 +36,61 @@ const InteractiveLinkType2 = ({ idxs, href, children }) => {
   );
 };
 
-export const Links =  ({ type }) => {
-  const { status: session } = useSession();
-  // const sessionStatus = localStorage.getItem("sessionStatus");
-  // if (sessionStatus === "authenticated") {
-  //   console.log("Session is authenticated");
-  // }
-  // console.log(session);
+export const Links = ({ type }) => {
+  // const { status: session } = useSession();
+   
+  const userData = CurrentUser();    // very important here to assign null if userData is empty!!
   const links = [
     { href: "/products", text: "Products" },
     { href: "/howtouse", text: "How to" },
     { href: "/about", text: "About" },
     { href: "/pricing", text: "Pricing" },
-    session === "authenticated" || session === "loading"
-      ? { href: "/api/auth/signout?callbackUrl=/", text: "Logout" }
-      : { href: "/login", text: "Sign Up/Login" },
   ];
+  if (userData.data === null) {
+    links.push({ href: "/login", text: "Sign up/Login" });
+  }
 
   if (type === "HeaderNav") {
     return (
       <>
-        {links.map((link, idx) => (
-          <InteractiveLinkType1 key={idx} href={link.href}>
-            {link.text}
-          </InteractiveLinkType1>
-        ))}
+      
+        <Link
+          href="/products"
+          className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
+        >
+          Products
+        </Link>
+        <Link
+          href="/howtouse"
+          className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
+        >
+          How To
+        </Link>
+        <Link
+          href="/about"
+          className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
+        >
+          About
+        </Link>
+        <Link
+          href="/pricing"
+          className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
+        >
+          Pricing
+        </Link>
+        <div>
+          {userData.data ? (
+            <UserProfile userData={userData} />
+          ) : (
+            <Link
+              href="/login"
+              className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
+            >
+              Sign up/Login
+            </Link>
+          )}
+        </div>
+      
       </>
     );
   } else if (type === "MobileNav") {
