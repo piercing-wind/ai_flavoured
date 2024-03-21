@@ -8,7 +8,7 @@ export const TryForFreeButton = () => {
         buttonVariants({
           size: "sm",
           className:
-            "btnh my-2 ml-2  text-white font-semibold py-2 px-2 rounded-xl sm:px-4 sm:rounded-2xl md:m-6 md:text-base border",
+            "my-2 ml-2 h-7 font-normal text-xs py-2 px-2 rounded-2xl sm:h-9 sm:px-4 md:m-6 md:text-base border",
         }),
         Styles.btnh
       )}

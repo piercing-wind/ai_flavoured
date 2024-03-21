@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 export const NewVerificationContent = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const searchPramas = useSearchParams();
   const token = searchPramas.get("token");
@@ -18,13 +19,17 @@ export const NewVerificationContent = () => {
       setError("Missing Token");
       return;
     }
-    newVerification(token)
+  setLoading(true);
+   await newVerification(token)
       .then((data: any) => {
         setSuccess(data.success);
         setError(data.error);
       })
       .catch(() => {
         setError("Something went wrong!");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [token]);
   useEffect(() => {
@@ -33,7 +38,7 @@ export const NewVerificationContent = () => {
 
   return (
     <>
-      {success && !error && (
+      {loading && (
         <div className="flex w-full justify-center p-4">
           <PropagateLoader color="#ff0783" loading={true} />
         </div>

@@ -5,7 +5,9 @@
 .btnh{
   border: 1px solid #ff0783;
   background: blur(1px);
+
 }
+
 .btnh:hover{
       background-color: rgba(0, 0, 0, 0.894);
       box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
