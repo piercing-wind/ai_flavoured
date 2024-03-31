@@ -28,3 +28,10 @@ export const RegisterUserSchema = z
     message: "Passwords did not match",
     path: ["confirmPassword"],
   });
+
+export const uploadToUserFileTBSchema = z.object({
+  fileKey: z.string(),
+  fileName: z.string(),
+  userId: z.string(),
+  url: z.string(),
+});

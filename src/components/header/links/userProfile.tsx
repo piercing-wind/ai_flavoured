@@ -1,16 +1,30 @@
 "use client";
 import { Logout } from "@/actions/logout";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CircleLoader } from "react-spinners";
 import { FaUser } from "react-icons/fa6"
 export const UserProfile = ({ userData }: { userData: any }) => {
   const [display, setDisplay] = useState(false);
   const user = userData?.data?.user;    
+  const userProfileRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userProfileRef.current && !(userProfileRef.current as HTMLElement).contains(event.target as Node)) {
+        setDisplay(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   if (userData.status === "authenticated") {
     return (
       <>
-        <div className="relative inline-block z-30">
-          <div className="rounded-full h-7 w-7 md:h-9 md:w-9 justify-center items-center flex mx-3 md:mx-5" 
+        <div className="relative inline-block z-30" ref={userProfileRef}>
+          <div className="rounded-full h-7 w-7 md:h-9 md:w-9 justify-center items-center flex ml-3 md:mx-5" 
           style={{backgroundColor: "#ff0783"}}
           onClick={() => {
             console.log("Avatar clicked");

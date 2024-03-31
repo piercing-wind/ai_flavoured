@@ -24,7 +24,22 @@ model User {
   accountCreationTimestamp  DateTime @default(now())
   isTwoFAEnabled Boolean @default(false)
   twoFAConfirmation    TwoFAConfirmation?
+  uploads      UserFile[]
 }
+
+model UserFile {
+  id        Int   @id @default(autoincrement())
+  userId    String
+  fileKey   String
+  fileName  String
+  url       String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, fileKey])
+}
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -77,4 +92,5 @@ model TwoFAConfirmation{
   user User @relation(fields:[userId],references:[id],onDelete: Cascade)
   @@unique([userId])
 }
+
 
