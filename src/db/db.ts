@@ -17,7 +17,7 @@ export const dbq = async (queries : string, values: any) => {
   try {
     const result = await client.query(queries,values);
     if (result.rows.length === 0) {
-      return { error: "No data found!" };
+      return { error: "No data found!", result };
     }else{
       return result.rows[0];
     }
