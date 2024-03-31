@@ -46,15 +46,16 @@ export const {
     },
     async jwt({ token, user }) {
       // console.log("User : ", user);
-      // console.log("JWT : ", token);
+       
 
       if (!token.sub) return token; // if no user, return empty token
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token; // if no user, return empty token
-
       token.role = existingUser.role;
       token.subscription = existingUser.subscription;
+      token.id = existingUser.id;
 
+      // console.log("JWT : ", token);
       return token;
     },
     async session({ session, token }) {
@@ -62,6 +63,7 @@ export const {
       if (session?.user) {
         session.user.role = token.role;
         session.user.subscription = token.subscription;
+        session.user.id = token.id;
       }
 
       return session;

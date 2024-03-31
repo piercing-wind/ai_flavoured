@@ -11,9 +11,9 @@ export const pool = new Pool({
 
 export const dbq = async (queries : string, values: any) => {
   const client = await pool.connect();
-  if (!client) {
-    return { error: "Database connection failed!" };
-  }
+  // if (!client) {
+  //   return { error: "Database connection failed!" };
+  // }
   try {
     const result = await client.query(queries,values);
     if (result.rows.length === 0) {

@@ -1,0 +1,17 @@
+Development Commands:
+
+npx prisma init:                                Initializes a new Prisma project by creating the necessary configuration files.
+npx prisma generate:                            Generates Prisma Client based on your Prisma schema.
+npx prisma studio:                              Opens Prisma Studio, which is a visual interface for viewing and editing data in your database.
+npx prisma migrate dev --name <migration_name>: Creates a new migration based on changes in your Prisma schema and applies it to your development database.
+npx prisma migrate reset:                       Resets your database and applies all migrations from scratch. This command is intended for development environments.
+npx prisma db seed --preview-feature:           Seeds your database using a seeding script.
+npx prisma introspect:                          Updates your Prisma schema to reflect the current state of your database.
+npx prisma format:                              Formats your Prisma schema file.
+npx prisma db push:                             short hand for sync db
+
+Production Commands:
+
+npx prisma generate:                            Generates Prisma Client based on your Prisma schema.
+npx prisma migrate deploy:                      Applies pending migrations to your production database.
+npx prisma migrate status:                      Checks the status of your migrations.
