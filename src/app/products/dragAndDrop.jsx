@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
-import { uploadToS3 } from "@/actions/s3";
+import { uploadToS3 } from "@/actions/uploads";
 
 export const DragAndDrop = () => {
   const [error, setError] = useState("");

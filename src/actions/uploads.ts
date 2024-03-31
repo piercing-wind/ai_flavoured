@@ -12,8 +12,9 @@ const uploadToUserFileTB = async (data: z.infer<typeof uploadToUserFileTBSchema>
   const { fileKey, fileName, userId, url } = data;
 
   try{
-        dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url") VALUES ($1, $2, $3, $4)', [ fileKey, userId,fileName, url])
-  }catch(e){
+        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url") VALUES ($1, $2, $3, $4)', [ fileKey, userId,fileName, url])
+      return res;
+      }catch(e){
         console.log(e)
         throw e;
   }
@@ -83,7 +84,6 @@ export const generatePublicFileAccessURL = async (fileKey: string) => {
     process.env.NEXT_PUBLIC_AWS_S3_REGION +
     ".amazonaws.com/" +
     fileKey;
-    console.log(url)
   return url;
 };
 
