@@ -55,17 +55,17 @@ export const {
       token.subscription = existingUser.subscription;
       token.id = existingUser.id;
 
-      // console.log("JWT : ", token);
+      //console.log("JWT : ", token);
       return token;
     },
     async session({ session, token }) {
-      // console.log("Session : ", token);
       if (session?.user) {
         session.user.role = token.role;
         session.user.subscription = token.subscription;
         session.user.id = token.id;
       }
-
+      
+      //console.log("Session : ", token);
       return session;
     },
   },

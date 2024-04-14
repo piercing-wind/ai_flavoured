@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 export const UserData = async () => {
   const session = await auth();
   const user = session?.user;
-  // console.log("Session : ", session);
+  // console.log("from component : ", session);
 
   if (session) {
     // console.log("User : ", user.email);

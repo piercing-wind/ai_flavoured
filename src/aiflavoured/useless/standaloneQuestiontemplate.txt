@@ -1,0 +1,92 @@
+
+//ignore it
+
+  const standaloneQuestionTemplate = `
+  generate a standalone question from the following question: {question} 
+  `;
+
+  questions work on this proompt  : question: "who submitted this project?"   
+                                    Who is the individual or group that submitted this project?
+
+
+This document discusses the adjudicating authority's reliance on the terms of a License and
+ Distribution Agreement between Speedo International Ltd, England and Page Industries Ltd. 
+ It mentions that the assessable value of imported goods includes amounts paid directly or 
+ indirectly to the foreign supplier. The document also mentions the demand against the agreement 
+ with Speedo International, UK, highlighting no suppression of facts at the time of import. 
+ Additionally, it discusses conditions in the agreement entered by the Appellant regarding 
+ the liability to pay royalty. Overall, the document focuses on the agreements related to the 
+ purchase and sale of distributed products and the implications for imported goods.
+
+
+This document discusses a licensing and distribution agreement between M/s Speedo International, 
+U.K and M/s Page Industries Ltd. It mentions the details of the agreement, including the purchase 
+and sale of distributed and licensed products bearing the trademarks. The document also touches 
+upon the payment of royalties, marketing expenses, and advertising costs incurred by the appellant.
+ Various clauses of the agreement are highlighted, such as the minimum royalties to be paid, 
+ the transfer of technical know-how, and the obligations of both parties. The adjudicating 
+ authority's reliance on the terms of the agreement is also mentioned, as well as the requirement 
+ for the appellant to pay royalties for the imported goods. Overall, the document delves into the 
+ contractual obligations, financial implications, and legal aspects of the licensing and 
+ distribution agreement in question.
+
+ 'The document discusses the criteria for adding royalties to imported goods under Customs Valuation Rules 2007,
+  specifically related to the License and Distribution Agreement between the Appellant and Jockey International INC. 
+  Royalties are paid on licensed products manufactured by the Appellant under the brand name of Jockey, as specified 
+  in the agreement. The document clarifies that royalties are not related to imported raw materials but to the finished
+   goods, as highlighted in a Supreme Court case. It also addresses the issue of advertisement expenses incurred by the 
+   appellant, stating that such expenses are part of the transaction value if they contribute to global brand 
+   development. The document emphasizes that the relationship between the appellant and Jockey International is on a 
+   principal-to-principal basis, and they are not considered related parties under the Customs Act or Valuation Rules
+
+
+//aiflavoured
+  
+  The document delves into Customs Appeal No. 20132 of 2023 involving Page Industries and the Commissioner of Customs
+  in Bangalore. The dispute revolves around the inclusion of royalty and advertisement costs in the transaction value
+  of imported goods for customs duty purposes. Page Industries challenges the double taxation of royalty payments 
+  and contests the application of Rule 10 under the Customs Valuation Rules 2007. It questions the definition of 
+  "related persons" in customs valuation, citing the case of CC (Imports), Mumbai Vs Bayer Corp Science Ltd. 
+
+  The document scrutinizes the contractual agreements with licensors M/s Jockey International USA and Speedo 
+  International UK, disputing the link between royalty payments and imported goods. It argues that advertisement 
+  costs are post-import activities not mandated by the seller, thus not subject to Rule 10(1)(e) of CV Rules. 
+  The absence of fixed expenditure requirements for sales promotion/advertisement in the agreement and the non-related 
+  nature of the parties involved are highlighted. The document references the interpretative note to Rule 3(b) 
+
+  to support the argument that buyer-incurred activities are not considered direct payments to the seller. It concludes 
+  that Page Industries has not paid on behalf of the seller, M/s. Sunlight Sports, and questions the applicability of 
+  previous rulings to the current case. Additionally, it delves into the License and Distribution Agreement between 
+  Page Industries and Speedo International Ltd, addressing the definition of royalty and the conditions for the import 
+  and sale of distributed products.
+
+
+//popai
+The document pertains to Customs Appeal No. 20132 of 2023, involving Page Industries as the appellant and the 
+Commissioner of Customs, Bangalore as the respondent. The central issue revolves around the valuation of imported 
+goods, specifically concerning the addition of royalty and advertisement costs to the transaction value of imported 
+goods. The appellant, Page Industries, is the sole distributor of brands owned by M/s Jockey International USA and 
+Speedo International, UK. The Customs Valuation Rules 2007 are invoked, with the appellant contesting that royalty 
+payments made are for services and not directly related to the imported goods, thus should not be included in the 
+transaction value for customs duty calculation.
+
+The appeals involve a detailed examination of the Customs Valuation Rules 2007 and various agreements between the 
+appellant and the foreign suppliers. The appellant's counsel argues that the royalty payments are not directly related 
+to the imported goods and should not be included in the transaction value. Additionally, the counsel contests the 
+obligation to incur a specific amount or percentage of invoice value towards advertisement expenses as a condition 
+of sale or import, stating that the expenses are for post-import activities and not an obligation of the seller. 
+These arguments are supported by references to previous tribunal decisions and relevant legal provisions.
+
+Ultimately, the Customs Excise & Service Tax Appellate Tribunal, in its final order dated 13.03.2024, allowed the 
+appeals and set aside the impugned order. The tribunal found that the royalty payments were related to the final 
+products manufactured by the appellant, not the imported goods, and thus should not be included in the transaction value.
+Similarly, the tribunal ruled that the advertisement expenses were not a condition of sale/import and should not be 
+added to the transaction value. The tribunal also emphasized that there was no evidence of willful suppression of facts,
+thereby rejecting the invocation of the extended period for the case. The appeals were allowed, providing the appellant 
+with consequential reliefs in accordance with the law. This comprehensive summary encapsulates the key arguments, 
+legal provisions, and the pivotal conclusion reached by the tribunal, offering a clear understanding of the case's 
+intricacies and the final outcome.
+
+
+
+{"Summary":"The AI Flavoured Project aims to develop an AI-powered platform for document summarization and interactive communication, targeting students, researchers, teachers, and professionals. The project emphasizes flexibility, adaptability, and iterative development using Agile methodologies like Scrum. Scrum enables collaboration, transparency, and a focus on delivering incremental value through short sprints. The project requires hardware resources like high-performance laptops, fast processors, and networking hardware, as well as software resources including operating systems, development tools, libraries, and databases. Internet connectivity with stable and high-speed access is crucial for various project activities. The project also references online courses, AI learning resources from OpenAI, and specific websites for additional information.","Details":"The project mentions specific references like Prof. Vishal Gupta from Khalsa College Amritsar, the Full Stack 2023 Web Development bootcamp on Udemy, and AI learning and resource material from OpenAI. It also highlights the importance of online courses, documentation, and APIs from OpenAI for the project's development. Additionally, the project emphasizes the need for specific hardware resources like routers, switches, and high-performance laptops with fast processors, RAM, and storage space. Software resources mentioned include operating systems like Ubuntu, development tools such as Javascript and Nodejs, frameworks like Nextjs and Reactjs, IDEs like Visual Studio Code, and DBMS like PostgreSQL and MySQL.","Conclusion":"The AI Flavoured Project not only focuses on developing an AI-powered platform but also emphasizes the importance of necessary facilities like hardware, software, internet connectivity, and external resources for the project's success. By incorporating references, online courses, AI learning materials, and specific websites, the project aims to enhance document summarization and interactive communication for a wide range of users, ultimately revolutionizing education and empowering professionals in their work.","Questions":["Who is the instructor/guide mentioned in the documents for the AI Flavoured Project?","What online course is referenced in the project documents?","Which AI learning resource material is mentioned for the project's development?","What specific hardware resources are required for the project according to the details provided?"]}

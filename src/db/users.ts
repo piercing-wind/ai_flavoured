@@ -2,7 +2,7 @@ import { dbq } from "./db";
 
 export const getUsersByEmail = async (email: string) => {
   try {
-    const user = dbq('SELECT email, password FROM "User" WHERE email = $1', [
+    const user = await dbq('SELECT email, password FROM "User" WHERE email = $1', [
       email,
     ]);
     return user;
@@ -13,7 +13,7 @@ export const getUsersByEmail = async (email: string) => {
 
 export const getUserById = async (id: any) => {
   try {
-    const user = dbq('SELECT * FROM "User" WHERE id = $1', [id]);
+    const user = await dbq('SELECT * FROM "User" WHERE id = $1', [id]);
     return user;
   } catch (error) {
     return null;

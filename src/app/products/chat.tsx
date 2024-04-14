@@ -11,6 +11,7 @@ import {
   FormField,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
+import {chats} from "@/aiflavoured/chat"
 
 type ChatMessage = {
   role: string;
@@ -63,7 +64,7 @@ export const Chat = () => {
         </button>
       </Form>
             <br />
-      <button onClick={x}>Chat</button>
+      <button className="p-5 border border-red-600" onClick={async ()=> await chats()}>Chat</button>
       <p className="">{chat?.content}</p>
     </div>
   );

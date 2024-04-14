@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_DATABASE_URL")
 }
 generator client{
   provider = "prisma-client-js"
@@ -87,10 +87,17 @@ model TwoFAToken{
 }
 
 model TwoFAConfirmation{
-  id Int @id @default(autoincrement())
-  userId String
-  user User @relation(fields:[userId],references:[id],onDelete: Cascade)
+  id       Int @id @default(autoincrement())
+  userId   String
+  user     User @relation(fields:[userId],references:[id],onDelete: Cascade)
   @@unique([userId])
 }
 
+// This is the AIMemory model { UserID and FileKey is Stored into the metadata}
 
+model AIMemory {
+  id        Int @id @default(autoincrement())
+  content   String
+  metadata  Json
+  vector    Unsupported("vector(3072)")?
+}

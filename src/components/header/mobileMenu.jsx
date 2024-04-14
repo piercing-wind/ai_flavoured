@@ -10,9 +10,6 @@ import { CurrentUser } from "@/hooks/useCurrentUser";
 
 export const MobileMenu = () => {
   const [isOpen, setOpen] = useState(false);
-  if (isOpen) {
-    console.log("MobileMenu: isOpen:", isOpen);
-  }
   const userData = CurrentUser();
   return (
     <>

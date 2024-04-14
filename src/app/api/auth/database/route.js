@@ -1,9 +1,7 @@
 import { getData, postData } from "./databaseController";
-import {auth} from '@/auth'
 
 export async function GET() {
-  const session = await auth();
-  console.log("Session : ", session);
+
   try {
     const result = await getData();
     return Response.json(result);

@@ -27,7 +27,6 @@ export const UserProfile = ({ userData }: { userData: any }) => {
           <div className="rounded-full h-7 w-7 md:h-9 md:w-9 justify-center items-center flex ml-3 md:mx-5" 
           style={{backgroundColor: "#ff0783"}}
           onClick={() => {
-            console.log("Avatar clicked");
             if (display) {
               setDisplay(false);
             } else {

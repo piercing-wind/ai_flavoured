@@ -35,3 +35,9 @@ export const uploadToUserFileTBSchema = z.object({
   userId: z.string(),
   url: z.string(),
 });
+
+const searchSchema = z.object({
+  query: z.string(),
+  user: z.string().optional(),
+  fileName :z.string()
+});
