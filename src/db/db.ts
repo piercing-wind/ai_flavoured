@@ -1,6 +1,6 @@
-import { Pool } from "pg";
+import pg from "pg";
 
-export const pool = new Pool({
+export const pool = new pg.Pool({
   user: process.env.USER_NAME,
   password: process.env.PASSWORD,
   host: process.env.HOST,
@@ -17,8 +17,9 @@ export const dbq = async (queries : string, values: any) => {
   try {
     const result = await client.query(queries,values);
     if (result.rows.length === 0) {
-      return { error: "No data found!", result };
+      return { error: "No data found!"};
     }else{
+      console.log(result.rows);
       return result.rows[0];
     }
   } catch (error) {

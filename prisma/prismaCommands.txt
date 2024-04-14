@@ -15,3 +15,7 @@ Production Commands:
 npx prisma generate:                            Generates Prisma Client based on your Prisma schema.
 npx prisma migrate deploy:                      Applies pending migrations to your production database.
 npx prisma migrate status:                      Checks the status of your migrations.
+
+
+Remember, these methods can help prevent data loss, but they're not foolproof. 
+Always backup your database before running migrations.

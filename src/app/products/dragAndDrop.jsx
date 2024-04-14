@@ -3,12 +3,18 @@ import { useRef, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
-import { uploadToS3 } from "@/actions/uploads";
+import { uploadToS3 } from "@/actions/file/uploadsToS3";
+import { documentToText, trys } from "@/aiflavoured/documentsToText";
+import { imgToText } from "@/aiflavoured/imgs/imgToText";
+import { set } from "zod";
+import { BarLoader } from "react-spinners";
+import { containsImages } from "@/aiflavoured/imgs/containsImages";
 
 export const DragAndDrop = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [dragging, setDragging] = useState(false);
+  const [loader, setloader] = useState(false);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -32,34 +38,48 @@ export const DragAndDrop = () => {
       setError("File size must be less than 10MB");
       return;
     }
-    try{
-      console.log(file.type, file.size, file.name);
+    try {
+      setloader(true);
       const data = await uploadToS3(file.name, file.type, file.size);
-
       const uploadUrl = data.success.url;
-      if(!data){
+      const fileKey = data.success.data.fileKey;
+      const userId = data.success.data.userId;
+      if (!data) {
         throw new Error("Upload failed");
       }
-      try{
-        const res = await fetch(uploadUrl,{
+      try {
+        const res = await fetch(uploadUrl, {
           method: "PUT",
           body: file,
           headers: {
             "Content-Type": file.type,
           },
+          cache: "no-store",
         });
-        if(!res.ok){
+        if (!res.ok) {
           throw new Error("Network error");
         }
-        let responseData;
-        if (res.headers.get('content-type')?.includes('application/json')) {
-          responseData = await res.json();
+
+        if (res.headers.get("content-type")?.includes("application/json")) {
+          let responseData = await res.json();
+          console.log(responseData);
         }
+
+        switch (file.type) {
+          case "application/pdf":
+            await documentToText(fileKey, userId, file.type);
+            break;
+          case "image/png":
+          case "image/jpeg":
+            await imgToText(fileKey, file.type);
+            break;
+        }
+        setloader(false);
         setSuccess("File uploaded successfully");
-      }catch(e){
-        console.log(e); 
+      } catch (e) {
+        console.log(e);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   };
@@ -100,6 +120,11 @@ export const DragAndDrop = () => {
           <button type="submit" className="border p-1 rounded-lg">
             Upload
           </button>
+          {loader && (
+            <div className="loader">
+              <BarLoader color="#36d7b7" loading />
+            </div>
+          )}
           <FormSuccess message={success} />
           <FormError message={error} />
         </form>
