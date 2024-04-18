@@ -55,7 +55,7 @@ export const {
       token.subscription = existingUser.subscription;
       token.id = existingUser.id;
 
-      //console.log("JWT : ", token);
+      // console.log("JWT : ", token);
       return token;
     },
     async session({ session, token }) {

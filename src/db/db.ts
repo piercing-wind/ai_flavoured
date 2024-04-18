@@ -19,7 +19,7 @@ export const dbq = async (queries : string, values: any) => {
     if (result.rows.length === 0) {
       return { error: "No data found!"};
     }else{
-      console.log(result.rows);
+      // console.log(result.rows);
       return result.rows[0];
     }
   } catch (error) {

@@ -66,7 +66,7 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
       const resp = await uploadToUserFileTable(data);
       
     } 
-    return Promise.resolve({success: {url : signedUrl, data }});
+    return Promise.resolve({awsS3: {url : signedUrl, data }});
   } catch (error) {
     console.log(error);
     throw error;

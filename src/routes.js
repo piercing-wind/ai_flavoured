@@ -27,7 +27,7 @@ The Prefix for  API authentication routes.
 Routes with this prefix are used for API authentication.
 @type {string}
 */
-export const apiRoutesPrefix = "/api/auth"
+export const apiRoutesPrefix = "/api/"
 
 /*
 The default redirect path after login.

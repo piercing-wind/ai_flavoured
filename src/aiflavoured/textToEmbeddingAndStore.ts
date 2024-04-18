@@ -26,18 +26,17 @@ export const vectorStore = async () => {
       modelName: "text-embedding-3-large",
     }),
     originalConfig
-  );
+  ); 
   return pgvectorStore;
 }
-
-
 // convert text to embeddings and store in the vector store
 
 export const textToEmbeddingAndStore = async (documents: any) => {
   const pgvectorStore = await vectorStore();
   try {
     await pgvectorStore.addDocuments(documents);
-    console.log("Documents added to the vector store");
+    // console.log("Documents added to the vector store");
+    return { message: "success" };
   } catch (error) {
     console.log(error);
     throw error;

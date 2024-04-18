@@ -64,8 +64,7 @@ export const Chat = () => {
         </button>
       </Form>
             <br />
-      <button className="p-5 border border-red-600" onClick={async ()=> await chats()}>Chat</button>
-      <p className="">{chat?.content}</p>
+            <p className="">{chat?.content}</p>
     </div>
   );
 };

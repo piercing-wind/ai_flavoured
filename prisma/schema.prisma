@@ -25,6 +25,7 @@ model User {
   isTwoFAEnabled Boolean @default(false)
   twoFAConfirmation    TwoFAConfirmation?
   uploads      UserFile[]
+  chatSessions  chatSessionId[]
 }
 
 model UserFile {
@@ -60,7 +61,7 @@ model Account {
 }
 
 model VerificationToken{
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
   email  String
   token  String @unique
   expires DateTime
@@ -69,7 +70,7 @@ model VerificationToken{
 }
 
 model ResetPasswordToken{
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
   email  String
   token  String @unique
   expires DateTime
@@ -78,7 +79,7 @@ model ResetPasswordToken{
 }
 
 model TwoFAToken{
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
   email  String
   token  String @unique
   expires DateTime
@@ -100,4 +101,26 @@ model AIMemory {
   content   String
   metadata  Json
   vector    Unsupported("vector(3072)")?
+}
+
+model chatSessionId {
+  chatId     String  @id @default(cuid())
+  chatName   String?
+  userId     String
+  timestamp  DateTime      @default(now())
+  messages   messageHistory[]
+  
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, chatId])
+}
+
+model messageHistory {
+  id          Int           @id @default(autoincrement())
+  chatId      String        @db.VarChar(255)
+  message     String        
+  timestamp   DateTime      @default(now())
+
+  chatSession chatSessionId @relation(fields: [chatId], references: [chatId])
+
+  @@index([chatId])
 }
