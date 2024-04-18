@@ -1,28 +1,49 @@
 "use server";
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { dbq } from "@/db/db";
 import { vectorStore } from "./textToEmbeddingAndStore";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { StringOutputParser } from "@langchain/core/output_parsers";
-import { RunnablePassthrough, RunnableSequence } from "@langchain/core/runnables";
-import { _decodeChunks } from "openai/streaming.mjs";
+import { BytesOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
+import {
+  RunnablePassthrough,
+  RunnableSequence,
+} from "@langchain/core/runnables";
+import { Message as VercelChatMessage, StreamingTextResponse } from 'ai';
 
 
-async function combineDocumentsToString(documents: any[][]): Promise<string> {
-  return documents.map((docArray: any[]) => {
-    const doc = docArray[0];
-    return doc.pageContent;
-  }).join(" ");
+
+async function combineDocumentsToString(documents: Document[]): Promise<string> {
+  return documents.map((doc: any) => doc.pageContent).join(" ");
 }
 
-export const chats = async () => {
+async function oldChatRetriver(chatId: string){
+  const oldChat = "l";
 
-  const retriever = (await vectorStore());
+  return oldChat;
+}
+
+
+
+
+export const chats = async (message : string) => {
+
+  const retriever = (await vectorStore()).asRetriever({
+    k: 12,
+    filter: {
+      //filter property works and search in metadata column
+      file: "6440ca88-90c6-4589-8b25-58c47de7d2ee/1713183358816synopsisofai.pdf",
+      //do not use file base, use the paticular chat session id
+    },
+  });
 
   const openAIKey = process.env.OPENAI_API_KEY;
-  
   const openaiModel = "gpt-3.5-turbo-0125";
+  // const retriever2 = ScoreThresholdRetriever.fromVectorStore(retriever, {
+  //   minSimilarityScore: 0.5, // Finds results with at least this similarity score
+  //   maxK: 20, // The maximum K value to use. Use it based to your chunk size to make sure you don't run out of tokens
+  //   kIncrement: 10, // How much to increase K by each time. It'll fetch N results, then N + kIncrement, then N + kIncrement * 2, etc.
+  // });
+
   //for standalone questions
   const llm2 = new ChatOpenAI({
     openAIApiKey: openAIKey,
@@ -35,6 +56,7 @@ export const chats = async () => {
     openAIApiKey: openAIKey,
     temperature: 1.5,
     modelName: openaiModel,
+    streaming: true,  
   });
 
   const embedding = new OpenAIEmbeddings({
@@ -47,12 +69,14 @@ export const chats = async () => {
   Generate a relevant standalone question from the following user question: '{question}'
   do not include any external information in the question.
 `;
-    //answer template
+  //answer template
   const answerTemplate = `You are helpful assistant who can answer questions based on the context provided to you.
   carefully look into the documents before answering the question.
   Try to find the answer only within the context of the document. 
+  and try fully explain the answer.
   Do not use any external information. if you don't find the answer say "I dont have enough information to answer the 
-  question" and Always speak in friendly behavior.
+  question" and dont give false information and Always speak in friendly behavior.
+
   
   documents : {context}
   
@@ -60,36 +84,41 @@ export const chats = async () => {
   
   answer :
   `;
-  
+
   //prompting templates
-  const standaloneQuestion = PromptTemplate.fromTemplate(standaloneQuestionTemplate);
-  
+  const standaloneQuestion = PromptTemplate.fromTemplate(
+    standaloneQuestionTemplate
+  );
+
   const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
 
   //chains
-  const standaloneQuestionChain =  standaloneQuestion.pipe(llm2).pipe(new StringOutputParser()) ;
-  
+  const standaloneQuestionChain = standaloneQuestion
+    .pipe(llm2)
+    .pipe(new StringOutputParser());
+
   // const retrieverChain = RunnableSequence.from([
   //   prevResult => prevResult.standalone_question,
   //   retriever,
   //   outputDocumentCombiner
   // ]);
+
   const retrieverChain = RunnableSequence.from([
-    prevResult => {
+    (prevResult) => {
       const standaloneQuestion = prevResult.standalone_question;
       console.log(standaloneQuestion);
       return { standaloneQuestion };
     },
-    async ({standaloneQuestion}) => {
-      const retrieverResult = await retriever.similaritySearchWithScore(standaloneQuestion, 12); //12 for better result
-      console.log(retrieverResult)
+    async ({ standaloneQuestion }) => {
+      const retrieverResult = await retriever.getRelevantDocuments(
+        standaloneQuestion
+      ); 
       return { retrieverResult };
     },
-    async result => await combineDocumentsToString(result.retrieverResult),
-
+    async (result) => await combineDocumentsToString(result.retrieverResult),
   ]);
-  //main chain
-  const answerChain = answerPrompt.pipe(llm).pipe(new StringOutputParser());
+  //main chain  
+  const answerChain = answerPrompt.pipe(llm2).pipe(new BytesOutputParser());
 
   const chat = RunnableSequence.from([
     {
@@ -98,19 +127,19 @@ export const chats = async () => {
     },
     {
       context: retrieverChain,
-      question: ({original_input}) => original_input.question,
+      question: ({ original_input }) => original_input.question,
     },
+
     answerChain,
   ]);
 
-  const response = await chat.invoke({ question: "Provide a consise summary of whole document" });
-  console.log(response);
-  // const response = await chat.stream({ question: "who is the autho?" });
-// 
-  // for await (const chunk of response) {
-    // console.log(chunk);
-  // }
-  
-  
+  const response = await chat.stream({ question: message });
 
+  // console.log(response);
+  // // const response = await chat.stream({ question: "who is the autho?" });
+  // //
+  // let aiResponse : string = ''
+ 
+  // return aiResponse;
+  return new StreamingTextResponse(response);
 };

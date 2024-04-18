@@ -4,22 +4,29 @@ import { FaFileUpload } from "react-icons/fa";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { uploadToS3 } from "@/actions/file/uploadsToS3";
-import { documentToText, trys } from "@/aiflavoured/documentsToText";
+
+import { documentToText } from "@/aiflavoured/documentsToText";
 import { imgToText } from "@/aiflavoured/imgs/imgToText";
 import { set } from "zod";
 import { BarLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
+
 import { containsImages } from "@/aiflavoured/imgs/containsImages";
 
+// import { json } from "stream/consumers"; 
+
 export const DragAndDrop = () => {
+
+  const router = useRouter();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [dragging, setDragging] = useState(false);
   const [loader, setloader] = useState(false);
 
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setDragging(true);
-    ``;
   };
 
   const handleDragLeave = (e) => {
@@ -41,20 +48,17 @@ export const DragAndDrop = () => {
     try {
       setloader(true);
       const data = await uploadToS3(file.name, file.type, file.size);
-      const uploadUrl = data.success.url;
-      const fileKey = data.success.data.fileKey;
-      const userId = data.success.data.userId;
+      const uploadUrl = data.awsS3.url;
       if (!data) {
         throw new Error("Upload failed");
       }
       try {
-        const res = await fetch(uploadUrl, {
+        const res = await fetch(uploadUrl, { //uploading file to s3
           method: "PUT",
           body: file,
           headers: {
             "Content-Type": file.type,
           },
-          cache: "no-store",
         });
         if (!res.ok) {
           throw new Error("Network error");
@@ -65,16 +69,18 @@ export const DragAndDrop = () => {
           console.log(responseData);
         }
 
-        switch (file.type) {
-          case "application/pdf":
-            await documentToText(fileKey, userId, file.type);
-            break;
-          case "image/png":
-          case "image/jpeg":
-            await imgToText(fileKey, file.type);
-            break;
+        const responseFromApi =  await fetch("api/chat", {
+          method: "PUT",
+          body : JSON.stringify({data : data.awsS3.data,fileType : file.type}),
+        });
+        if (!responseFromApi.ok) {
+          setError("Upload failed");
+
+        }else{
+          const result = await responseFromApi.json();
+          setloader(false);
+          router.push(`/chat/${result.chatId}`);
         }
-        setloader(false);
         setSuccess("File uploaded successfully");
       } catch (e) {
         console.log(e);

@@ -1,9 +1,29 @@
-.buttonStyle{
-     
-      border: 1px solid #ffffff;
-      background: blur(1px);
+.button {
+  background-image: linear-gradient(
+    to right,
+    #ff6e7f 0%,
+    #9fdeff 51%,
+    #ff6e7f 100%
+  );
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  /* box-shadow: 0 0 20px #eee; */
 }
-.buttonStyle:hover{
-      background-color: rgba(0, 0, 0, 0.894);
-      box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
+
+.button:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
+  text-decoration: none;
+}
+
+.buttonStyle {
+  border: 1px solid #ffffff;
+  background: blur(1px);
+}
+.buttonStyle:hover {
+  background-color: rgba(0, 0, 0, 0.894);
+  box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
 }
