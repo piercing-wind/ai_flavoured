@@ -1,6 +1,19 @@
+'use server'
 import { db } from "@/lib/db";
 
-export const  chatSession = async (slug : string) => {
+export const createChatSession = async (userId: string, fileName : string) => {
+  const createChatSession = await db.chatSessionId.create({
+    data: {
+      userId: userId,
+      chatName: fileName,
+    },select :{
+      chatId : true
+    }
+  });
+  return createChatSession.chatId; 
+};
+
+export const  findChatSession = async (slug : string) => {
  
  const chatSession = await db.chatSessionId.findUnique({
       where: { chatId: slug },

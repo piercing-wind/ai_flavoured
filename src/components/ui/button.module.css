@@ -9,6 +9,7 @@
   transition: 0.5s;
   background-size: 200% auto;
   color: white;
+  text-shadow: #752c5a 0 0 2px;
   /* box-shadow: 0 0 20px #eee; */
 }
 

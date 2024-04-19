@@ -1,9 +1,4 @@
-import { chats } from "@/aiflavoured/chat";
-import { documentToText } from "@/aiflavoured/documentsToText";
-import { imgToText } from "@/aiflavoured/imgs/imgToText";
-import { summarize } from "@/aiflavoured/summarize";
-import { textSplitter } from "@/aiflavoured/textsplitter";
-import { textToEmbeddingAndStore } from "@/aiflavoured/textToEmbeddingAndStore";
+// import { chats } from "@/aiflavoured/chat";
 import { Message as VercelChatMessage, StreamingTextResponse } from 'ai';
 import { NextRequest, NextResponse } from "next/server";
 import { ChatOpenAI } from "@langchain/openai";
@@ -18,54 +13,33 @@ import {
 } from "@langchain/core/runnables";
 import { _decodeChunks } from "openai/streaming.mjs";
 import { combineDocumentsToString } from "./combineDocumentsToString";
-import { db } from "@/lib/db";
+import {uploadFileCore} from "./uploadFileCore"
 
 
 export async function PUT(req:Request){
-      
-      const body = await req.json();
-      const userId = body.data.userId;
-      const fileKey = body.data.fileKey;
-      const fileName = body.data.fileName;
-      const fileType = body.fileType;
+  const body = await req.json();
+  // console.log(body);
+  // const uploadedFiles = body.uploadedFiles;
+  console.log("from route", body);
+  for (const file of body) {   
+      const userId = file.data.userId;
+      const fileKey = file.data.fileKey;
+      const fileName = file.data.fileName;
+      const fileType = file.fileType;
+      const chatId = file.chatId;
+
       console.log("from route", fileName);
       try{
-        const createChatSession = await db.chatSessionId.create({
-          data: {
-            userId: userId,
-            chatName: fileName,
-          },select :{
-            chatId : true
-          }
-        });
-        console.log(createChatSession.chatId);
-      switch (fileType) {
-            case "application/pdf":
+        
+        const result = await uploadFileCore(userId, fileKey, fileName, fileType, chatId); 
 
-              const textFromDocuments = await documentToText(fileKey, userId, fileType);
-     
-              // const summary = await summarize(textFromDocuments);
-         
-              const splittedDocuments = await textSplitter(textFromDocuments, userId, createChatSession.chatId);
-              
-              const vectoring = await textToEmbeddingAndStore(splittedDocuments);
-              
-              if(vectoring.message === "success"){
-                return Response.json({message: "success", chatId: createChatSession.chatId});
-              }
-              break;
-            case "image/png":
-            case "image/jpeg":
-              await imgToText(fileKey, fileType);
-              break;
-          }   
-
-          return Response.json({message: "success", chatId: createChatSession.chatId});
+          return Response.json({result});
       }catch(e){
             console.log(e);
           return Response.json({message: "error"});
       }
 }
+} 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
