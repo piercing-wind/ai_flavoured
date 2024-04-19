@@ -12,17 +12,16 @@ import { BarLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 
 import { containsImages } from "@/aiflavoured/imgs/containsImages";
-
-// import { json } from "stream/consumers"; 
+import { createChatSession } from "@/actions/chat/chatSession";
+import { Session } from "@/actions/userSession";
+// import { json } from "stream/consumers";
 
 export const DragAndDrop = () => {
-
   const router = useRouter();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [dragging, setDragging] = useState(false);
   const [loader, setloader] = useState(false);
-
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -34,62 +33,79 @@ export const DragAndDrop = () => {
   };
 
   const handleFile = async (e, fromDrop = false) => {
+    const data = await Session();
+    const user = data.session;
+    
     setError("");
     setSuccess("");
+
     if (fromDrop) {
       e.preventDefault();
       setDragging(false);
     }
-    const file = (fromDrop ? e.dataTransfer : e.target).files[0];
-    if (file.size > 10 * 1024 * 1024) {
-      setError("File size must be less than 10MB");
-      return;
-    }
-    try {
-      setloader(true);
-      const data = await uploadToS3(file.name, file.type, file.size);
-      const uploadUrl = data.awsS3.url;
-      if (!data) {
-        throw new Error("Upload failed");
+    const files = (fromDrop ? e.dataTransfer : e.target).files;
+    const uploadedFiles = [];
+    const fileName = files.length > 1 ? "new folder 1" : files[0].name;
+    const chatId = await createChatSession(user.id, fileName);
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.size > 10 * 1024 * 1024) {
+        setError("File size must be less than 10MB");
+        return;
       }
       try {
-        const res = await fetch(uploadUrl, { //uploading file to s3
-          method: "PUT",
-          body: file,
-          headers: {
-            "Content-Type": file.type,
-          },
-        });
-        if (!res.ok) {
-          throw new Error("Network error");
+        setloader(true);
+        const data = await uploadToS3(file.name, file.type, file.size, user.id);
+        const uploadUrl = data.awsS3.url;
+        if (!data) {
+          throw new Error("Upload failed");
         }
+        try {
+          //this section is for uploading in the aws s3 bucket
+          const res = await fetch(uploadUrl, {
+            //uploading file to s3
+            method: "PUT",
+            body: file,
+            headers: {
+              "Content-Type": file.type,
+            },
+          });
+          if (!res.ok) {
+            throw new Error("Network error");
+          }
 
-        if (res.headers.get("content-type")?.includes("application/json")) {
-          let responseData = await res.json();
-          console.log(responseData);
+          if (res.headers.get("content-type")?.includes("application/json")) {
+            let responseData = await res.json();
+            console.log(responseData);
+          }
+          uploadedFiles.push({ data: data.awsS3.data, fileType: file.type, chatId: chatId});
+        } catch (e) {
+          console.log(e);
         }
-
-        const responseFromApi =  await fetch("api/chat", {
-          method: "PUT",
-          body : JSON.stringify({data : data.awsS3.data,fileType : file.type}),
-        });
-        if (!responseFromApi.ok) {
-          setError("Upload failed");
-
-        }else{
-          const result = await responseFromApi.json();
-          setloader(false);
-          router.push(`/chat/${result.chatId}`);
-        }
-        setSuccess("File uploaded successfully");
       } catch (e) {
         console.log(e);
+      }
+    }
+    console.log(uploadedFiles);
+    //aws s3 bucket upload ends here
+
+    try {
+      const responseFromApi = await fetch("api/chat", {
+        method: "PUT",
+        body: JSON.stringify(uploadedFiles),
+      });
+      if (!responseFromApi.ok) {
+        setError("Failed to Upload in database");
+      } else {
+        router.push(`/chat/${chatId}`);
       }
     } catch (e) {
       console.log(e);
     }
+    setloader(false);
+    setSuccess("File received successfully");
   };
-
   const fileInput = useRef(null);
   const handleClick = () => {
     fileInput.current.click();
@@ -113,6 +129,7 @@ export const DragAndDrop = () => {
             onClick={handleClick}
           >
             <input
+              multiple
               ref={fileInput}
               type="file"
               name="file"

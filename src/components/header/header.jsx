@@ -7,6 +7,7 @@ import Styles from "./header.module.css";
 import { Links } from "./links/links";
 import { MobileMenu } from "./mobileMenu";
 import AuthProvider from "../AuthProvider";
+
 export const Logo = () => {
   return (
     <div>
@@ -35,11 +36,12 @@ export const Header = async () => {
         <MobileMenu />
         <div className="hidden xl:flex items-center justify-center">
           <nav className={"items-center justify-center flex"}>
-            <div className="items-center sm:flex text-xl sd:text-sm text-white">
+            <div className="items-center sm:flex text-xl sd:text-sm">
               <Links type="HeaderNav" />
             </div>
           </nav>
         </div>
+
         <div className="hidden xl:flex">
           <TryForFreeButton />
         </div>

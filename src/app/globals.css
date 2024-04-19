@@ -14,7 +14,7 @@ html {
 }
 
 w{
-  color:#ff0783
+  color:#f8ebf1e4
 }
 
 :root {
@@ -30,8 +30,8 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: #fff;
+    --foreground: 0deg 0% 0%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -62,8 +62,8 @@ body {
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: rgb(0, 0, 0);
+    --foreground: 210 60% 100%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -92,9 +92,9 @@ body {
   }
 }
 body {
-  background-color: hsl(var(--background));
-  /* color: hsl(var(--foreground)); */
-  background-color: rgba(1, 1, 1, 0.982);
+  background-color: var(--background);
+  /* background-color: hsl(var(--background)); */
+  color: hsl(var(--foreground));
 }
 .glow {
   font-family: 'Caramel', sans-serif; /* Use the imported Google Font here */

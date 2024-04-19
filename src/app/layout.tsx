@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {cn} from "../lib/utils";
 import "./globals.css";
+import {Provider} from './provider'
 import AuthProvider from "../components/AuthProvider";
 
 export const metadata: Metadata = {
@@ -15,9 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn("antialiased",
-            "font-helvetica")}>{children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn("antialiased","font-helvetica")}>
+        <Provider>
+        {children}
+        </Provider>
       </body>
     </html>
   );

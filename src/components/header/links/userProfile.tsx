@@ -3,6 +3,7 @@ import { Logout } from "@/actions/logout";
 import { useEffect, useRef, useState } from "react";
 import { CircleLoader } from "react-spinners";
 import { FaUser } from "react-icons/fa6"
+import { ThemeSwitch } from "@/components/ThemeSwitch";
 export const UserProfile = ({ userData }: { userData: any }) => {
   const [display, setDisplay] = useState(false);
   const user = userData?.data?.user;    
@@ -47,6 +48,9 @@ export const UserProfile = ({ userData }: { userData: any }) => {
                         <h5 className="font-semibold">{user?.name}</h5>
                         <p className="text-sm">{user?.email}</p>
                         <p className="my-2 py-1" style={{ borderTop: '0.5px solid #4d2f4fd8', borderBottom: '0.5px solid #4d2f4fd8' }} >Personal</p>
+                        <div className="flex items-center justify-between">
+                          <p>Theme</p> &nbsp; <div className="right"><ThemeSwitch/></div>
+                        </div>
                         <button style={{ border: '0.5px solid #ff0783' }} className="flex px-5 rounded-2xl justify-center items-center mt-2 hover:bg-zinc-800" onClick={() => Logout()}>Log out</button>
                   </div>
             </div>

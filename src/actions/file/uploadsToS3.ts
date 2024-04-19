@@ -5,7 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { dbq } from "@/db/db"
 import * as z from "zod"
 import { uploadToUserFileTBSchema } from "@/schemas"
-import {auth} from "@/auth"
+// import {auth} from "@/auth"
 
 const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>) => {
   const { fileKey, fileName, userId, url } = data;
@@ -27,14 +27,14 @@ const acceptedFileType = [
 ]
 const maxFileSize =10 * 1024 * 1024; // 10 MB
 
-export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number ) => {
+export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string ) => {
   try {
 
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {failure : "User not authenticated"}
-    }
-    const userId = session?.user?.id ?? '';
+    // const session = await auth();
+    // if (!session || !session.user?.id) {
+    //   return {failure : "User not authenticated"}
+    // }
+    const userId = user;
     if(!acceptedFileType.includes(fileType)){
       return {failure : "File type not supported"}
     }
