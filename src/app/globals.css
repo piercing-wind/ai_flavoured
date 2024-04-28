@@ -4,7 +4,7 @@
 @tailwind utilities;
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
-  display: none;
+  /* display: none; */
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -14,7 +14,7 @@ html {
 }
 
 w{
-  color:#f8ebf1e4
+  color:#9300c0
 }
 
 :root {

@@ -14,15 +14,16 @@ import { useRouter } from "next/navigation";
 import { containsImages } from "@/aiflavoured/imgs/containsImages";
 import { createChatSession } from "@/actions/chat/chatSession";
 import { Session } from "@/actions/userSession";
+import { FileSelectorWarning } from "@/components/fileSelectorWarning";
 // import { json } from "stream/consumers";
 
 export const DragAndDrop = () => {
+  const [fileLength, setFileLength] = useState(null); 
   const router = useRouter();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [dragging, setDragging] = useState(false);
   const [loader, setloader] = useState(false);
-
   const handleDragOver = (e) => {
     e.preventDefault();
     setDragging(true);
@@ -31,23 +32,31 @@ export const DragAndDrop = () => {
   const handleDragLeave = (e) => {
     setDragging(false);
   };
-
+  const resetFileLength = () => {
+    console.log("reset file length");
+    setFileLength(null);
+  };
   const handleFile = async (e, fromDrop = false) => {
-    const data = await Session();
-    const user = data.session;
-    
-    setError("");
-    setSuccess("");
-
     if (fromDrop) {
       e.preventDefault();
+      e.stopPropagation();
       setDragging(false);
     }
-    const files = (fromDrop ? e.dataTransfer : e.target).files;
+    setError("");
+    setSuccess("");
+    const files = (fromDrop ? e.dataTransfer : e.target).files 
     const uploadedFiles = [];
     const fileName = files.length > 1 ? "new folder 1" : files[0].name;
+    console.log(files);
+    
+    const data = await Session();
+    const user = data.session;
     const chatId = await createChatSession(user.id, fileName);
-
+    
+    if(user.subscription === "free" && files.length > 2){
+      setFileLength(files.length);
+      return;
+    }
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.size > 10 * 1024 * 1024) {
@@ -56,7 +65,7 @@ export const DragAndDrop = () => {
       }
       try {
         setloader(true);
-        const data = await uploadToS3(file.name, file.type, file.size, user.id);
+        const data = await uploadToS3(file.name, file.type, file.size, user.id, chatId);
         const uploadUrl = data.awsS3.url;
         if (!data) {
           throw new Error("Upload failed");
@@ -79,7 +88,7 @@ export const DragAndDrop = () => {
             let responseData = await res.json();
             console.log(responseData);
           }
-          uploadedFiles.push({ data: data.awsS3.data, fileType: file.type, chatId: chatId});
+          uploadedFiles.push({ data: data.awsS3.data, fileType: file.type});
         } catch (e) {
           console.log(e);
         }
@@ -105,6 +114,9 @@ export const DragAndDrop = () => {
     }
     setloader(false);
     setSuccess("File received successfully");
+    if (!fromDrop) {
+      e.target.value = null;
+    }
   };
   const fileInput = useRef(null);
   const handleClick = () => {
@@ -113,12 +125,14 @@ export const DragAndDrop = () => {
 
   return (
     <div className="text-center flex justify-center">
+      {fileLength && <FileSelectorWarning file={fileLength} resetFileLength={resetFileLength} />}
       <div className="text-center">
         <h1 className=" mt-8 text-2xl">Upload your file here</h1>
 
         <form>
           <div
             className=" border border-dashed m-4 h-20 block items-center justify-center hover:mouse p-3 rounded-md"
+
             onDragOver={handleDragOver}
             onDrop={(e) => handleFile(e, true)}
             onDragLeave={handleDragLeave}
@@ -152,6 +166,7 @@ export const DragAndDrop = () => {
           <FormError message={error} />
         </form>
       </div>
+   
     </div>
   );
 };

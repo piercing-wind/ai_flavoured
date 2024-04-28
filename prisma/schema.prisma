@@ -11,6 +11,11 @@ enum UserRole{
   USER
 }
 
+enum MessageRole{
+  system
+  human
+}
+
 model User {
   id            String      @id @default(uuid())
   name          String?
@@ -28,18 +33,6 @@ model User {
   chatSessions  chatSessionId[]
 }
 
-model UserFile {
-  id        Int   @id @default(autoincrement())
-  userId    String
-  fileKey   String
-  fileName  String
-  url       String
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, fileKey])
-}
 
 model Account {
   id                 String  @id @default(cuid())
@@ -102,6 +95,20 @@ model AIMemory {
   metadata  Json
   vector    Unsupported("vector(3072)")?
 }
+model UserFile {
+  id        Int   @id @default(autoincrement())
+  userId    String
+  fileKey   String
+  fileName  String
+  url       String
+  chatId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatSession chatSessionId @relation(fields: [chatId], references: [chatId])
+
+  @@unique([userId, fileKey])
+}
 
 model chatSessionId {
   chatId     String  @id @default(cuid())
@@ -109,6 +116,7 @@ model chatSessionId {
   userId     String
   timestamp  DateTime      @default(now())
   messages   messageHistory[]
+  userFiles  UserFile[]
   
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, chatId])
@@ -117,7 +125,8 @@ model chatSessionId {
 model messageHistory {
   id          Int           @id @default(autoincrement())
   chatId      String        @db.VarChar(255)
-  message     String        
+  message     String    
+  role        MessageRole    
   timestamp   DateTime      @default(now())
 
   chatSession chatSessionId @relation(fields: [chatId], references: [chatId])

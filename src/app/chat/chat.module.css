@@ -1,0 +1,22 @@
+.chatscroll::-webkit-scrollbar {
+  width: 5px;
+  
+  display: flex;
+}
+
+.chatscroll::-webkit-scrollbar-track {
+  background: transparent;
+  transform : translateZ(0)
+}
+
+.chatscroll::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #ff0783;
+
+}
+
+.chatscroll::-webkit-scrollbar-thumb:hover {
+  background: #b6065e;
+  /* box-shadow: 0 0 5px  #ff0783; */
+}
+

@@ -21,24 +21,25 @@ export async function PUT(req:Request){
   // console.log(body);
   // const uploadedFiles = body.uploadedFiles;
   console.log("from route", body);
-  for (const file of body) {   
+  for (const file of body) {  
+    console.log("from loop", file); 
       const userId = file.data.userId;
       const fileKey = file.data.fileKey;
       const fileName = file.data.fileName;
+      const chatId = file.data.chatId;
       const fileType = file.fileType;
-      const chatId = file.chatId;
 
       console.log("from route", fileName);
       try{
         
-        const result = await uploadFileCore(userId, fileKey, fileName, fileType, chatId); 
+        await uploadFileCore(userId, fileKey, fileName, fileType, chatId); 
 
-          return Response.json({result});
       }catch(e){
-            console.log(e);
-          return Response.json({message: "error"});
+        console.log(e);
+        return Response.json({message: "error"});
       }
-}
+    }
+    return Response.json({message: "success"});
 } 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;

@@ -8,9 +8,9 @@ import { uploadToUserFileTBSchema } from "@/schemas"
 // import {auth} from "@/auth"
 
 const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>) => {
-  const { fileKey, fileName, userId, url } = data;
+  const { fileKey, fileName, userId, url, chatId } = data;
   try{  
-        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url") VALUES ($1, $2, $3, $4)', [ fileKey, userId,fileName, url])
+        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "chatId") VALUES ($1, $2, $3, $4, $5)', [ fileKey, userId,fileName, url, chatId])
         return res;
       }catch(e){
         console.log(e)
@@ -27,7 +27,7 @@ const acceptedFileType = [
 ]
 const maxFileSize =10 * 1024 * 1024; // 10 MB
 
-export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string ) => {
+export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string, chatId : string ) => {
   try {
 
     // const session = await auth();
@@ -59,7 +59,7 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
     
     //upload to user file table in database (postgres)
 
-    const data = { fileKey, fileName, userId, url : downloadUrl};
+    const data = { fileKey, fileName, userId, url : downloadUrl, chatId};
     // Handle validation errors
     const validationResult = uploadToUserFileTBSchema.safeParse(data);
     if (validationResult.success) {

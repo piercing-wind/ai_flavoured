@@ -1,12 +1,15 @@
 import {
   findChatSession,
   getAllPreviousSessions,
+  getDocUrls,
 } from "@/actions/chat/chatSession";
 import { auth } from "@/auth";
-import { FormError } from "@/components/auth/form-error";
-import { Conversation } from "./conversation";
-import { Sidebar } from "@/components/sidebar";
 
+import { Sidebar } from "@/components/sidebar";
+import { notFound } from "next/navigation";
+
+import { MainBar } from "@/components/mainBar";
+import { revalidatePath } from 'next/cache'
 
 export default async function Chat({ params }: { params: { slug: string } }) {
   const session = await auth();
@@ -18,24 +21,29 @@ export default async function Chat({ params }: { params: { slug: string } }) {
   const id: any = await findChatSession(params.slug);
 
   if (id.error) {
-    return (
-      <div className="flex justify-center items-center w-full h-screen">
-        <FormError message={id.error} />
-      </div>
-    );
+    notFound();
   }
+
+  const revalidate =async ()=>{
+    "use server"
+    revalidatePath(`/chat/${params.slug}`)
+  }
+
   const chatSessions = await getAllPreviousSessions(userId);
-  // console.log(chatSessions);
+  const activeSessions = chatSessions.find(
+    (session) => session.chatId === params.slug
+  );
+  // console.log("activeSessions", activeSessions);
+
+  const filesName = await getDocUrls(params.slug);
 
   return (
     <>
-      <div className="fullbody flex">
-          <Sidebar chatSessions={chatSessions} />
+      <div className="fullbody w-full flex h-screen">
+        <Sidebar chatSessions={chatSessions}  revalidate={revalidate} params={params}/>
 
-
-        <div className="pdfviewr flex"> hello</div>
-        <div className="converstaion flex">
-          <Conversation chatSession={params} user={userId} />
+        <div className="w-full">
+          <MainBar userId={userId} params={params} filesName={filesName} chatName={id.chatName}/>
         </div>
       </div>
     </>

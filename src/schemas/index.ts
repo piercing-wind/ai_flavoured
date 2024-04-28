@@ -34,6 +34,7 @@ export const uploadToUserFileTBSchema = z.object({
   fileName: z.string(),
   userId: z.string(),
   url: z.string(),
+  chatId: z.string()
 });
 
 const searchSchema = z.object({

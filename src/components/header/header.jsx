@@ -6,7 +6,7 @@ config.autoAddCss = false;
 import Styles from "./header.module.css";
 import { Links } from "./links/links";
 import { MobileMenu } from "./mobileMenu";
-import AuthProvider from "../AuthProvider";
+import AuthProvider from "@/components/AuthProvider";
 
 export const Logo = () => {
   return (
