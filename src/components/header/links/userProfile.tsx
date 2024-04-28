@@ -24,7 +24,7 @@ export const UserProfile = ({ userData }: { userData: any }) => {
   if (userData.status === "authenticated") {
     return (
       <>
-        <div className="relative inline-block z-30" ref={userProfileRef}>
+        <div className="relative inline-block z-30 cursor-pointer" ref={userProfileRef}>
           <div className="rounded-full h-7 w-7 md:h-9 md:w-9 justify-center items-center flex ml-3 md:mx-5" 
           style={{backgroundColor: "#ff0783"}}
           onClick={() => {
@@ -47,6 +47,7 @@ export const UserProfile = ({ userData }: { userData: any }) => {
                   <div className=" text-sm md:text-lg">
                         <h5 className="font-semibold">{user?.name}</h5>
                         <p className="text-sm">{user?.email}</p>
+                        <p>{user?.subscription}</p>
                         <p className="my-2 py-1" style={{ borderTop: '0.5px solid #4d2f4fd8', borderBottom: '0.5px solid #4d2f4fd8' }} >Personal</p>
                         <div className="flex items-center justify-between">
                           <p>Theme</p> &nbsp; <div className="right"><ThemeSwitch/></div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import {cn} from "../lib/utils";
 import "./globals.css";
 import {Provider} from './provider'
-import AuthProvider from "../components/AuthProvider";
+import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Ai Flavoured",
