@@ -2,8 +2,8 @@
 import { Logout } from "@/actions/logout";
 import { useEffect, useRef, useState } from "react";
 import { CircleLoader } from "react-spinners";
-import { FaUser } from "react-icons/fa6"
 import { ThemeSwitch } from "@/components/ThemeSwitch";
+import { UserIcon } from "@/components/userIcon";
 export const UserProfile = ({ userData }: { userData: any }) => {
   const [display, setDisplay] = useState(false);
   const user = userData?.data?.user;    
@@ -25,8 +25,7 @@ export const UserProfile = ({ userData }: { userData: any }) => {
     return (
       <>
         <div className="relative inline-block z-30 cursor-pointer" ref={userProfileRef}>
-          <div className="rounded-full h-7 w-7 md:h-9 md:w-9 justify-center items-center flex ml-3 md:mx-5" 
-          style={{backgroundColor: "#ff0783"}}
+          <div className="ml-3 md:mx-5" 
           onClick={() => {
             if (display) {
               setDisplay(false);
@@ -35,12 +34,7 @@ export const UserProfile = ({ userData }: { userData: any }) => {
             }
           }}
           >
-          {user?.image === null ? (<FaUser className="h-3 w-3 sm:h-5 sm:w-5"/>) : (
-          <img
-            className="rounded-full"
-            src={user?.image || ""}
-            alt="user"
-          />)}
+        <UserIcon userImage={user?.image} />
           </div>
       {display ? (
             <div className="absolute w-[230px] sm:w-72 right-0 mt-4 rounded-md p-3 backdrop-blur-3xl overflow-auto" style={{ border: '1px solid #ff0783' }}>

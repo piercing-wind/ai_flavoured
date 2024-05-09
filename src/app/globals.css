@@ -111,3 +111,8 @@ body {
     text-shadow: 0 0 10px #ff4da681, 0 0 15px #ff4da6a9, 0 0 20px #ff4da6b1; 
   }
 }
+.shiny-text {
+  background: linear-gradient(to right, #EC4899, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -16,6 +16,8 @@ import { IoMdCheckmark } from "react-icons/io";
 import Styles from "@/app/chat/chat.module.css";
 import { updateChatName, deleteChatSession } from "@/actions/chat/chatSession";
 import { Success } from "./success";
+import { usePathname } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 
 interface ChatSession {
   chatId: string;
@@ -26,16 +28,17 @@ interface ChatSession {
 
 interface SidebarProps {
   chatSessions: ChatSession[];
-  revalidate?: () => void;
-  params?: { slug: string }; //optional
 }
-export const Sidebar = ({ chatSessions, revalidate, params }: SidebarProps) => {
+export const Sidebar = ({ chatSessions }: SidebarProps) => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [editingChatId, setEditingChatId] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [success, setSuccess] = useState(false);
   
+  const pathname = usePathname();
+  const params = pathname.split("/").pop();
+
 
   //todo :  will update this later
   // const [optimisticChatHistory, updateOptimisticChatHistory ]= useOptimistic(chatSessions, (state, newChatHistory : any) => {
@@ -72,11 +75,13 @@ export const Sidebar = ({ chatSessions, revalidate, params }: SidebarProps) => {
       }
     }
   }
-
   // Danger zone :
   const handleDelete = (chatId : string) => {
     deleteChatSession(chatId);
     console.log("deleted")
+  }
+  const revalidate = async ()=>{
+    await revalidatePath(pathname)
   }
 
   return (
@@ -129,7 +134,7 @@ export const Sidebar = ({ chatSessions, revalidate, params }: SidebarProps) => {
                       <div
                         
                         className={`p-2 w-56 my-2 overflow-hidden overflow-ellipsis text-md flex items-center rounded-md justify-between hover:bg-gray-800 ${
-                          chathistory.chatId === params?.slug
+                          chathistory.chatId === params
                             ? " backdrop-blur-3xl bg-pink-900 font-semibold"
                             : ""
                         }`}
@@ -160,7 +165,7 @@ export const Sidebar = ({ chatSessions, revalidate, params }: SidebarProps) => {
                           </div>
                           </>)}
                         </div>
-                        {chathistory.chatId === params?.slug && editingChatId === null &&  (
+                        {chathistory.chatId === params && editingChatId === null &&  (
                           <div className="flex items-center text-lg">
                             <CiEdit className="mx-2" onClick={() => {setEditingChatId(chathistory.chatId),setInputValue(chathistory.chatName);}}/>
                             <RiDeleteBin5Line className="mx-2" onClick={()=>{handleDelete(chathistory.chatId)}} />

@@ -5,47 +5,37 @@ import {
 } from "@/actions/chat/chatSession";
 import { auth } from "@/auth";
 
-import { Sidebar } from "@/components/sidebar";
+
 import { notFound } from "next/navigation";
-
 import { MainBar } from "@/components/mainBar";
-import { revalidatePath } from 'next/cache'
 
-export default async function Chat({ params }: { params: { slug: string } }) {
+
+export default async function Page({ params }: { params: { slug: string } }) {
   const session = await auth();
   if (!session || !session.user?.id) {
     return { failure: "User not authenticated" };
   }
-  const userId = session.user.id;
+  const user = session.user;
 
-  const id: any = await findChatSession(params.slug);
+  const userChatSession: any = await findChatSession(params.slug);
 
-  if (id.error) {
+  if (userChatSession.error) {
     notFound();
   }
-
-  const revalidate =async ()=>{
-    "use server"
-    revalidatePath(`/chat/${params.slug}`)
-  }
-
-  const chatSessions = await getAllPreviousSessions(userId);
-  const activeSessions = chatSessions.find(
-    (session) => session.chatId === params.slug
-  );
-  // console.log("activeSessions", activeSessions);
-
-  const filesName = await getDocUrls(params.slug);
+  
+  const chatSessions = await getAllPreviousSessions(user.id || "");    
+  const chatSession = chatSessions.find(session => session.chatId === params.slug);
+  const userFiles = chatSession ? chatSession.userFiles : [];
 
   return (
     <>
-      <div className="fullbody w-full flex h-screen">
-        <Sidebar chatSessions={chatSessions}  revalidate={revalidate} params={params}/>
+      {/* <div className="fullbody w-full flex h-screen"> */}
+        
 
         <div className="w-full">
-          <MainBar userId={userId} params={params} filesName={filesName} chatName={id.chatName}/>
+          <MainBar user={user} params={params} userFiles={userFiles} chatName={userChatSession.chatName}/>
         </div>
-      </div>
+      {/* </div> */}
     </>
   );
 }

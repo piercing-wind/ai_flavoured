@@ -20,6 +20,7 @@ export const documentToText = async (fileKey: string, userId: string, fileType: 
   const buffer: any = await downloadFileFromS3(fileKey);
   try {
     if (buffer && fileType === "application/pdf") {
+
       const blob = new Blob([buffer], { type: fileType });
 
       const loader = new WebPDFLoader(blob,{

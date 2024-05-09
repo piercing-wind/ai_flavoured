@@ -1,3 +1,4 @@
+'use server'
 import { PromptTemplate } from "@langchain/core/prompts";
 import { OpenAI } from "@langchain/openai";
 import { loadSummarizationChain } from "langchain/chains";
@@ -10,8 +11,8 @@ import {
 } from "./prompts";
 
 
-export const summarize = async (docs: any) => {
-
+export const summarize = async (docs: any, aiModel : string) => {
+  console.log('received text from docs and generating summary')
   const documents = []; //temprary storage for documents
 
   // Loop through the documents and store the page content in the documents array
@@ -34,7 +35,7 @@ export const summarize = async (docs: any) => {
   
   // llm model
   const llmSummary = new OpenAI({
-    modelName: "gpt-3.5-turbo-0125",
+    modelName: aiModel,
     temperature: 0.1,
     streaming: true,
   });
@@ -51,9 +52,13 @@ export const summarize = async (docs: any) => {
     refineLLM: llmSummary,
   });
 
-  
-for await (const chunk of await summarizeChain.stream({ input_documents: docSummary })) {
-  console.log(chunk.output_text);
-}
- 
+  const summary = await summarizeChain.invoke({ input_documents: docSummary });
+  console.log('summary generated')
+  return summary.output_text;
+// for await (const chunk of await summarizeChain.stream({ input_documents: docSummary })) {
+//   summary.push(chunk.output_text);
+// } 
+// console.log()
+//   console.log('summary generated', summary)
+//  return summary.join(" ");
 };

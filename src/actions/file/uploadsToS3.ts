@@ -8,9 +8,9 @@ import { uploadToUserFileTBSchema } from "@/schemas"
 // import {auth} from "@/auth"
 
 const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>) => {
-  const { fileKey, fileName, userId, url, chatId } = data;
+  const { fileKey, fileName, userId, url, chatId , fileType } = data;
   try{  
-        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "chatId") VALUES ($1, $2, $3, $4, $5)', [ fileKey, userId,fileName, url, chatId])
+        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "chatId", "fileType") VALUES ($1, $2, $3, $4, $5, $6)', [ fileKey, userId,fileName, url, chatId, fileType])
         return res;
       }catch(e){
         console.log(e)
@@ -25,7 +25,7 @@ const acceptedFileType = [
   "image/png",
   // add more image types if needed
 ]
-const maxFileSize =10 * 1024 * 1024; // 10 MB
+
 
 export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string, chatId : string ) => {
   try {
@@ -37,9 +37,6 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
     const userId = user;
     if(!acceptedFileType.includes(fileType)){
       return {failure : "File type not supported"}
-    }
-    if(fileSize > maxFileSize){
-      return {failure : "File size exceeded"}
     }
     const client = await awsS3Config();
     const fileKey = userId.toString() + "/" + Date.now().toString() + fileName.replace(" ", "_");
@@ -59,7 +56,7 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
     
     //upload to user file table in database (postgres)
 
-    const data = { fileKey, fileName, userId, url : downloadUrl, chatId};
+    const data = { fileKey, fileName, userId, url : downloadUrl, chatId , fileType};
     // Handle validation errors
     const validationResult = uploadToUserFileTBSchema.safeParse(data);
     if (validationResult.success) {

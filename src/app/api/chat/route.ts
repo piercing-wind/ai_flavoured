@@ -46,11 +46,15 @@ const formatMessage = (message: VercelChatMessage) => {
 };
 
 
+
+
 export async function POST(req:NextRequest){
 
   const body = await req.json();
-  const messages = body.message
+  const userMessage = body.userMessage
   const chatId = body.chatId;
+  const prevChat = body.prevChat;
+  const aiModel = body.aiModel;
   // s ?? [];
   // console.log("Messages",messages)
   // const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
@@ -68,7 +72,7 @@ export async function POST(req:NextRequest){
   });
 
   const openAIKey = process.env.OPENAI_API_KEY;
-  const openaiModel = "gpt-3.5-turbo-0125";
+  const openaiModel = aiModel;
 
   
   // const retriever2 = ScoreThresholdRetriever.fromVectorStore(retriever, {
@@ -87,7 +91,7 @@ export async function POST(req:NextRequest){
   //for answers
   const llm = new ChatOpenAI({
     openAIApiKey: openAIKey,
-    temperature: 1.5,
+    temperature: 0.3,
     modelName: openaiModel,
     streaming: true,  
   });
@@ -99,22 +103,61 @@ export async function POST(req:NextRequest){
 
   //standalone question template rele
   const standaloneQuestionTemplate = `
-  Generate a relevant standalone question from the following user question: '{question}'
-  do not include any external information in the question.
+  As an intelligent assistant named aiflavoured, your task involves accurately processing user inputs. 
+  
+  If the input is a declarative sentence, retain it as is, without converting it into a question.
+  Also, refrain from changing "I" to "you" or "my" to "your" within declarative sentences. 
+  For example: 
+  If the human sentence is like : "I am going to market" Then maintain the sentence as it like : "I am going to market." If the human sentence is: "What is my name?" Maintain the sentence as: "What is my name?"
+  or i like this or that or anything like this are declarative sentences.;
+
+  Before generation your response Analyze the human statements to determine if it is a question or a declarative sentence.
+
+  Avoid converting sentences to questions when dealing with declarative sentence scenarios.
+  
+  However, if the user's input isn't a declarative sentence, then further processing is required.
+  With the information from a new human sentence and previous chat history between the human user
+  and aiflavoured, generate a standalone question. This question should be formulated without any 
+  additional commentary.
+  
+  Chat history: {chat_history}
+  
+  Human sentence: {question}
+  
+  Output: ;
 `;
   //answer template
-  const answerTemplate = `You are helpful assistant who can answer questions based on the context provided to you.
-  carefully look into the documents before answering the question. 
-  Try to find the answer only within the context of 
-  the document. and try fully explain the answer. Do not use any external information. if you don't find the answer 
-  say "I dont have enough information to answer the question" and dont give false information and Always speak in friendly behavior.
+const answerTemplate = `
+As an intelligent assistant named aiflavoured, your role extends beyond answering inquiries, 
+it also involves engaging the user in a friendly manner. The conversation record, which includes 
+the previous interactions between aiflavoured (you) and the human, is crucial for providing appropriate 
+responses from the documents and chat history only.
 
-  
-  documents : {context}
-  
-  Question: {question}
-  
-  answer :
+Before responding, review the conversation history to determine whether the user has asked a
+question, made a statement, or given a simple greeting. Take a few moments to understand the
+nature of the user's statement or inquiry.
+
+If the user's input is a declarative sentence, acknowledge and appreciate their contribution.
+However, if the input is irrelevant or off-topic, kindly inform them that you can only provide 
+assistance on the documents, while expressing appreciation for their interaction.
+
+If the user greets you, return the greeting in a friendly manner but remember to steer the 
+conversation back to the topic at hand.
+
+When providing an answer, always aim to be comprehensive, using information only from the 
+conversation history and provided documents. Always avoid referencing external information. 
+If the answer isn't available within the chat history or documents, simply respond with 
+"I don't have enough information to answer your question".
+
+During interactions, avoid providing false information at all.
+
+Chat history (human and aiflavoured's interactions): {chat_history}
+
+Documents: {context}
+
+User's input: {question}
+
+Response:
   `;
 
   //prompting templates
@@ -123,7 +166,7 @@ export async function POST(req:NextRequest){
   );
 
   const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
-
+ 
   //chains
   const standaloneQuestionChain = standaloneQuestion
     .pipe(llm2)
@@ -151,7 +194,7 @@ export async function POST(req:NextRequest){
     async (result) => await combineDocumentsToString(result.retrieverResult),
   ]);
   //main chain
-  const answerChain = answerPrompt.pipe(llm2).pipe(new BytesOutputParser());
+  const answerChain = answerPrompt.pipe(llm).pipe(new BytesOutputParser());
 
   const chat = RunnableSequence.from([
     {
@@ -161,7 +204,8 @@ export async function POST(req:NextRequest){
     {
       context: retrieverChain,
       question: ({ original_input }) => original_input.question,
-      // chat_history: ({ original_input }) => original_input.chat_history,
+      chat_history: ({ original_input }) => original_input.chat_history,
+     
     },
 
     answerChain,
@@ -169,8 +213,8 @@ export async function POST(req:NextRequest){
 
   const response = await chat.stream(
     {
-      // chat_history: formattedPreviousMessages.join('\n'), 
-      question: messages, 
+      question: userMessage, 
+      chat_history: prevChat, 
     }
   );
   
