@@ -18,6 +18,18 @@
   box-shadow: 0 0 10px #a00f57a0, 0 0 20px #e6007393;
   text-decoration: none;
 }
+.button:disabled {
+  background-image: linear-gradient(
+    to right,
+    #a31c2c 0%,
+    #bd0318 100%
+  );
+  color: #f2cbcb; /* change as needed */
+  box-shadow: none; /* remove box shadow */
+  cursor: not-allowed; /* change cursor */
+}
+
+
 
 .buttonStyle {
   border: 1px solid #ffffff;

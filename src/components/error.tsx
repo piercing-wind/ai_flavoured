@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-export const Success = ({ message }: { message: string }) => {
-  const [isVisible, setIsVisible] = useState(false);
+export const Error = ({ message }: { message: string }) => {
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (message) {
@@ -15,7 +15,7 @@ export const Success = ({ message }: { message: string }) => {
   }, [message]);
 
   return isVisible ? (
-    <div className='absolute left-1/2 transform -translate-x-1/2 top-5 z-50 w-64 h-8 border border-green-800 rounded-md text-green-700 font-semibold text-md backdrop-blur-lg flex items-center justify-center'>
+    <div className='absolute left-1/2 transform -translate-x-1/2 top-5 z-50 w-64 h-8 border border-red-800 rounded-md text-red-700 font-semibold text-md backdrop-blur-lg flex items-center justify-center'>
       <p>{message}</p>
     </div>
   ) : null;

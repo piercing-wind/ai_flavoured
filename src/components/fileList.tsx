@@ -13,10 +13,10 @@ import { IoCheckmarkSharp, IoChevronDown } from "react-icons/io5";
 import { useEffect, useState } from "react";
 
 export const FileList = ({
-  filesName,
+  userFiles,
   handleChange,
 }: {
-  filesName: any;
+  userFiles: any;
   handleChange: (url: string) => void;
 }) => {
   const handleClick = (url: string, fileName: string) => {
@@ -24,13 +24,13 @@ export const FileList = ({
     setSelectedFile(fileName);
   };
   useEffect(() => {
-    if (filesName[0]) {
-      handleClick(filesName[0].url, filesName[0].fileName);
+    if (userFiles[0]) {
+      handleClick(userFiles[0].url, userFiles[0].fileName);
     }
   }, []);
 
   const [selectedFile, setSelectedFile] = useState(
-    filesName[0] ? filesName[0]?.fileName : "No Files here!"
+    userFiles[0] ? userFiles[0]?.fileName : "No Files here!"
   );
   return (
     <div className="p-2">
@@ -42,7 +42,7 @@ export const FileList = ({
               {selectedFile}
             </div>
             <span className="rounded-full h-6 flex items-center justify-center p-[0.5rem]" style={{backgroundImage : 'linear-gradient(45deg, rgba(255, 7, 131, 0.5), rgba(147, 0, 192, 0.5))'}}>
-            {filesName.length}
+            {userFiles.length}
             </span>
             <Button aria-label="Zoom" className="p-0">
               &nbsp;
@@ -52,7 +52,7 @@ export const FileList = ({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent >
-          {filesName.map((file: any, index: number) => (
+          {userFiles.map((file: any, index: number) => (
             <DropdownMenuItem
               key={index}
               onClick={() => handleClick(file.url, file.fileName)}

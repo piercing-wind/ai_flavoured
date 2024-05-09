@@ -1,4 +1,4 @@
-import { DragAndDrop } from "./dragAndDrop";
+import { DragAndDrop } from "@/components/DragAndDrop";
 import { Chat } from "./chat";
 // export ex
 

@@ -5,8 +5,8 @@ import { Document } from "@langchain/core/documents";
 export const textSplitter = async (docs: Document[], userId : string, chatSession : string) => {
   try {
     const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 700,
-      chunkOverlap: 70,
+      chunkSize: 1000,
+      chunkOverlap: 100,
       separators: [" ", "\n", ". ", "?"],
     });
       //for vectorization

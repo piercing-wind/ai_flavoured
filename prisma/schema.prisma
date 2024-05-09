@@ -12,7 +12,7 @@ enum UserRole{
 }
 
 enum MessageRole{
-  system
+  aiflavoured
   human
 }
 
@@ -25,14 +25,13 @@ model User {
   accounts      Account[]
   password      String?  
   role          UserRole @default(USER)
-  subscription String?   @default("free")
+  subscription String?   @default("free")   
   accountCreationTimestamp  DateTime @default(now())
   isTwoFAEnabled Boolean @default(false)
   twoFAConfirmation    TwoFAConfirmation?
   uploads      UserFile[]
   chatSessions  chatSessionId[]
 }
-
 
 model Account {
   id                 String  @id @default(cuid())
@@ -102,6 +101,7 @@ model UserFile {
   fileName  String
   url       String
   chatId    String
+  fileType  String @default("")
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -125,6 +125,7 @@ model chatSessionId {
 model messageHistory {
   id          Int           @id @default(autoincrement())
   chatId      String        @db.VarChar(255)
+  title       String?
   message     String    
   role        MessageRole    
   timestamp   DateTime      @default(now())
