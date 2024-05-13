@@ -39,7 +39,7 @@
     "src/actions/login.ts",
     "src/middleware.js",
     ".next/types/**/*.ts"
-, "src/components/auth/userProfile.jsx", "src/components/header/links/links.jsx"  ],
+, "src/components/auth/userProfile.jsx", "src/components/header/links/links.jsx", "src/aiflavoured/presentation/presentation.ts"  ],
   "exclude": [
     "node_modules"
   ]
