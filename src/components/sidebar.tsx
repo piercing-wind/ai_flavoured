@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Styles from "@/app/chat/chat.module.css";
 import { Divider } from "@/components/divider";
 import { Button } from "@/components/button";
 import { FaPlus } from "react-icons/fa6";
@@ -13,11 +14,12 @@ import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FcCancel } from "react-icons/fc";
 import { IoMdCheckmark } from "react-icons/io";
-import Styles from "@/app/chat/chat.module.css";
 import { updateChatName, deleteChatSession } from "@/actions/chat/chatSession";
 import { Success } from "./success";
 import { usePathname } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { createPresentation } from "@/aiflavoured/presentation/presentation";
+import {createPresentationSlides} from "@/aiflavoured/presentation/presentation2";
 
 interface ChatSession {
   chatId: string;
@@ -109,9 +111,11 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
           <div className="flex items-center mx-2 my-5">
             <TiFolderOpen className=" text-xl" /> &nbsp; Chat with Documents
           </div>
+            <button onClick={()=>createPresentationSlides()}>
           <div className="flex items-center mx-2 my-5">
             <IoIosCreate className=" text-xl " /> &nbsp; Presentation AI
           </div>
+            </button>
           <Divider />
 
           <div className="chathistory">

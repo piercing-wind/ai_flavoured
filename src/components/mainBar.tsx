@@ -56,8 +56,8 @@ export const MainBar = ({
   },[]);
   return (
     <main className="w-full flex-col flex h-full ">
-      <div className="flex items-center justify-between border-b border-gray-400 shadow-md z-30">
-        <div className="p-4 rounded-r-sm  w-full flex items-center">
+      <div className="flex p-3 items-center justify-between border-b border-gray-400 shadow-md z-30">
+        <div className="rounded-r-sm  w-full flex items-center text-nowrap">
           <MdFolderZip className="text-2xl" /> &nbsp; <b>{chatName}</b> &nbsp;
           <FileList userFiles={userFiles} handleChange={handleSelectChange} />
         </div>
@@ -69,7 +69,7 @@ export const MainBar = ({
         <div className="mx-2">
           <ThemeSwitch  detectTheme={handleThemeChnage}/>
         </div>
-        <div className=" flex items-center mx-4 rounded-md">
+        <div className=" flex items-center ml-4 rounded-md">
           <AiModelSelector model={model} checkUserSubscription={checkUserSubscription} updateModel={updateModel} />
        </div>
       </div>
