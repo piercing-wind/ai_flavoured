@@ -8,6 +8,7 @@ export const summarizer = async (documents : any) => {
 
 
 const llm = new OpenAI({
+  openAIApiKey: process.env.OPENAI_API_KEY,
   modelName: "gpt-3.5-turbo-0125",
   temperature: 0,
 });

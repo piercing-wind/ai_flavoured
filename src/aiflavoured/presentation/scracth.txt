@@ -1,4 +1,0 @@
-{"nameOfSlide" : {
-      title : "contents",
-      body : "contents"
-}}

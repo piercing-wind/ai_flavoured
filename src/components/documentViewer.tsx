@@ -242,7 +242,7 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
                 key={i}
                 className="relative"
               >
-                <div className="absolute top-4 left-5 z-20 text-black">
+                <div className="absolute bg-slate-600 px-1 text-xs rounded-sm top-4 left-5 z-10 text-white">
                   {i + 1}
                 </div>
                 <Page

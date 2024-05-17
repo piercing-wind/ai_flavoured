@@ -8,7 +8,7 @@ import {
   summaryRefinePromptTemplate,
   summaryTemplate1,
   summaryRefineTemplate2
-} from "./prompts";
+} from "@/aiflavoured/prompts";
 
 
 export const summarize = async (docs: any, aiModel : string) => {
@@ -25,7 +25,7 @@ export const summarize = async (docs: any, aiModel : string) => {
   const splitter = new TokenTextSplitter({
     chunkSize: 16000,
     chunkOverlap: 300,
-  });
+  }); 
 
   // Join all the documents into a single string
   const combineDocs = documents.join(" ");
@@ -35,6 +35,7 @@ export const summarize = async (docs: any, aiModel : string) => {
   
   // llm model
   const llmSummary = new OpenAI({
+    openAIApiKey : process.env.OPENAI_API_KEY,
     modelName: aiModel,
     temperature: 0.1,
     streaming: true,

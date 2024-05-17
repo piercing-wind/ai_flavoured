@@ -36,7 +36,7 @@ const ResizableHandle = ({
     {...props}
   >
     {withHandle && (
-      <div className="z-10 flex text-xl items-center justify-center">
+      <div className="flex text-xl items-center justify-center">
        <PiArrowsOutLineHorizontalDuotone  className="text-xl"/>
       </div>
     )}
