@@ -18,8 +18,10 @@ import { updateChatName, deleteChatSession } from "@/actions/chat/chatSession";
 import { Success } from "./success";
 import { usePathname } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { createPresentation } from "@/aiflavoured/presentation/presentation";
-import {createPresentationSlides} from "@/aiflavoured/presentation/presentation2";
+import { presentaion } from "@/aiflavoured/presentation/presentation";
+import { aiSlides } from "@/aiflavoured/presentation/aiSlides";
+import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
+
 
 interface ChatSession {
   chatId: string;
@@ -104,14 +106,17 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
           <Divider />
         </div>
         <div className="mx-4 my-4">
+          <Link href="/chat">
           <Button className="text-sm my-4">
             <FaPlus /> &nbsp; New Chat
           </Button>
-
+          </Link> 
+          <button onClick={()=>pptxDocGenerator()}>
           <div className="flex items-center mx-2 my-5">
             <TiFolderOpen className=" text-xl" /> &nbsp; Chat with Documents
           </div>
-            <button onClick={()=>createPresentationSlides()}>
+          </button>
+            <button onClick={()=>presentaion()}>
           <div className="flex items-center mx-2 my-5">
             <IoIosCreate className=" text-xl " /> &nbsp; Presentation AI
           </div>
