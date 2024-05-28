@@ -14,11 +14,11 @@ html {
 }
 
 w{
-  color:#211f1f
+  color:#1e1c1d
 }
 
 :root {
-color:rgb(255, 255, 255)
+color:rgba(155,117, 156)
 
 }
 body {
@@ -114,5 +114,23 @@ body {
 .shiny-text {
   background: linear-gradient(to right, #EC4899, #7C3AED);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.text-gradient {
+  background: -webkit-linear-gradient(80deg, #ec008c, #fc6767);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subscribe-text-gradient {
+  background: -webkit-linear-gradient(80deg, #ff4cb7, #ff3737);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subscribe-background-image {
+  background-image: url('/subscribe-bg-pink-blue.png');
+  background-size: cover;
+  background-position: center;
 }

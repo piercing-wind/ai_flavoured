@@ -15,10 +15,13 @@ import { Button } from "@/components/button";
 import { AiModelSelector } from "@/components/aiModelSelector";
 import { useRouter } from "next/navigation";
 import { MultipleFilesPPTXwarn } from "@/components/multipleFilesPPTXwarn";
-import { PresentationSession } from "./presentationSession";
-import {documentToText} from "@/aiflavoured/documentsToText";
+import { DrawerForPPTXConfiguration } from "./drawerForPPTXConfiguration";
+import { generatePresentaionAndStore } from "@/aiflavoured/presentation/generatePresentaionAndStore";
+import { presentationSchema } from "@/schemas";
+import * as z from "zod"
 
-interface FileObject {
+
+export interface FileObject {
   id: number;
   userId: string;
   fileKey: string;
@@ -27,6 +30,23 @@ interface FileObject {
   chatId: string;
   fileType: string;
   createdAt: Date;
+  generator : string;
+}
+
+type UploaData = {
+  awsS3: {
+    url: string;
+    data: {
+        fileKey: string;
+        fileName: string;
+        userId: string;
+        url: string;
+        chatId: string;
+        fileType: string;
+    };
+};
+}|{
+  failure: string;
 }
 
 export const MainBar = ({
@@ -44,9 +64,10 @@ export const MainBar = ({
   const [theme, setTheme] = useState<boolean>(true);
   const [openFileManager, setFileManager] = useState<boolean>(false);
   const [model, setModel] = useState("gpt-3.5-turbo-0125");
-
+  const [openPPTXConfig, setOpenPPTXConfig] = useState<boolean>(false);
+  const [selectedFiles, setSelectedFiles] = useState<FileObject[]>([]);
   const router = useRouter();
-
+ 
   const checkUserSubscription = async () => {
     if (user.subscription === "free") {
       router.push(`/pricing`);
@@ -65,24 +86,33 @@ export const MainBar = ({
     setTheme(theme);
   };
   const setWarningOn = () => {
+    if(userFiles.length === 1){
+      setOpenPPTXConfig(true);
+      setSelectedFiles(userFiles);
+      return;
+    }
     setFileManager(true);
   };
+  const setOpenPPTXConfigOff = () => {
+    setOpenPPTXConfig(false);
+  }
   const setWarningOff = () => {
     setFileManager(false);
+    setOpenPPTXConfig(true);
   };
-  const handleFilesForPPTX = async (selectedFiles: FileObject[], togather: Boolean) => {
-      const response = await fetch("/api/presentation", {
-               method: "POST",
-               body: JSON.stringify({ 
-              files: selectedFiles,
-              aiModel: model,
-              togather: togather
-            }),
-          })
 
-      // Process responses here
-      console.log(response);
+  const getSelectedFiles = async (selectedFiles: FileObject[], ) => {
+    setSelectedFiles(selectedFiles);
   };
+  
+  const generatePPTX = async (slides : number, wordsAmount : string, audience : string, imageSearch : string , aiModel : string) => {
+
+    const data : z.infer<typeof presentationSchema> = {selectedFiles, user, slides, wordsAmount, audience, imageSearch, model , aiModel}
+    const presentationUrl = await generatePresentaionAndStore(data);  
+    if(presentationUrl){
+      router.push(presentationUrl)
+    }
+  }
   useEffect(() => {
     const htmlClassList = document.documentElement.classList;
     setTheme(htmlClassList.contains("light"));
@@ -94,7 +124,7 @@ export const MainBar = ({
           <MultipleFilesPPTXwarn
             file={userFiles}
             setWarnClose={setWarningOff}
-            handleFilesForPPTX={handleFilesForPPTX}
+            getSelectedFiles={getSelectedFiles}
           />
         )}
         <div className="flex p-3 items-center justify-between border-b border-gray-400 shadow-md">
@@ -124,7 +154,7 @@ export const MainBar = ({
             />
           </div>
         </div>
-
+       { openPPTXConfig && <DrawerForPPTXConfiguration user={user} setOpenPPTXConfigOff={setOpenPPTXConfigOff} openPptxConfig={openPPTXConfig} generatePPTX={generatePPTX}/>}
         <div className="flex flex-grow justify-between">
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel className="flex-1 xl:flex w-6/12" defaultSize={1}>
@@ -142,6 +172,7 @@ export const MainBar = ({
                   user={user}
                   aiModel={model}
                   userFiles={userFiles}
+                  api = "chat"
                 />
               </div>
             </ResizablePanel>

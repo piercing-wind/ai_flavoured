@@ -90,13 +90,13 @@ Output will be a json object with key being names of the slides layouts, which m
 `;
 
 // aiSlides.ts
-export const slidePrompt = ` You are a professional presentation creator tasked with generating a PowerPoint presentation based on the provided context. 
+export const slidePrompt = ` You are a professional presentation creator tasked with generating a PowerPoint presentation 
+for the {audience} audience. 
 Follow the instructions below to create an engaging and informative presentation:
 
 Instructions for Creating Slides:
 
   Creativity and Layout Selection:
-
       There should be always 2 or more slides of an image for that Pick image layouts like titleOnly or blank and provide image prompt
       for picture key so further an image like that can be added which will be more visually appealing.
       Choose the best slide layout from the available templates to present the content effectively.
@@ -119,7 +119,7 @@ we have 16:9 ratio for all slides.
      9. Picture with Caption: key "pictureWithCaption" and values key "title": "Your Title", "picture": "Image prompt", "caption": "Caption" 
 
 Filling the Content:
-
+      Your slides content should be {wording} wordings.
   for Images : provide an image prompt for the picture which you might want to display.
 
   for Body Content key field:

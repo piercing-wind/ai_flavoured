@@ -19,6 +19,9 @@ export const FileList = ({
   userFiles: any;
   handleChange: (url: string) => void;
 }) => {
+  const [selectedFile, setSelectedFile] = useState(
+    userFiles[0] ? userFiles[0]?.fileName : "No Files here!"
+  );
   const handleClick = (url: string, fileName: string) => {
     handleChange(url);
     setSelectedFile(fileName);
@@ -29,9 +32,6 @@ export const FileList = ({
     }
   }, []);
 
-  const [selectedFile, setSelectedFile] = useState(
-    userFiles[0] ? userFiles[0]?.fileName : "No Files here!"
-  );
   return (
     <div className="p-2">
       <DropdownMenu >

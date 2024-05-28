@@ -1,4 +1,5 @@
-"use client";
+"use client"
+import React from 'react';
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -26,6 +27,7 @@ import {
 import { Rotate } from "hamburger-react";
 import DocuFullScreenViewer from "./docFullScreenViewer";
 import { RxHamburgerMenu } from "react-icons/rx";
+import _ from 'lodash';
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -40,7 +42,19 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
   const [errorStyle, setErrorStyle] = useState<string>("");
   const [scale, setScale] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
+  const [debouncedWidth, setDebouncedWidth] = useState(0);
  
+  useEffect(() => {
+    const debouncedResizeHandler = _.debounce((newWidth) => {
+      setDebouncedWidth(newWidth);
+    },1000);
+    if (width !== undefined) {
+      debouncedResizeHandler(width);
+    }
+    return () => {
+      debouncedResizeHandler.cancel();
+    }
+  }, [width]);
 
   const inputValidator = z.object({
     pageNumber: z
@@ -215,8 +229,8 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
       </div>
       
 
-      <div className="flex-1 w-full max-h-screen overflow-y-auto overflow-x-auto ">
-        <div ref={ref} className={`w-full  h-full`}>
+      <div ref={ref} className="flex-1 w-full max-h-screen overflow-y-auto p-2">
+        <div >
           <Document
             loading={
               <div className=" flex items-center justify-center h-screen">
@@ -225,7 +239,7 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
             }
             onLoadError={(error) => {
               <div className=" flex items-center justify-center h-screen">
-                <FormError message={"unable to load pdf"} />
+                <FormError message={"unable to load file"} />
                 <p className="text-red">Fail to load document!</p>
               </div>;
             }}
@@ -240,13 +254,13 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
               <div
                 ref={(ref) => (pageRefs.current[i] = ref)}
                 key={i}
-                className="relative"
+                className="relative rounded"
               >
                 <div className="absolute bg-slate-600 px-1 text-xs rounded-sm top-4 left-5 z-10 text-white">
                   {i + 1}
                 </div>
                 <Page
-                  width={width ? width : 1}
+                 width={debouncedWidth}
                   pageNumber={i + 1}
                   scale={scale}
                   rotate={rotation}

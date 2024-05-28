@@ -1,4 +1,5 @@
 "use client";
+import React from 'react'
 import { DocumentViewer } from "@/components/documentViewer";
 import {
   ResizableHandle,
@@ -11,9 +12,18 @@ import { useEffect, useState } from "react";
 import { MdFolderZip } from "react-icons/md";
 import { LogoText } from "./logo";
 import {ThemeSwitch} from "@/components/ThemeSwitch";
-import { Button } from "@/components/button";
+import { Button } from "@/components/ui/button";
 import { AiModelSelector } from "@/components/aiModelSelector";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";  
+import { IoCloudDownloadOutline } from "react-icons/io5";
+import { BuySubscription } from "./buySubscription";
+
+
+function capitalizeFirstWord(str : string) {
+  const words = str.split(' ');
+  words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+  return words.join(' ');
+}
 
 interface FileObject {
   id: number;
@@ -26,7 +36,7 @@ interface FileObject {
   createdAt: Date;
 }
 
-export const PresentationSession = ({
+export const PresentationSession = React.memo(({
   user,
   params,
   userFiles,
@@ -38,11 +48,13 @@ export const PresentationSession = ({
   userFiles: FileObject[];
   chatName: string;
 }) => {
-  const [pptx, setPPTX] = useState("");
+  const [pptxAsPDF, setPPTXAsPDFUrl] = useState("");
   const [theme, setTheme] = useState<boolean>(true);
   const [model, setModel] = useState("gpt-3.5-turbo-0125");
+  const [fileName, setFileName] = useState("");
+  const [pptxUrl, setPPTXUrl] = useState("");
+  const [subscriptionRequired, setSubscriptionRequired] = useState(false);
   const router = useRouter();
-
   const checkUserSubscription = async () => {
     if (user.subscription === "free") {
       router.push(`/pricing`);
@@ -54,9 +66,41 @@ export const PresentationSession = ({
     setModel("gpt-3.5-turbo-0125");
   }
 
+  useEffect(() => {
+  const pdfFile = userFiles.find(item => item.fileType === 'application/pdf');
+  if(pdfFile){
+    setPPTXAsPDFUrl(pdfFile.url);
+  }  
+  const pptxFile = userFiles.find(item => item.fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+  if(pptxFile){
+    const fileName = capitalizeFirstWord(pptxFile.fileName.replace(/_/g, ' '));
+    setFileName(fileName);
+    setPPTXUrl(pptxFile.url);
+  }
+ 
+  },[])
+
   const handleThemeChnage = (theme : boolean) => {
     setTheme(theme);
   };
+
+  const closeSubscriptionreq = () => {
+    setSubscriptionRequired(false);
+  }
+
+  const handleDownload = () => {
+    if (user.subscription === "free") {
+      setSubscriptionRequired(true);
+      return;
+    }else{
+    const link = document.createElement('a');
+    link.href = pptxUrl;
+    link.download = fileName ; // Optional: Set the name of the downloaded file
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  }
 
   useEffect(() => {
     const htmlClassList = document.documentElement.classList;
@@ -64,33 +108,40 @@ export const PresentationSession = ({
   },[]);
   return (
     <>
-    <main className="relative w-full flex-col flex h-full ">
-      <div className="flex p-3 items-center justify-end border-b border-gray-400 shadow-md">
+    <main className="relative w-full flex-col flex h-full">
+     {subscriptionRequired && <BuySubscription closeSubscriptionreq={closeSubscriptionreq}/>}
+      <div className="flex p-3 items-center justify-between border-b border-gray-400 shadow-md">
+        <Button onClick={() => {handleDownload()} } size="sm" variant={'default'} className=' h-8 bg-slate-950 text-white shadow-xl  hover:bg-slate-800 dark:hover:bg-pink-600 dark:bg-pink-500 font-semibold'>Download &nbsp; <IoCloudDownloadOutline /></Button>      
+        <div title={fileName} className="text-gradient w-96 overflow-ellipsis flex items-center justify-center text-xl font-bold">{fileName}</div>        
+         <div className="flex items-center justify-end">
         <div className="mx-2">
           <ThemeSwitch  detectTheme={handleThemeChnage}/>
         </div>
         <div className=" flex items-center ml-4 rounded-md">
           <AiModelSelector model={model} checkUserSubscription={checkUserSubscription} updateModel={updateModel} />
        </div>
+        </div>
       </div>
 
-      <div className="flex flex-grow justify-between">
+      <div className="justify-between w-[99.9%]">
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel className="flex-1 xl:flex w-6/12" defaultSize={1}>
-            <div className="w-full h-[calc(100vh-5rem)] overflow-auto ">
-              <DocumentViewer docUrl={pptx} />
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-          <ResizablePanel className="flex-1 px-2 " defaultSize={1}>
-            <div className="converstaion flex rounded-sm h-[calc(100vh-5rem)]">
-              <Conversation isLightMode={theme} chatSession={params} user={user} aiModel={model} userFiles={userFiles} />
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+                <ResizablePanel defaultSize={75}>
+                  <div className="w-full h-[calc(100vh-5rem)] overflow-y-auto ">
+                    <DocumentViewer docUrl={pptxAsPDF} />
+                  </div>
+                </ResizablePanel>
+        
+                <ResizableHandle withHandle />
+                <ResizablePanel defaultSize={25}>
+                  <div className="converstaion flex rounded-sm h-[calc(100vh-5rem)]">
+                    <Conversation isLightMode={theme} chatSession={params} user={user} aiModel={model} userFiles={userFiles} api={'presentationchat'} />                  
+                  </div>
+                </ResizablePanel>
+              </ResizablePanelGroup>
       </div>
     </main>
     </>
   );
-};
+});
+
+PresentationSession.displayName = "PresentationSession";

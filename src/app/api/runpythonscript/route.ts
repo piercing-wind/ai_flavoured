@@ -1,16 +1,18 @@
 import {exec as execCb} from "child_process";
 import { promisify } from 'util';
+import path from 'path';
 
 const exec = promisify(execCb);
 
 export async function GET(req: Request) {
   console.log("Python script running");
-  let output = "";
-  const data = "Sourabh";
-
+ 
+  const pptxPath = path.resolve('output/ppPartyThemePresentation.pptx');
+  const pdfPath = path.resolve('output/python.pdf');
   try {
-    const { stdout, stderr } : any = await exec(`python3 pyscripts/script.py  ${data}`);
+    const { stdout, stderr } : any = await exec(`python3 pyscripts/script.py ${JSON.stringify(pptxPath)} `);
     console.log("stdout", stdout);
+    console.log("stderr", stderr);
     return Response.json({ message: stdout }, { status: 200 });
   } catch (error) {
     console.log("Error in python script", error);

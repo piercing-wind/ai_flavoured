@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa6";
 import { TiFolderOpen } from "react-icons/ti";
 import { IoIosCreate } from "react-icons/io";
 import { FaHistory } from "react-icons/fa";
-import { useState , useOptimistic} from "react";
+import { useState , useOptimistic, useEffect} from "react";
 import { MdChevronLeft, MdChevronRight, MdFolderZip } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -17,10 +17,24 @@ import { IoMdCheckmark } from "react-icons/io";
 import { updateChatName, deleteChatSession } from "@/actions/chat/chatSession";
 import { Success } from "./success";
 import { usePathname } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
-import { presentaion } from "@/aiflavoured/presentation/presentation";
+import { revalidate } from "@/actions/revalidate";
+import { useRouter } from "next/navigation";
+
+import { presentation } from "@/aiflavoured/presentation/presentation";
 import { aiSlides } from "@/aiflavoured/presentation/aiSlides";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
+import { getImagesFromGoogle, getImagesFromGoogleAsBase64ArrayWithoutHeaders } from "@/aiflavoured/presentation/getImagesFromGoogleAndConvertToBase64";
+import {imageToBase64, localImageToBase64} from "@/aiflavoured/imgs/imageToBase64";
+import { histogram } from "@/aiflavoured/imgs/histogram";
+import {webpToJpg4} from "@/aiflavoured/presentation/webptoJpg";
+import { googleImagesDesignFilterAI } from "@/aiflavoured/presentation/googleImagesDesignFilterAI";
+import { FileObject } from "./mainBar";
+import { deleteFromS3 } from "@/actions/file/awsS3";
+import { log } from "console";
+import { facetPresentation } from "@/aiflavoured/presentation/facetPresentation";
+import { chat } from "googleapis/build/src/apis/chat";
+import { spresentation } from "@/aiflavoured/presentation/simplePresentation";
+import { ppPartyThemePresentation } from "@/aiflavoured/presentation/ppPartyThemePresentation";
 
 
 interface ChatSession {
@@ -34,6 +48,7 @@ interface SidebarProps {
   chatSessions: ChatSession[];
 }
 export const Sidebar = ({ chatSessions }: SidebarProps) => {
+  const router = useRouter();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [editingChatId, setEditingChatId] = useState<string | null>(null);
@@ -43,6 +58,12 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
   const pathname = usePathname();
   const params = pathname.split("/").pop();
 
+  useEffect(() => {
+    const refreshPage = () => {
+      router.refresh();
+    };
+    refreshPage();
+  },[])
 
   //todo :  will update this later
   // const [optimisticChatHistory, updateOptimisticChatHistory ]= useOptimistic(chatSessions, (state, newChatHistory : any) => {
@@ -54,7 +75,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
   // const [chatHistory, setChatHistory] = useState(chatSessions);
 
 
-  const handleEdit = () => {  
+  const handleEdit = async () => {  
     if (editingChatId !== null) {
       // updateOptimisticChatHistory(
       //   chatSessions.map((chat) => {
@@ -69,7 +90,8 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
       //   })
       // )
       try{
-        updateChatName(editingChatId, inputValue);
+        console.log( inputValue)
+        await updateChatName(editingChatId, inputValue);
         setSuccess(true);
         setTimeout(() => {
             setSuccess(false);
@@ -79,13 +101,28 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
       }
     }
   }
+  
   // Danger zone :
-  const handleDelete = (chatId : string) => {
-    deleteChatSession(chatId);
+  const handleDelete = async (chatId : string, userFiles : FileObject[] ) => {
+    console.log(userFiles)
+    await deleteChatSession(chatId),
+      
+    Promise.all(userFiles.map(file => deleteFromS3(file.fileKey)))
+
     console.log("deleted")
   }
-  const revalidate = async ()=>{
-    await revalidatePath(pathname)
+
+  const handleAPI = async () => {
+    const data = {
+      author : "author",
+      title : "test",
+      pptxData : "text",
+      imageSearch : "Google Search",
+      modelForColorAndTitle : "gpt-3.5-turbo-0125",
+      userId : chatSessions[0].userId
+    }
+    console.log("clickers")
+     const presentation =await ppPartyThemePresentation(data);
   }
 
   return (
@@ -111,25 +148,30 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
             <FaPlus /> &nbsp; New Chat
           </Button>
           </Link> 
-          <button onClick={()=>pptxDocGenerator()}>
+          <button onClick={handleAPI} >
           <div className="flex items-center mx-2 my-5">
             <TiFolderOpen className=" text-xl" /> &nbsp; Chat with Documents
           </div>
           </button>
-            <button onClick={()=>presentaion()}>
+            <button onClick={async()=> {
+              const res = await fetch('/api/runpythonscript', {
+                method: 'GET',
+              });
+              console.log(res);
+            }} >
           <div className="flex items-center mx-2 my-5">
             <IoIosCreate className=" text-xl " /> &nbsp; Presentation AI
           </div>
             </button>
           <Divider />
 
-          <div className="chathistory">
+          <div className="chathistory flex flex-col h-full">
             <h1 className="text-lg p-2 m-2 hover:bg-stone-900 rounded-md">
               <div className="flex items-center ">
                 <FaHistory /> &nbsp; Chat History
               </div>
             </h1>
-            <div className={`h-96 overflow-auto ${Styles.chatscroll}`}>
+            <div className={`h-[47vh] sm:h-[30vh] md:h-[33vh] lg:h-[45vh] xl:h-[50vh] overflow-auto ${Styles.chatscroll}`}>
               {chatSessions.length >= 1 ? (
                 chatSessions
                   .sort(
@@ -138,17 +180,28 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                       new Date(a.timestamp).getTime()
                   )
                   .map((chathistory: any) => (
+                    
                     // {
-                    <Link key={chathistory.chatId} href={`/chat/${chathistory.chatId}`}>
-                      <div
-                        
-                        className={`p-2 w-56 my-2 overflow-hidden overflow-ellipsis text-md flex items-center rounded-md justify-between hover:bg-gray-800 ${
+                    <Link key={chathistory.chatId} href={
+                      (() => {
+                        switch(chathistory.userFiles[0].generator){
+                          case "aiflavoured":
+                            return `/aipresentation/${chathistory.chatId}`;
+                          case "user":    
+                            return `/chat/${chathistory.chatId}`;
+                          default:
+                            return "/error";
+                        }
+                      })()
+                    }>
+                      <div                       
+                        className={`p-2 w-56 my-2 overflow-hidden truncate text-md flex items-center rounded-md justify-between hover:bg-gray-800 ${
                           chathistory.chatId === params
                             ? " backdrop-blur-3xl bg-pink-900 font-semibold"
                             : ""
                         }`}
                         onClick={() => {
-                          revalidate;
+                         revalidate(pathname)
                         }}
                       >
                         <div className=" items-center flex">
@@ -161,7 +214,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                           )}{" "}
                           &nbsp;&nbsp;
                           {chathistory.chatId !== editingChatId ?
-                           (chathistory.chatName ): (<>
+                           ( chathistory.chatId === params ? <p className="truncate w-32">{chathistory.chatName}</p> : chathistory.chatName ): (<>
                           <input 
                           value={inputValue !== null && inputValue !== undefined ? inputValue : chathistory.chatName}   
                           onChange={event => setInputValue(event.target.value)} 
@@ -169,7 +222,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                           style={{ backgroundColor: 'transparent', borderBottom: '1px solid pink'}}
                           ></input>
                           <div className="flex items-center text-lg">
-                          <button onClick={() => {handleEdit(); setEditingChatId(null)}} className="mx-2" ><IoMdCheckmark className="text-green-600"/></button>
+                          <button onClick={async () =>  {await handleEdit(); setEditingChatId(null)}} className="mx-2" ><IoMdCheckmark className="text-green-600"/></button>
                           <button onClick={() => {setEditingChatId(null);setInputValue('')}} className=""><FcCancel /></button>
                           </div>
                           </>)}
@@ -177,7 +230,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                         {chathistory.chatId === params && editingChatId === null &&  (
                           <div className="flex items-center text-lg">
                             <CiEdit className="mx-2" onClick={() => {setEditingChatId(chathistory.chatId),setInputValue(chathistory.chatName);}}/>
-                            <RiDeleteBin5Line className="mx-2" onClick={()=>{handleDelete(chathistory.chatId)}} />
+                            <RiDeleteBin5Line className="mx-2" onClick={()=>{handleDelete(chathistory.chatId, chathistory.userFiles)}} />
                           </div>
                         )}
                       </div>

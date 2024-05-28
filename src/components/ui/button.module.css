@@ -32,7 +32,7 @@
 
 
 .buttonStyle {
-  border: 1px solid #ffffff;
+  /* border: 1px solid #ffffff; */
   background: blur(1px);
 }
 .buttonStyle:hover {

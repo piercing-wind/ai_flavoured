@@ -3,8 +3,9 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { slidePrompt, refineOutput } from "./promptsForPresentation";
-export const aiSlides = async (model : string = 'gpt-4o', numOfSlides : string = '10', docsData : string) => {
+export const aiSlides = async (model : string = 'gpt-4o', numOfSlides : string = '10', docsData : string, audience : string, wording : string) :Promise<string> => {
   console.log("working on it...");
+  let slideData : string = "";
   try{
       
       const llm = new ChatOpenAI({
@@ -27,17 +28,17 @@ export const aiSlides = async (model : string = 'gpt-4o', numOfSlides : string =
       const slides = await slidesChain.invoke({
             numberOfSlides: numOfSlides,
             document: docsData,
+            wording : wording,
+            audience : audience,
       });
       const refineOutputChain = refineOutputPrompt.pipe(llm2).pipe(new StringOutputParser());
 
       const refinedSlides = await refineOutputChain.invoke({
             slides: slides,
       });
-
-
-      console.log(refinedSlides);
-      return refinedSlides;
-      }catch(e){
-            console.log(e);
-      }
+      slideData = refinedSlides;
+}catch(e){
+      console.log(e);
+}
+return slideData;
 };
