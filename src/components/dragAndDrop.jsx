@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
 import { Error } from "@/components/error";
 import { Success } from "@/components/success";
-import { uploadToS3 } from "@/actions/file/uploadsToS3";
+import { uploadToS3 } from "@/actions/file/awsS3";
 
 import { documentToText } from "@/aiflavoured/documentsToText";
 import { imgToText } from "@/aiflavoured/imgs/imgToText";
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 import { containsImages } from "@/aiflavoured/imgs/containsImages";
 import { createChatSession } from "@/actions/chat/chatSession";
-import { Session } from "@/actions/userSession";
+import { Session } from "@/actions/userSession";  
 import { FileSelectorWarning } from "@/components/fileSelectorWarning";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -25,6 +25,8 @@ import { BsChatRightText } from "react-icons/bs";
 import { FormError } from "@/components/auth/form-error";
 import { Redirecting } from "@/components/redirecting";
 import {AiModelSelector} from "@/components/aiModelSelector";
+import {cn} from "@/lib/utils"
+import { revalidate } from "@/actions/revalidate";
 
 export const DragAndDrop = () => {
   const [fileLengthError, setFileLengthError] = useState(false);
@@ -48,9 +50,10 @@ export const DragAndDrop = () => {
     e.preventDefault();
     setDragging(true);
   };
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e) =>{
     setDragging(false);
-  };
+  }
+
   const checkUserSubscription = async () => {
     if (isSubscribed === "free" || session.subscription === "free") {
       router.push(`/pricing`);
@@ -68,11 +71,15 @@ export const DragAndDrop = () => {
     setOpenFileManager(false);
     setInputFiles([]);
   }
-  function emptyErrorMessage() {
+  function emptyErrorMessage (){ 
     setError("");
   }
+  const resetFileInput = () => {
+    if (fileInput.current) {
+      fileInput.current.value = null;
+    }
+  };
 
-  
   const filesPageLengthCheck = async (files) => {
     setValidating(true);
     setDisabled(true);
@@ -119,15 +126,17 @@ export const DragAndDrop = () => {
         setDisabled(false);
         setFileLengthError(false);
       }
-
+      
       if (session.subscription === "free" && inputFiles.length > 2) {
         setFileLengthError(true);
       }
     };
+
     if (session && session.subscription !== null) {
       updateFileLength();
     }
   }, [inputFiles]);
+  
 
   const handleFile = async (e, fromDrop = false) => {
     e.preventDefault();
@@ -136,35 +145,37 @@ export const DragAndDrop = () => {
       e.stopPropagation();
       setDragging(false);
     }
-
+    
     if (session === null) {
       console.log("No user found");
       return;
     }
-
+    
     const files = Array.from((fromDrop ? e.dataTransfer : e.target).files);
     const newInputFiles = [...inputFiles, ...files];
-    console.log("from handle file", newInputFiles);
     setInputFiles(newInputFiles);
-
+    
     //checking for valid files
     if (fileLengthError) {
       setError(`You can only upload two files  at once`);
       return;
     }
-
+    console.log(files.length);
     if (files.length >= 2) {
       setOpenFileManager(true);
+      setDisabled(true);
     }
-
+    setChatDisable(true);
     const fileValidation = await filesPageLengthCheck(newInputFiles);
-
+    
     for (const result of fileValidation) {
       if (result.pages > 30 && isSubscribed === "free") {
         setError(
           `The ${result.fileName} have ${result.pages} pages, You can only upload files with less than 50 pages. Please buy a plan for more!`
-        );
-        setloader(false);
+          );
+          if (openFileManager === false && files.length === 1) {
+            setInputFiles([]);
+          }
         setDisabled(true);
         setChatDisable(true);
         return;
@@ -173,13 +184,11 @@ export const DragAndDrop = () => {
     setChatDisable(false);
 
     if ((files.length === 0 || files.length === 1) && inputFiles.length === 0) {
-      setloader(true);
       processFiles(files);
 
       if (!fromDrop) {
         e.target.value = null;
       }
-      setloader(false);
       return;
     }
 
@@ -188,22 +197,25 @@ export const DragAndDrop = () => {
     }
   };
 
-  const handleDeleteFile = (index) => {
+  const handleDeleteFile = async (index) => {
     const newUploadedFiles = [...inputFiles];
     newUploadedFiles.splice(index, 1);
     setInputFiles(newUploadedFiles);
-
     emptyErrorMessage();
     // If there are no more files, close the file manager
+    const fileValidation = await filesPageLengthCheck(newUploadedFiles);
+    const validFiles = fileValidation.every(result => result.pages <= 30);
+    setChatDisable(!validFiles);
+
     if (newUploadedFiles.length === 0) {
       setOpenFileManager(false);
     }
   };
 
   const processFiles = async (singleFiles) => {
+    setloader(true);
     setError("");
     setSuccess("");
-    setloader(true);
     const files = inputFiles.length > 0 ? inputFiles : singleFiles;
     const uploadedFiles = [];
     const fileName = files.length > 1 ? "new folder 1" : files[0].name;
@@ -218,7 +230,8 @@ export const DragAndDrop = () => {
           file.type,
           file.size,
           user.id,
-          chatId
+          chatId,
+           "user"
         );
         const uploadUrl = data.awsS3.url;
         if (!data) {
@@ -252,18 +265,18 @@ export const DragAndDrop = () => {
     //aws s3 bucket upload ends here
 
     try {
-      const responseFromApi = await fetch("api/chat", {
+      //for vectorizing the text from the uploaded files
+      const responseFromApi = await fetch("/api/vectorstore", {
         method: "PUT",
         body: JSON.stringify(uploadedFiles),
       });
       if (!responseFromApi.ok) {
         setError("Failed to Upload in database, Try Again!");
       } else {
-        setRedirect(true);
         setloader(false);
+        setRedirect(true);
         setSuccess("File upload successfull");
         router.push(`/chat/${chatId}`);
-        setRedirect(false);
       }
     } catch (e) {
       console.log(e);
@@ -287,6 +300,7 @@ export const DragAndDrop = () => {
         />
       )}
       {redirect && <Redirecting />}
+
       <div className="p-2 w-2/3 h-auto">
         <div className=" w-full h-auto flex justify-center border border-gray-400 rounded-md">
           <input
@@ -297,7 +311,9 @@ export const DragAndDrop = () => {
             accept=".pdf,.doc,.docx,image/*"
             style={{ display: "none" }}
             onChange={(e) => {
+              console.log(e.target.files)
               handleFile(e);
+              resetFileInput();
             }}
           />
           {openFileManager ? (
@@ -315,7 +331,7 @@ export const DragAndDrop = () => {
                 <Button2
                   onClick={processFiles}
                   className="border h-9 rounded-lg "
-                  disabled={isDisabled || chatDisable}
+                  disabled={chatDisable}
                   title={chatDisable ? "Please select valid files" : ""}
                 >
                   <BsChatRightText /> &nbsp; Start Chat
@@ -382,15 +398,15 @@ export const DragAndDrop = () => {
               <AiModelSelector  model={model} checkUserSubscription={checkUserSubscription} updateModel={updateModel}/>
               </div>
                 <div
-                  className="w-full border border-dashed border-gray-500 pb-16 block items-center justify-center hover:mouse p-3 rounded-md"
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleFile(e, true)}
-                  onDragLeave={handleDragLeave}
+                  className={cn(`w-full border border-dashed border-gray-500 pb-16 block items-center justify-center hover:mouse p-3 rounded-md` , loader ? 'opacity-65' : '')}
+                  onDragOver={(e) => {!loader || !validating &&  handleDragOver(e)}}
+                  onDrop={(e) =>{!loader || !validating  &&  handleFile(e, true)}}
+                  onDragLeave={(e) => {!loader || !validating  && handleDragLeave(e)}}
                   style={{
                     backgroundColor: dragging ? "#012" : "",
                     cursor: "pointer",
                   }}
-                  onClick={handleClickFromDropArea}
+                  onClick={(e) => {!loader || !validating  && handleClickFromDropArea(e)}}
                 >
                   <h1 className=" mt-12 text-2xl">
                     Upload/Drag your Pdf/Doc here
@@ -417,21 +433,41 @@ export const DragAndDrop = () => {
                       />
                     </div>
                   )}
-                  {/* </form> */}
-                </div>
-                <div className="relative group flex items-center justify-center bottom-12">
-                  <Button2
-                    onClick={handleClickFromButton}
-                    className=" absolute border p-1 rounded-lg mt-4"
-                    disabled={loader}
-                  >
-                    Upload
-                  </Button2>
-                  <div className="absolute transform mt-2 px-2 py-1 bottom-4 rounded text-sm backdrop-blur-lg border border-gray-300 hidden group-hover:block">
-                    Hold Control &#40; Ctrl &#41; or Command key &#40; ⌘ &#41;
-                    to select multiple files
+                  {validating && (
+                  <div>
+                  <p>Validating File...</p>
+                  <div className="loader m-4 flex justify-center">
+                    <BarLoader
+                      className="w-full"
+                      color="#ff0783"
+                      size={3000}
+                      loading
+                    />
                   </div>
                 </div>
+              )}
+                  {/* </form> */}
+                  <div className="flex items-center justify-center bottom-12 z-10 ">
+                    <div className="group inline-block relative" onClick={(e) => e.stopPropagation()}> 
+                      <Button2
+                        onClick={(e) => {
+                          if (!loader  || !validating) {
+                            e.stopPropagation();
+                            handleClickFromButton();
+                          }
+                        }}
+                        className="relative border p-1 rounded-lg mt-4"
+                        disabled={loader}
+                      >
+                        Upload
+                      </Button2>
+                      <div className="transform w-[26rem] mt-2 px-2 py-1 bottom-10 rounded text-sm backdrop-blur-lg border border-gray-300 hidden group-hover:block absolute">
+                        Hold Control &#40; Ctrl &#41; or Command key &#40; ⌘ &#41;
+                        to select multiple files
+                      </div>
+                    </div> 
+                  </div>
+               </div>
               </div>
             </>
           )}

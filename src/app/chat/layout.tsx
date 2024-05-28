@@ -2,12 +2,12 @@ import { getAllPreviousSessions } from "@/actions/chat/chatSession";
 import { auth } from "@/auth";
 import { Sidebar } from "@/components/sidebar";
 
-
 export default async function ChatLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode,
 }) {
+
   const session = await auth();
   if (!session || !session.user?.id) {
     return { failure: "User not authenticated" };

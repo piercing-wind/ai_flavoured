@@ -4,26 +4,17 @@ import { CgClose } from "react-icons/cg";
 import { Button } from '@/components/ui/button';
 import { HiOutlineDocumentText } from 'react-icons/hi2';
 import { IoMdClose } from 'react-icons/io';
+import { FileObject } from './mainBar';
 
-interface FileObject {
-  id: number;
-  userId: string;
-  fileKey: string;
-  fileName: string;
-  url: string;
-  chatId: string;
-  fileType: string;
-  createdAt: Date;
-}
 export const MultipleFilesPPTXwarn = ({
   file,
   setWarnClose,
-  handleFilesForPPTX,
+  getSelectedFiles,
   }:{
   file: FileObject[],
   setWarnClose : () => void, 
   setWarnOpen? : () => void,
-  handleFilesForPPTX : (selectedFiles: FileObject[], togather : Boolean) => void,
+  getSelectedFiles : (selectedFiles: FileObject[]) => void,
 }) => {
       const [isOpen, setIsOpen] = useState(true); 
       const [userFiles, setUserFiles] = useState<FileObject[]>(file);
@@ -89,11 +80,11 @@ export const MultipleFilesPPTXwarn = ({
               ))}
               </div>
             {userFiles.length === 1 ? <div className=' space-x-3 mt-6'>
-            <Button onClick={() => {handleFilesForPPTX(userFiles, true)}} size="sm" variant={'default'} className='border border-pink-600 shadow-xl hover:bg-pink-100 font-semibold w-36'>Generate PPTX</Button>
+            <Button onClick={() => {setIsOpen(false);setWarnClose();getSelectedFiles(userFiles)}} size="sm" variant={'default'} className='border border-pink-600 shadow-xl hover:bg-pink-100 font-semibold w-36'>Create PPTX</Button>
             </div> : 
             <div className=' space-x-3 mt-6'>
-            <Button onClick={() => {handleFilesForPPTX(userFiles, true)}} size="sm" variant={'default'} className='border border-pink-600 shadow-xl hover:bg-pink-100 font-semibold w-36'>Generate Togather</Button>
-            <Button onClick={() => {handleFilesForPPTX(userFiles, false)}} size="sm" variant={'default'} className='border bg-slate-950 text-white border-black shadow-xl hover:bg-slate-800 font-semibold w-36'>Generate Seprately</Button>
+            <Button onClick={() => {setIsOpen(false);setWarnClose();getSelectedFiles(userFiles)}} size="sm" variant={'default'} className='border border-pink-600 shadow-xl hover:bg-pink-100 font-semibold w-36'>Generate Togather</Button>
+            <Button onClick={() => {setIsOpen(false);setWarnClose();getSelectedFiles([userFiles[0]])}} size="sm" variant={'default'} className='border bg-slate-950 text-white border-black shadow-xl hover:bg-slate-800 font-semibold w-36'>Generate First One</Button>
             </div>
             }
             <p></p>

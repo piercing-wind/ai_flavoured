@@ -30,6 +30,7 @@ export const getSlidesDataFromAi = async (docs?: any, aiModel?: string) => {
   const docText = await splitter.createDocuments([combineDocs]);
   // llm model
   const llmSummary = new OpenAI({
+    openAIApiKey: process.env.OPENAI_API_KEY,
     modelName: 'gpt-3.5-turbo',
     temperature: 0.1,
     streaming: true,

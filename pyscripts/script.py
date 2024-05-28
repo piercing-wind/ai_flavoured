@@ -1,13 +1,35 @@
-from langchain.chains.summarize import load_summarize_chain
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_openai import ChatOpenAI
+import sys
+import os
+import tempfile
+import win32com.client
 
-path = "https://aiflavoured.s3.ap-south-1.amazonaws.com/d8909f44-a98b-416d-99c0-e3aac1895500/1712406131120ilovepdf_merged_removed.pdf"
+def convert_pptx_to_pdf(pptx_buffer):
+    # Create a temporary PPTX file
+    pptx_file = tempfile.mktemp(suffix='.pptx')
+    with open(pptx_file, 'wb') as f:
+        f.write(pptx_buffer)
 
-loader = WebBaseLoader(path)
-docs = loader.load()
+    # Create a temporary PDF file
+    pdf_file = tempfile.mktemp(suffix='.pdf')
 
-llm = ChatOpenAI(api_key="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", temperature=0, model_name="gpt-3.5-turbo-1106")
-chain = load_summarize_chain(llm, chain_type="stuff")
+    # Convert the PPTX file to PDF using PowerPoint
+    powerpoint = win32com.client.Dispatch("Powerpoint.Application")
+    presentation = powerpoint.Presentations.Open(pptx_file)
+    presentation.ExportAsFixedFormat(pdf_file, 2)  # 2 stands for PDF format
+    presentation.Close()
+    powerpoint.Quit()
 
-chain.invoke(docs)
+    # Read the PDF file into a byte buffer
+    with open(pdf_file, 'rb') as f:
+        pdf_buffer = f.read()
+
+    # Delete the temporary files
+    os.remove(pptx_file)
+    os.remove(pdf_file)
+
+    return pdf_buffer
+
+if __name__ == "__main__":
+    pptx_buffer = sys.stdin.buffer.read()
+    pdf_buffer = convert_pptx_to_pdf(pptx_buffer)
+    sys.stdout.buffer.write(pdf_buffer)

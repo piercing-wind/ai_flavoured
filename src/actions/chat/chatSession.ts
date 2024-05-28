@@ -46,7 +46,7 @@ export const updateChatName = async (chatId : string, newChatName: string) => {
     where: { chatId: chatId },
     data: { chatName: newChatName },
   });
-  console.log(updatedChat);
+  // console.log(updatedChat);
   return updatedChat;
 }
 

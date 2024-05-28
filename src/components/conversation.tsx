@@ -8,10 +8,6 @@ import { PulseLoader } from "react-spinners";
 import {storeMessage, getMessages, formatMessages} from '@/actions/chat/messages';
 import DOMPurify from 'dompurify';
 
-
-
-
-
 // type Message = {
 //   message: string;
 //   role: string;
@@ -49,7 +45,7 @@ const extractQuestions = (message : string) => {
 };
 
 
-export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiModel} : { isLightMode : boolean ,chatSession : { slug: string }, user : any, userFiles : any, aiModel : string}) => {
+export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiModel, api} : { isLightMode : boolean ,chatSession : { slug: string }, user : any, userFiles : any, aiModel : string, api : string}) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [disable, setDisable] = useState(false);
@@ -57,8 +53,8 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
   const [systemMessage, setSystemMessage] = useState("");
   const messagesEndRef = React.useRef<HTMLDivElement | null>(null);
   const [firstChunkReceived, setFirstChunkReceived] = React.useState(false);
+  const [apiCaller, setApiCaller] = useState("chat");
   // const [isLightMode, setIsLightMode] = useState(false);
-
   const fetchMessages = async () => {
     
     const fetchedMessages = await getMessages(chatSession.slug);
@@ -94,6 +90,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
     }
   }
   useEffect(() => {
+    setApiCaller(api);
     fetchMessages();
   }, []);
 
@@ -112,7 +109,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
     
     const prevMessages = messages.slice(-30);
     const formattedMessage = await formatMessages(prevMessages);      
-    const response = await fetch("/api/chat", {
+    const response = await fetch(`/api/${apiCaller}`, {
       method: "POST",
       body: JSON.stringify({
         prevChat : formattedMessage,
@@ -167,8 +164,8 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
 
         
         return (
-          <div className="w-full flex flex-col h-full">
-      <div className="flex flex-col space-y-2 overflow-y-auto h-[calc(100vh-5rem)]">
+    <div className="w-full flex flex-col h-full">
+      <div className="flex flex-col space-y-2 overflow-y-scroll h-[calc(100vh-5rem)]">
       {messages.map((chat, index) => (
         chat.role === 'human' 
           ? (
@@ -181,7 +178,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
             </div>
           </div>
           ) : (
-          <div className='flex w-full pt-2 ' key={index}>
+          <div className='flex w-full pt-2' key={index}>
             <div className='w-8 mx-2' title="AI Flavoured">
               <LogoText/>
             </div>
@@ -211,10 +208,10 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
             </div>
           </div>)
       ))}
-        {systemMessage && <div ref={messagesEndRef} className='flex w-full'><div className='w-8 mx-2'><LogoText/></div><div ref={messagesEndRef} className=" mr-14 self-start backdrop-blur-lg border border-gray-700 p-2 rounded-md"> {systemMessage} </div></div>}
+        {systemMessage && <div ref={messagesEndRef} className='flex w-full'><div className='w-8 mx-2'><LogoText/></div><div ref={messagesEndRef} className="w-full mr-16 self-start backdrop-blur-lg border border-gray-700 p-2 rounded-md"> {systemMessage} </div></div>}
         { isThinking && <div ref={messagesEndRef} className='flex w-full items-center opacity-70 '>
                           <div className='w-8 mx-2'><LogoText/></div>
-                            <div ref={messagesEndRef} className=" flex items-end mr-14 self-start backdrop-blur-lg border border-gray-700 p-2 rounded-md text-nowrap">
+                            <div ref={messagesEndRef} className=" flex items-end mr-16 self-start backdrop-blur-lg border border-gray-700 p-2 rounded-md">
                                AI Flavoured is Thinking 
                               <PulseLoader color="#f436a6" className=" m-1" loading size={2} />
                           </div>

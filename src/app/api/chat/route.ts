@@ -13,39 +13,6 @@ import {
 } from "@langchain/core/runnables";
 import { _decodeChunks } from "openai/streaming.mjs";
 import { combineDocumentsToString } from "./combineDocumentsToString";
-import {uploadFileCore} from "./uploadFileCore"
-
-
-export async function PUT(req:Request){
-  const body = await req.json();
-  // console.log(body);
-  // const uploadedFiles = body.uploadedFiles;
-  console.log("from route", body);
-  for (const file of body) {  
-    console.log("from loop", file); 
-      const userId = file.data.userId;
-      const fileKey = file.data.fileKey;
-      const fileName = file.data.fileName;
-      const chatId = file.data.chatId;
-      const fileType = file.fileType;
-
-      console.log("from route", fileName);
-      try{
-        
-        await uploadFileCore(userId, fileKey, fileName, fileType, chatId); 
-
-      }catch(e){
-        console.log(e);
-        return Response.json({message: "error"});
-      }
-    }
-    return Response.json({message: "success"});
-} 
-const formatMessage = (message: VercelChatMessage) => {
-  return `${message.role}: ${message.content}`;
-};
-
-
 
 
 export async function POST(req:NextRequest){

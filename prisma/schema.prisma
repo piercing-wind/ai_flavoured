@@ -15,6 +15,24 @@ enum MessageRole{
   aiflavoured
   human
 }
+enum Generator{
+  user
+  aiflavoured
+}
+enum Generator{
+  user
+  aiflavoured
+}
+
+enum SubscriptionName {
+  free
+  premium
+  unlimited
+}
+enum SubscriptionType {
+  monthly
+  annually
+}
 
 model User {
   id            String      @id @default(uuid())
@@ -100,7 +118,8 @@ model UserFile {
   fileKey   String
   fileName  String
   url       String
-  chatId    String
+  chatId    String 
+  generator Generator @default(user)
   fileType  String @default("")
   createdAt DateTime @default(now())
 
@@ -134,3 +153,11 @@ model messageHistory {
 
   @@index([chatId])
 }
+model subscription {
+  id  String  @id @default(cuid())
+  user User   @relation(fields: [userId], references: [id])
+  subscriptionName  SubscriptionName
+  subscriptionType  SubscriptionType
+  subscription      DateTime @default(now())
+  price             String 
+} 
