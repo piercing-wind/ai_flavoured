@@ -1,5 +1,5 @@
 import { createChatSession } from "@/actions/chat/chatSession";
-import { PresentaionData, presentation } from "./presentation";
+import { PresentaionData, presentation } from "./themes/presentation";
 import { uploadToS3 } from "@/actions/file/awsS3";
 import { storeMessage } from "@/actions/chat/messages";
 import * as z from "zod"

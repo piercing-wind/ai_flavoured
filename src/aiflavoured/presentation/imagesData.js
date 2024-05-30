@@ -1,3 +1,6 @@
+import path from "path";
+import { minimalistSalePitchThemePresentation } from "./themes/minimalistSalePitchThemePresentation";
+
 export const imagesData = [
   {
     kind: "customsearch#result",
@@ -516,7 +519,7 @@ export const varients = {
     ]
 };
 
-export const pppartytheme = {
+export const themes = {
   pppartytheme: [
     {
       path : "public/pppartytheme/titleSlide.png",
@@ -559,5 +562,101 @@ export const pppartytheme = {
       mime : "image/png"
     }
 
+  ],
+  darkThemeMoon: [
+    {
+      path : "public/darkThemeMoon/titleSlide.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/titleAndContent.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/twoContent.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/twoContent.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/twoContent.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/twoContent.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/twoContent.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/comparison.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/comparison.jpg",
+      mime: "image/jpg"
+    },
+    {
+      path : "public/darkThemeMoon/comparison.jpg",
+      mime: "image/jpg"
+    },  
+  ],
+  minimalistSalePitchTheme:[
+    {
+      path : "public/minimalistSalePitchTheme/slide1.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide2.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide3.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide4.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide5.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide6.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide7.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide8.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide9.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide10.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide11.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide12.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/minimalistSalePitchTheme/slide13.jpg",
+      mime: 'image/jpg'
+    }
   ]
 }

@@ -85,7 +85,7 @@ CREATE TABLE "TwoFAConfirmation" (
 );
 
 -- CreateTable
-CREATE EXTENSION IF NOT EXISTS vector;
+.
 CREATE TABLE "AIMemory" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,

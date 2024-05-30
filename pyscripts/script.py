@@ -1,35 +1,40 @@
 import sys
 import os
-import tempfile
-import win32com.client
+import comtypes.client
+from tempfile import NamedTemporaryFile
+import base64
 
-def convert_pptx_to_pdf(pptx_buffer):
-    # Create a temporary PPTX file
-    pptx_file = tempfile.mktemp(suffix='.pptx')
-    with open(pptx_file, 'wb') as f:
-        f.write(pptx_buffer)
+def pptx_to_pdf(pptx_path):
+    # Prepare a temporary file for the PDF output
+    with NamedTemporaryFile(delete=False, suffix='.pdf') as pdf_temp_file:
+        pdf_temp_filename = pdf_temp_file.name
 
-    # Create a temporary PDF file
-    pdf_file = tempfile.mktemp(suffix='.pdf')
+    # Convert PPTX to PDF using PowerPoint COM automation
+    powerpoint = comtypes.client.CreateObject("PowerPoint.Application")
+    powerpoint.Visible = 1
 
-    # Convert the PPTX file to PDF using PowerPoint
-    powerpoint = win32com.client.Dispatch("Powerpoint.Application")
-    presentation = powerpoint.Presentations.Open(pptx_file)
-    presentation.ExportAsFixedFormat(pdf_file, 2)  # 2 stands for PDF format
+    presentation = powerpoint.Presentations.Open(pptx_path, WithWindow=False)
+    presentation.SaveAs(pdf_temp_filename, FileFormat=32)  # 32 for pdf
     presentation.Close()
     powerpoint.Quit()
 
-    # Read the PDF file into a byte buffer
-    with open(pdf_file, 'rb') as f:
-        pdf_buffer = f.read()
+    # Read the PDF file into a buffer
+    with open(pdf_temp_filename, 'rb') as pdf_file:
+        pdf_buffer = pdf_file.read()
 
-    # Delete the temporary files
-    os.remove(pptx_file)
-    os.remove(pdf_file)
-
-    return pdf_buffer
+    # Clean up temporary files
+    os.remove(pdf_temp_filename)
+    pdf_base64 = base64.b64encode(pdf_buffer).decode()
+    
+    return pdf_base64
 
 if __name__ == "__main__":
-    pptx_buffer = sys.stdin.buffer.read()
-    pdf_buffer = convert_pptx_to_pdf(pptx_buffer)
-    sys.stdout.buffer.write(pdf_buffer)
+    pptx_path = sys.argv[1]
+    pdf_base64 = pptx_to_pdf(pptx_path)
+    os.remove(pptx_path)
+    print(pdf_base64)
+
+
+# Example usage:
+# pptx_buffer = ... (Get this from your Node.js environment)
+# pdf_buffer = pptx_to_pdf_buffer(pptx_buffer)
