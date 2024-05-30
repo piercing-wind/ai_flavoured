@@ -8,6 +8,8 @@ const nextConfig = {
                   "sharp$": false,
                   "onnxruntime-node$": false,
               };
+              
+     
             return config;
       },
       // experimental: {

@@ -4,16 +4,18 @@ import path from 'path';
 
 const exec = promisify(execCb);
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
+  const body = await req.json();
+  const respptxPath = body.path;
   console.log("Python script running");
- 
-  const pptxPath = path.resolve('output/ppPartyThemePresentation.pptx');
-  const pdfPath = path.resolve('output/python.pdf');
-  try {
-    const { stdout, stderr } : any = await exec(`python3 pyscripts/script.py ${JSON.stringify(pptxPath)} `);
-    console.log("stdout", stdout);
+  const pptxPath = path.resolve(respptxPath);
+
+  try { 
+    const { stdout, stderr } : any = await exec(`python pyscripts/script.py ${pptxPath} `);
+
     console.log("stderr", stderr);
-    return Response.json({ message: stdout }, { status: 200 });
+
+    return Response.json({ pdfBase64: stdout }, { status: 200 });
   } catch (error) {
     console.log("Error in python script", error);
     return Response.json({ error: "Failed to execute python script" },{status: 500});

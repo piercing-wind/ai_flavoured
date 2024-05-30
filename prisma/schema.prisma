@@ -19,10 +19,6 @@ enum Generator{
   user
   aiflavoured
 }
-enum Generator{
-  user
-  aiflavoured
-}
 
 enum SubscriptionName {
   free
@@ -153,11 +149,3 @@ model messageHistory {
 
   @@index([chatId])
 }
-model subscription {
-  id  String  @id @default(cuid())
-  user User   @relation(fields: [userId], references: [id])
-  subscriptionName  SubscriptionName
-  subscriptionType  SubscriptionType
-  subscription      DateTime @default(now())
-  price             String 
-} 

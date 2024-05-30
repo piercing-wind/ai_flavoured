@@ -20,7 +20,7 @@ import { usePathname } from 'next/navigation'
 import { revalidate } from "@/actions/revalidate";
 import { useRouter } from "next/navigation";
 
-import { presentation } from "@/aiflavoured/presentation/presentation";
+import { presentation } from "@/aiflavoured/presentation/themes/presentation";
 import { aiSlides } from "@/aiflavoured/presentation/aiSlides";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
 import { getImagesFromGoogle, getImagesFromGoogleAsBase64ArrayWithoutHeaders } from "@/aiflavoured/presentation/getImagesFromGoogleAndConvertToBase64";
@@ -31,10 +31,12 @@ import { googleImagesDesignFilterAI } from "@/aiflavoured/presentation/googleIma
 import { FileObject } from "./mainBar";
 import { deleteFromS3 } from "@/actions/file/awsS3";
 import { log } from "console";
-import { facetPresentation } from "@/aiflavoured/presentation/facetPresentation";
+import { facetThemePresentation } from "@/aiflavoured/presentation/themes/facetThemePresentation";
 import { chat } from "googleapis/build/src/apis/chat";
 import { spresentation } from "@/aiflavoured/presentation/simplePresentation";
-import { ppPartyThemePresentation } from "@/aiflavoured/presentation/ppPartyThemePresentation";
+import { ppPartyThemePresentation } from "@/aiflavoured/presentation/themes/ppPartyThemePresentation";
+import { darkThemeMoonPresentation } from "@/aiflavoured/presentation/themes/darkThemeMoonPresentation";
+import { minimalistSalePitchThemePresentation } from "@/aiflavoured/presentation/themes/minimalistSalePitchThemePresentation";
 
 
 interface ChatSession {
@@ -114,15 +116,15 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
 
   const handleAPI = async () => {
     const data = {
-      author : "author",
-      title : "test",
+      author : "Sourabh",
+      title : "minimalistSalePitchThemePresentation",
       pptxData : "text",
       imageSearch : "Google Search",
       modelForColorAndTitle : "gpt-3.5-turbo-0125",
-      userId : chatSessions[0].userId
+      waterMark : false
     }
     console.log("clickers")
-     const presentation =await ppPartyThemePresentation(data);
+     const presentation = await minimalistSalePitchThemePresentation(data);
   }
 
   return (
@@ -155,7 +157,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
           </button>
             <button onClick={async()=> {
               const res = await fetch('/api/runpythonscript', {
-                method: 'GET',
+                method: 'POST',
               });
               console.log(res);
             }} >

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { documentToText } from "@/aiflavoured/documentsToText";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
 import { aiSlides } from "@/aiflavoured/presentation/aiSlides";
-import { PresentaionData, presentation } from "@/aiflavoured/presentation/presentation";
+import { PresentaionData, presentation } from "@/aiflavoured/presentation/themes/presentation";
 
 interface FileObject {
       id: number;
