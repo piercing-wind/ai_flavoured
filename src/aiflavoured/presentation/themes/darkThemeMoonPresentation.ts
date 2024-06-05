@@ -53,7 +53,7 @@ titleOnly?: {
   pictureWithCaption?: {
     title: string;
     picture: string;
-    caption: string;
+    caption: string | string[];
   };
   team?: {
     title: string;
@@ -159,6 +159,7 @@ const titleSlide = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
             w: 3.3,
             h: 6.5,
             fontSize: 14,
+            color : 'f41c76',
             bold: true,
             align: "right",
             fontFace: bodyFontFace,
@@ -318,9 +319,11 @@ const titleAndContent = async (pptx: pptxgen, font: Font, waterMark: boolean) =>
             y: 4,
             w: 3.3,
             h: 6.5,
+            color : 'f41c76',
             bold: true,
             fontSize: 14,
             align: "right",
+            fontFace: fontFace,
           },
         },
       },
@@ -532,9 +535,11 @@ const team = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
             y: 4,
             w: 3.3,
             h: 6.5,
+            color : 'f41c76',
             bold: true,
             fontSize: 14,
             align: "right",
+            fontFace: fontFaceBody,
           },
         },
       },
@@ -777,6 +782,7 @@ const sectionHeader = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
             y: 4,
             w: 3.3,
             h: 6.5,
+            color : 'f41c76',
             bold: true,
             fontSize: 14,
             align: "right",
@@ -967,6 +973,7 @@ const comparison = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
             y: 4,
             w: 3.3,
             h: 6.5,
+            color : 'f41c76',
             fontSize: 14,
             bold: true,
             align: "right",
@@ -1040,6 +1047,7 @@ const titleOnly = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
             y: 4,
             w: 3.3,
             h: 6.5,
+            color : 'f41c76',
             bold: true,
             fontSize: 14,
             align: "right",
@@ -1125,10 +1133,11 @@ const blank = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
                   y: 4,
                   w: 3.3,
                   h: 6.5,
+                  color : 'f41c76',
                   bold : true,
                   fontSize: 14,
-                  color: "f41c76",
                   align: "right",
+                  fontFace: font.body,
                 },
               },
             },
@@ -1253,6 +1262,7 @@ const contentWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
             y: 4,
             w: 3.3,
             h: 6.5,
+            color : 'f41c76',
             bold: true,
             fontSize: 14,
             align: "right",
@@ -1298,12 +1308,12 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
   // Picture section settings
   const picturex = 0.67;
   const picturey = 1.57;
-  const picturew = 5.19;
-  const pictureh = 7.06;
+  const picturew = 6;
+  const pictureh = 5.59;
 
   // Caption section settings
-  const captionx = 8.05;
-  const captiony = 0.44;
+  const captionx = 6.92;
+  const captiony = 1.23;
   const captionw = 6.32;
   const captionh = 5.05;
   const captionFontSize = 18;
@@ -1403,7 +1413,7 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
   return pptx;
 }
 
-export const darkThemeMoonPresentation = async ({author, title, pptxData, imageSearch, modelForColorAndTitle, waterMark}: PresentaionData) => {
+export const darkThemeMoonPresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData) => {
       console.log("presentaion function call");
       try {
 
@@ -1430,148 +1440,8 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
         // pptx.theme = { headFontFace: "Book Antiqua", bodyFontFace: "Book Antiqua" };
         
     
-      // const data: Presentation = await convertSlidesStringToObject(pptxData);
-      const data : Presentation = [
-    {
-      "titleAndContent": {
-        "title": "Content List",
-        "body": [
-          "Introduction to AI Flavoured",
-          "Project Overview",
-          "Core Functionalities",
-          "Intelligent Summarization",
-          "Interactive Engagement",
-          "Multilingual Support",
-          "Personalized Learning Experiences",
-          "Technical Aspects and Benefits",
-          "Future Scopes",
-          "Thank You"
-        ]
-      }
-    },
-    {
-      "titleSlide":{
-            "title" : "Introduction to AI Flavoured",
-            "body" : "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning."
-      }
-    },
-    {
-      "titleAndContent": {
-        "title": "Introduction to AI Flavoured",
-        "body": [
-          "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning.",
-          "The platform features advanced summarization engines, interactive communication, multilingual support, and personalized learning experiences.",
-          "It aims to address challenges such as information overload, complex documents, and language barriers."
-        ]
-      }
-    },
-    {
-      "sectionHeader":{
-            "title" : "Project Overview",
-            "body" : "AI Flavoured empowers users to efficiently extract insights from written content."
-      }
-    },
-    {
-      "twoContent": {
-        "title": "Core Functionalities",
-        "content": [
-          "Intelligent Summarization",
-          "Interactive Engagement",
-          "Multilingual Support",
-          "Personalized Learning Experiences"
-        ],
-        "content2": [
-          "Streamlines information retrieval",
-          "Improves knowledge acquisition",
-          "Fosters collaboration",
-          "Enhances learning environments"
-        ]
-      }
-    },
-    {
-      "comparison":{
-            "title" : "Core Functionalities",
-            "subheading": "Core Functionalities",
-            "content": ["Intelligent Summarization", "Interactive Engagement", "Multilingual Support", "Personalized Learning Experiences"],
-            "subheading2": "Benefits",
-            "content2" : ["Streamlines information retrieval", "Improves knowledge acquisition", "Fosters collaboration", "Enhances learning environments"]
-      }
-    },
-    {
-      "team" : {
-        "title" : "This is my First ai team",
-        "first" :{
-          "name" : "Sourav Sharma",
-          "picture" : "Cat"
-        },
-        "second" : {
-          "name" : "Sourav Sharma",
-          "picture" : "dog"
-        },
-        "third" : {
-          "name" : "Sourav Sharma",
-          "picture" : "Parrot"
-        
-        }
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Intelligent Summarization",
-        "content": [
-          "AI Flavoured's summarization engine condenses complex documents into concise summaries.",
-          "This feature helps users quickly grasp the essence of lengthy texts."
-        ],
-        "caption": "Efficiently extract key insights from vast amounts of information."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Interactive Engagement",
-        "content": [
-          "The platform offers interactive communication features to enhance user engagement.",
-          "Users can interact with the content, ask questions, and receive instant feedback."
-        ],
-        "caption": "Foster a more engaging and interactive learning experience."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Multilingual Support",
-        "content": [
-          "AI Flavoured supports multiple languages, breaking down language barriers.",
-          "This feature ensures accessibility for a global audience."
-        ],
-        "caption": "Promote inclusivity and accessibility in document comprehension."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Personalized Learning Experiences",
-        "content": [
-          "The platform offers personalized learning experiences tailored to individual needs.",
-          "Users receive recommendations and insights based on their preferences and learning patterns."
-        ],
-        "caption": "Enhance learning outcomes through personalized content."
-      }
-    },
-    {
-      "titleAndContent": {
-        "title": "Technical Aspects and Benefits",
-        "body": [
-          "AI Flavoured showcases the feasibility and operational benefits of AI in document comprehension.",
-          "It streamlines information retrieval, improves knowledge acquisition, and fosters collaboration.",
-          "The project aims to stay at the forefront of AI-powered education and knowledge sharing."
-        ]
-      }
-    },
-    {
-      "titleSlide": {
-        "title": "Thank You",
-        "body": "Thank you for your attention. We hope AI Flavoured will revolutionize your document comprehension and learning experience."
-      }
-    },
-  ]
+      const data: Presentation = await convertSlidesStringToObject(pptxData);
+
       let slideNumber = 1
       let index = 0;
       for(let slide of data){
@@ -2044,30 +1914,19 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
             if (typeof (pictureTO) === 'string') {
               // imageSearch variable === "Google Search"
               const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureTO) as string;
-              slideTO.addImage({ data: base64WithHeader, w: 10.5, h: 5.5, placeholder: "picture" });
+              slideTO.addImage({ data: base64WithHeader, w: 10.5, h: 5.5, x: 1.42,y:1.55, placeholder: "picture" });
               // pictureTO is a string to be displayed
               // slideTO.addText(pictureTO, {
               //   placeholder: "picture",
               // });
             }
             break;  
-          case "blank":
+            case "blank":
             let slideDataB = slide[key];
             pptx =await blank(pptx, font, waterMark);
             const slideB = pptx.addSlide({ masterName: "blank" });
             const pictureB = slideDataB!.picture;
-            // slideB.addShape(pptxgen.)
-            slideB.addShape(pptx.ShapeType.rect, {
-              x: 0,
-              y: 0,
-              w: '100%',
-              h: '100%',
-              fill: {
-                  type: 'solid',
-                  color: 'FFC0CB',  
-       
-              }
-          });
+  
           slideB.addText(slideNumber.toString(), {
             color: colors.body,
             placeholder: 'slideNumber'
@@ -2152,9 +2011,9 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
               placeholder: "title",
             });
             slidePWC.addShape('line', {
-              x: 7.89,
-              y: 0.44,
-              h: 6.32,
+              x: 6.89,
+              y: 1.23,
+              h: 5.66,
               w: 0,
               line: { color: colors.body, width: 1, dashType: "solid" },
               fill: { color: colors.body }
@@ -2162,12 +2021,26 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
             if (typeof (picturePWC) === 'string') {
               //imageSearch variable === "Google Search"
               const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-              slidePWC.addImage({ data: base64WithHeader, w: 5.19, h: 7.06, placeholder: "picture" });
+              slidePWC.addImage({ data: base64WithHeader, w: 5.19, h: 6, placeholder: "picture" });
             }
+            if(Array.isArray(captionPWC)){
+              let captionPWCString = captionPWC.map((item, index) =>{
+                let charCount = item.length;
+                if(charCount > maxCharCountForContent){
+              return ` ${item} \n`
+                }else{
+                 return `${index + 1}. ${item}`
+                }
+              }).join('\n');
+              slidePWC.addText(captionPWCString, {
+                color : colors.body,
+                placeholder: "caption",
+              });
+            }else{
             slidePWC.addText(captionPWC, {
-              color: colors.body,
+              color : colors.body,
               placeholder: "caption",
-            });
+            });}
             slidePWC.addText(slideNumber.toString(), {
               color: colors.body,
               placeholder: 'slideNumber'
@@ -2289,7 +2162,7 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
             console.log("exiting")
             //temporarily saving the file
 
-            fs.writeFileSync(`output/${title}.pptx`, new Uint8Array(buffer));
+            fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
 
             // try{
             //   const res = await fetch('http://localhost:3000/api/runpythonscript',{
@@ -2306,21 +2179,22 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
             // }catch(e){
             //   console.log("Error in creating pdf",e)
             // }
-
-            //     const bufferString = Buffer.from(buffer)
-      //     const pptxBufferBase64 = bufferString.toString('base64')
-      //     const fileName = `${title}_AiFlavoured.pptx`
-      //     const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-      //     const fileSize = buffer?.byteLength;
-      //     // const param = await createChatSession(userId,fileName)
-      //     const data = {
-      //       fileName,
-      //       fileType,
-      //       fileSize,
-      //       pptxBufferBase64,
-      //     }
-      //     console.log("exitng from presention")
-      //     return data;
+            const bufferString = Buffer.from(buffer)
+            const pptxBufferBase64 = bufferString.toString('base64')
+            const fileName = `${author}_AiFlavoured.pptx`
+            const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            const fileSize = buffer?.byteLength;
+            const filePath = `output/${author}.pptx`
+            // const param = await createChatSession(userId,fileName)
+            const data = {
+              fileName,
+              fileType,
+              fileSize,
+              pptxBufferBase64,
+              filePath
+            }
+            console.log("exitng from presention")
+            return data;
     
         } else {
           console.error("Failed to generate buffer from streamData");

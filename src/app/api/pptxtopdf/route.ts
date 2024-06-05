@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     const pdfBuffer = await convertToPdf(pptxBuf);
     const upload  = await uploadToS3(fileName.replace(".pptx", ".pdf"), "application/pdf", pdfBuffer.length, user, param, "aiflavoured");
-    if('awsS3' in upload){
+    if(upload && 'awsS3' in upload){
       const url = upload.awsS3.url;
       try{
         const res = await fetch(url, {

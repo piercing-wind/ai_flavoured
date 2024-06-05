@@ -91,7 +91,7 @@ export const DragAndDrop = () => {
       formData.append("fileTypes[]", file.type);
     }
     
-    const res = await fetch("api/getnumberofpages", {
+    const res = await fetch("/api/getnumberofpages", {
       method: "POST",
       body: formData,
     });
@@ -254,7 +254,8 @@ export const DragAndDrop = () => {
           if (res.headers.get("content-type")?.includes("application/json")) {
             let responseData = await res.json();
           }
-          uploadedFiles.push({ data: data.awsS3.data, fileType: file.type });
+          
+          uploadedFiles.push({ data: data.awsS3.userFile });
         } catch (e) {
           console.log(e);
         }
@@ -276,7 +277,7 @@ export const DragAndDrop = () => {
         setloader(false);
         setRedirect(true);
         setSuccess("File upload successfull");
-        router.push(`/chat/${chatId}`);
+        router.push(`x/chat/${chatId}`);
       }
     } catch (e) {
       console.log(e);
@@ -289,6 +290,8 @@ export const DragAndDrop = () => {
   const handleClickFromButton = () => {
     fileInput.current.click();
   };
+  console.log(loader)
+  console.log(validating)
 
   return (
     <div className="relative text-center w-full flex justify-center">
@@ -297,6 +300,7 @@ export const DragAndDrop = () => {
           file={inputFiles.length}
           selectAgain={emptyFiles}
           uploadFirstTwo={removeExtraFiles}
+          setFileLengthError={setFileLengthError}
         />
       )}
       {redirect && <Redirecting />}
@@ -399,14 +403,14 @@ export const DragAndDrop = () => {
               </div>
                 <div
                   className={cn(`w-full border border-dashed border-gray-500 pb-16 block items-center justify-center hover:mouse p-3 rounded-md` , loader ? 'opacity-65' : '')}
-                  onDragOver={(e) => {!loader || !validating &&  handleDragOver(e)}}
-                  onDrop={(e) =>{!loader || !validating  &&  handleFile(e, true)}}
-                  onDragLeave={(e) => {!loader || !validating  && handleDragLeave(e)}}
+                  onDragOver={(e) => {!loader && !validating &&  handleDragOver(e)}}
+                  onDrop={(e) =>{!loader && !validating  &&  handleFile(e, true)}}
+                  onDragLeave={(e) => {!loader && !validating  && handleDragLeave(e)}}
                   style={{
                     backgroundColor: dragging ? "#012" : "",
                     cursor: "pointer",
                   }}
-                  onClick={(e) => {!loader || !validating  && handleClickFromDropArea(e)}}
+                  onClick={(e) => {!loader && !validating  && handleClickFromDropArea(e)}}
                 >
                   <h1 className=" mt-12 text-2xl">
                     Upload/Drag your Pdf/Doc here

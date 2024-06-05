@@ -565,7 +565,7 @@ export const themes = {
   ],
   darkThemeMoon: [
     {
-      path : "public/darkThemeMoon/titleSlide.jpg",
+      path : "public/darkThemeMoon/titleSlide1.jpg",
       mime: "image/jpg"
     },
     {
@@ -658,5 +658,120 @@ export const themes = {
       path : "public/minimalistSalePitchTheme/slide13.jpg",
       mime: 'image/jpg'
     }
+  ],
+  scientificBluePresentationTheme:[
+    {
+      path : "public/scientificBluePresentationTheme/slide1.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide2.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide3.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide4.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide5.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide6.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide7.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide8.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide9.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide10.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide11.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide12.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/scientificBluePresentationTheme/slide13.jpg",
+      mime: 'image/jpg'
+    }
+  ],
+  biomeTheme:[
+    {
+      path : "public/biomeTheme/slide1.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide2.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide3.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide4.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide5.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide6.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide7.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide8.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide9.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide10.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide11.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide12.jpg",
+      mime: 'image/jpg'
+    },
+    {
+      path : "public/biomeTheme/slide13.jpg",
+      mime: 'image/jpg'
+    }
+  ],
+  facetTheme :[
+    {
+      path : "public/facetTheme/slide1.jpg",
+      mime : "image/jpg"
+    }
   ]
+
 }

@@ -39,7 +39,7 @@
     "src/actions/login.ts",
     "src/middleware.js",
     ".next/types/**/*.ts"
-, "src/components/auth/userProfile.jsx", "src/components/header/links/links.jsx", "src/aiflavoured/presentation/themes/presentation.ts", "src/aiflavoured/presentation/presentation2sts", "src/app/aipresentation/[slug]", "src/app/api/pptxtopdf/route.ts"  ],
+, "src/components/auth/userProfile.jsx", "src/components/header/links/links.jsx", "src/aiflavoured/presentation/themes/presentation.ts", "src/aiflavoured/presentation/presentation2sts", "src/app/x/@aipresentation/[slug]", "src/app/api/pptxtopdf/route.ts"  ],
   "exclude": [
     "node_modules"
   ]

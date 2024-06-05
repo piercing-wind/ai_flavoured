@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Styles from "@/app/chat/chat.module.css";
+import Styles from "@/app/x/chat/chat.module.css";
 import { Divider } from "@/components/divider";
 import { Button } from "@/components/button";
 import { FaPlus } from "react-icons/fa6";
@@ -21,7 +21,7 @@ import { revalidate } from "@/actions/revalidate";
 import { useRouter } from "next/navigation";
 
 import { presentation } from "@/aiflavoured/presentation/themes/presentation";
-import { aiSlides } from "@/aiflavoured/presentation/aiSlides";
+import { aiSlidesForPresentation } from "@/aiflavoured/presentation/aiSlidesForPresentation";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
 import { getImagesFromGoogle, getImagesFromGoogleAsBase64ArrayWithoutHeaders } from "@/aiflavoured/presentation/getImagesFromGoogleAndConvertToBase64";
 import {imageToBase64, localImageToBase64} from "@/aiflavoured/imgs/imageToBase64";
@@ -37,6 +37,8 @@ import { spresentation } from "@/aiflavoured/presentation/simplePresentation";
 import { ppPartyThemePresentation } from "@/aiflavoured/presentation/themes/ppPartyThemePresentation";
 import { darkThemeMoonPresentation } from "@/aiflavoured/presentation/themes/darkThemeMoonPresentation";
 import { minimalistSalePitchThemePresentation } from "@/aiflavoured/presentation/themes/minimalistSalePitchThemePresentation";
+import { scientificBluePresentationTheme } from "@/aiflavoured/presentation/themes/scientificBluePresentationTheme";
+import { biomePresentationTheme } from "@/aiflavoured/presentation/themes/biomePresentationTheme";
 
 
 interface ChatSession {
@@ -59,7 +61,6 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
   
   const pathname = usePathname();
   const params = pathname.split("/").pop();
-
   useEffect(() => {
     const refreshPage = () => {
       router.refresh();
@@ -114,17 +115,24 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
     console.log("deleted")
   }
 
+  
   const handleAPI = async () => {
     const data = {
       author : "Sourabh",
-      title : "minimalistSalePitchThemePresentation",
+      title : "biomePresentationTheme",
       pptxData : "text",
       imageSearch : "Google Search",
       modelForColorAndTitle : "gpt-3.5-turbo-0125",
-      waterMark : false
+      waterMark : true
     }
     console.log("clickers")
-     const presentation = await minimalistSalePitchThemePresentation(data);
+    //  await presentation(data);  *
+      // await facetThemePresentation(data);   
+    //  await ppPartyThemePresentation(data);  *
+    //  await darkThemeMoonPresentation(data);  *
+      await minimalistSalePitchThemePresentation(data);  
+      // await scientificBluePresentationTheme(data);   *
+    //  await biomePresentationTheme(data);
   }
 
   return (
@@ -186,13 +194,17 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                     // {
                     <Link key={chathistory.chatId} href={
                       (() => {
-                        switch(chathistory.userFiles[0].generator){
-                          case "aiflavoured":
-                            return `/aipresentation/${chathistory.chatId}`;
-                          case "user":    
-                            return `/chat/${chathistory.chatId}`;
-                          default:
-                            return "/error";
+                        if (chathistory.userFiles && chathistory.userFiles[0]) {
+                          switch(chathistory.userFiles[0].generator){
+                            case "aiflavoured":
+                              return `/x/aipresentation/${chathistory.chatId}`;
+                            case "user":    
+                              return `/x/chat/${chathistory.chatId}`;
+                            default:
+                              return "/error";
+                          }
+                        } else {
+                          return "/error"; // return "/error" or any other default route
                         }
                       })()
                     }>
@@ -231,7 +243,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                         </div>
                         {chathistory.chatId === params && editingChatId === null &&  (
                           <div className="flex items-center text-lg">
-                            <CiEdit className="mx-2" onClick={() => {setEditingChatId(chathistory.chatId),setInputValue(chathistory.chatName);}}/>
+                            <CiEdit className="mx-2" onClick={() => {setEditingChatId(chathistory.chatId); setInputValue(chathistory.chatName);}}/>
                             <RiDeleteBin5Line className="mx-2" onClick={()=>{handleDelete(chathistory.chatId, chathistory.userFiles)}} />
                           </div>
                         )}
