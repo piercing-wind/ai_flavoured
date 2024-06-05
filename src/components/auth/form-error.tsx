@@ -5,7 +5,7 @@ import { IoMdClose } from "react-icons/io";
 
 interface FormErrorProps {
   message: string | undefined;
-  clearMessage? : () => void;
+  clearMessage? : (v: string) => void;
 }
 
 export const FormError = ({ message, clearMessage }: FormErrorProps) => {
@@ -24,7 +24,7 @@ export const FormError = ({ message, clearMessage }: FormErrorProps) => {
       </div>
       {clearMessage &&
       <div className=" flex items-center justify-center">
-        <button onClick={()=>clearMessage()}>
+        <button onClick={()=>clearMessage('')}>
           <IoMdClose className="h-5 w-5 inline right-0" />
         </button>
       </div>

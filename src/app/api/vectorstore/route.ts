@@ -9,7 +9,7 @@ export async function PUT(req:Request){
           const fileKey = file.data.fileKey;
           const fileName = file.data.fileName;
           const chatId = file.data.chatId;
-          const fileType = file.fileType;
+          const fileType = file.data.fileType;
     
           console.log("from route", fileName);
           try{

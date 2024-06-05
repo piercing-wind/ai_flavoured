@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Rotate } from "hamburger-react";
-import DocuFullScreenViewer from "./docFullScreenViewer";
+import DocFullScreenViewer from "./docFullScreenViewer";
 import { RxHamburgerMenu } from "react-icons/rx";
 import _ from 'lodash';
 
@@ -224,7 +224,7 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
           >
             <FaArrowRotateRight size={20} className="text-xl" />
           </Button>
-          <DocuFullScreenViewer fileUrl={docUrl} />
+          <DocFullScreenViewer fileUrl={docUrl} />
         </div>
       </div>
       

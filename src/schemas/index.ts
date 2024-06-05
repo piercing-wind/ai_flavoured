@@ -46,14 +46,14 @@ const searchSchema = z.object({
 
 export const presentationSchema = z.object({
   selectedFiles : z.array(z.object({
-    id: z.number(),
+    id: z.optional(z.number()),
     userId: z.string(),
     fileKey: z.string(),
     fileName: z.string(),
     url: z.string(),
     chatId: z.string(),
     fileType: z.string(),
-    createdAt: z.date(),
+    createdAt: z.optional(z.date()),
     generator : z.string()
   })),
    user :z.object({
@@ -67,6 +67,9 @@ export const presentationSchema = z.object({
     wordsAmount : z.string(),
     audience : z.string(),
     imageSearch : z.string(),
-    model : z.string(),
-    aiModel : z.string()
+    ppmodel : z.string(),
+    waterMark : z.boolean(),
+    variant :z.optional(z.string()),
+    textInputValue : z.string(),
+    themeFunction :  z.string()
 });

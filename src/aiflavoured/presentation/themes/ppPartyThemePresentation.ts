@@ -53,7 +53,7 @@ titleOnly?: {
   pictureWithCaption?: {
     title: string;
     picture: string;
-    caption: string;
+    caption: string[] | string;
   };
   team?: {
     title: string;
@@ -82,16 +82,16 @@ type Font = {
   body: string;
 };
 
-const titleSlide = async (pptx: pptxgen, font : Font , waterMark : boolean) => {
+const titleSlide = async (pptx: pptxgen, font : Font , waterMark : boolean) => {  
   const FontFacetitle = font.title;
   const bodyFontFace = font.body;
 
   // Title section settings
   const titlex = 1;
   const titley = 0.7;
-  const titlew = 7;
+  const titlew = 9;
   const titleh = 4;
-  const titleFontSize = 60;
+  const titleFontSize = 50;
   const titleFontFace = FontFacetitle;
   const titleAlign = "left";
   const titleValign = "bottom";
@@ -132,6 +132,7 @@ const titleSlide = async (pptx: pptxgen, font : Font , waterMark : boolean) => {
             align: titleAlign,
             valign: titleValign,
             fontFace: titleFontFace,
+            
           },
           text: "Title Placeholder",
         },
@@ -163,30 +164,30 @@ const titleSlide = async (pptx: pptxgen, font : Font , waterMark : boolean) => {
         text: waterMark ? "Made with Ai Flavoured" : "",
         options: {
           x: 10,
-          y: 4,
-          w: 3.3,
-          h: 6.5,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
           fontSize: 14,
           color: "f41c76",
-          bold : true,
           align: "right",
-          fontFace: bodyFontFace,
+          fontFace: font.body,
         },
       },
-    },
+    }, 
     {
       placeholder:{
         options: {
           name: "slideNumber",
           type: "body",
           x: 0.5,
-          y: '94%',
+          y: '95%',
           w: 0.7,
           h: 0.4,
           fontSize: 12,
           align: 'center',
           valign: 'middle',
-          fontFace: bodyFontFace,
+          fontFace: font.body,
         },
         text: "SlideNumber Placeholder",
       
@@ -330,36 +331,38 @@ const titleAndContent = async (pptx: pptxgen, font: Font, waterMark: boolean) =>
       // Footer
       {
         text: {
-          text: waterMark ? "Made with Ai Flavoured" : "",
-          options: {
-            x: 10,
-            y: 4,
-            w: 3.3,
-            h: 6.5,
-            bold: true,
-            fontSize: 14,
-            align: "right",
-          },
+        text: waterMark ? "Made with Ai Flavoured" : "",
+        options: {
+          x: 10,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
+          fontSize: 14,
+          color: "f41c76",
+          align: "right",
+          fontFace: font.body,
         },
       },
-      {
-        placeholder:{
-          options: {
-            name: "slideNumber",
-            type: "body",
-            x: 0.5,
-            y: '94%',
-            w: 0.7,
-            h: 0.4,
-            fontSize: 12,
-            align: 'center',
-            valign: 'middle',
-            fontFace: fontFace,
-          },
-          text: "SlideNumber Placeholder",
-        
-        }
+    }, 
+    {
+      placeholder:{
+        options: {
+          name: "slideNumber",
+          type: "body",
+          x: 0.5,
+          y: '95%',
+          w: 0.7,
+          h: 0.4,
+          fontSize: 12,
+          align: 'center',
+          valign: 'middle',
+          fontFace: font.body,
+        },
+        text: "SlideNumber Placeholder",
+      
       }
+    }
     ],
   });
   return pptx;
@@ -552,37 +555,38 @@ const team = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
       // Footer
       {
         text: {
-          text: waterMark ? "Made with Ai Flavoured" : "",
-          options: {
-            x: 10,
-            y: 4,
-            w: 3.3,
-            h: 6.5,
-            bold: true,
-            fontSize: 14,
-            align: "right",
-            fontFace: fontFaceBody,
-          },
+        text: waterMark ? "Made with Ai Flavoured" : "",
+        options: {
+          x: 10,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
+          fontSize: 14,
+          color: "f41c76",
+          align: "right",
+          fontFace: font.body,
         },
       },
-      {
-        placeholder:{
-          options: {
-            name: "slideNumber",
-            type: "body",
-            x: 0.5,
-            y: '94%',
-            w: 0.7,
-            h: 0.4,
-            fontSize: 12,
-            align: 'center',
-            valign: 'middle',
-            fontFace: fontFaceBody,
-          },
-          text: "SlideNumber Placeholder",
-        
-        }
+    }, 
+    {
+      placeholder:{
+        options: {
+          name: "slideNumber",
+          type: "body",
+          x: 0.5,
+          y: '95%',
+          w: 0.7,
+          h: 0.4,
+          fontSize: 12,
+          align: 'center',
+          valign: 'middle',
+          fontFace: font.body,
+        },
+        text: "SlideNumber Placeholder",
+      
       }
+    }
     ],
   });
   return pptx;
@@ -601,10 +605,10 @@ const twoContent = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
   const titleValign = "middle";
 
   // Left content section settings
-  const leftContentx = 0.5;
-  const leftContenty = 0.5;
-  const leftContentw = 5;
-  const leftContenth = 6.5;
+  const leftContentx = 0.67;
+  const leftContenty = 0.73;
+  const leftContentw = 4.64;
+  const leftContenth = 6.06;
   const leftContentFontSize = 16;
   const leftContentFontFace = bodyFontFace;
   const leftContentAlign = "left";
@@ -692,37 +696,38 @@ const twoContent = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
       // Footer
       {
         text: {
-          text: waterMark ? "Made with Ai Flavoured" : "",
-          options: {
-            x: 10,
-            y: 4,
-            w: 3.3,
-            h: 6.5,
-            bold: true,
-            fontSize: 14,
-            align: "right",
-            fontFace: bodyFontFace,
-          },
+        text: waterMark ? "Made with Ai Flavoured" : "",
+        options: {
+          x: 10,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
+          fontSize: 14,
+          color: "f41c76",
+          align: "right",
+          fontFace: font.body,
         },
       },
-      {
-        placeholder:{
-          options: {
-            name: "slideNumber",
-            type: "body",
-            x: 0.5,
-            y: '94%',
-            w: 0.7,
-            h: 0.4,
-            fontSize: 12,
-            align: 'center',
-            valign: 'middle',
-            fontFace: bodyFontFace,
-          },
-          text: "SlideNumber Placeholder",
-        
-        }
+    }, 
+    {
+      placeholder:{
+        options: {
+          name: "slideNumber",
+          type: "body",
+          x: 0.5,
+          y: '95%',
+          w: 0.7,
+          h: 0.4,
+          fontSize: 12,
+          align: 'center',
+          valign: 'middle',
+          fontFace: font.body,
+        },
+        text: "SlideNumber Placeholder",
+      
       }
+    }
     ],
   });
   return pptx;
@@ -734,7 +739,7 @@ const sectionHeader = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
   // Title section settings
   const titlex = 0.83;
   const titley = 2;
-  const titlew = 12;
+  const titlew = 11.14;
   const titleh = 2;
   const titleFontSize = 40;
   const titleFontFace = FontFacetitle;
@@ -805,37 +810,38 @@ const sectionHeader = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
       // Footer
       {
         text: {
-          text: waterMark ? "Made with Ai Flavoured" : "",
-          options: {
-            x: 10,
-            y: 4,
-            w: 3.3,
-            h: 6.5,
-            bold: true,
-            fontSize: 14,
-            align: "right",
-            fontFace: bodyFontFace,
-          },
+        text: waterMark ? "Made with Ai Flavoured" : "",
+        options: {
+          x: 10,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
+          fontSize: 14,
+          color: "f41c76",
+          align: "right",
+          fontFace: font.body,
         },
       },
-      {
-        placeholder:{
-          options: {
-            name: "slideNumber",
-            type: "body",
-            x: 0.5,
-            y: '94%',
-            w: 0.7,
-            h: 0.4,
-            fontSize: 12,
-            align: 'center',
-            valign: 'middle',
-            fontFace: bodyFontFace,
-          },
-          text: "SlideNumber Placeholder",
-        
-        }
+    }, 
+    {
+      placeholder:{
+        options: {
+          name: "slideNumber",
+          type: "body",
+          x: 0.5,
+          y: '95%',
+          w: 0.7,
+          h: 0.4,
+          fontSize: 12,
+          align: 'center',
+          valign: 'middle',
+          fontFace: font.body,
+        },
+        text: "SlideNumber Placeholder",
+      
       }
+    }
     ],
   });
   return pptx;
@@ -1003,37 +1009,38 @@ const comparison = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
       // Footer
       {
         text: {
-          text: waterMark ? "Made with Ai Flavoured" : "",
-          options: {
-            x: 10,
-            y: 4,
-            w: 3.3,
-            h: 6.5,
-            fontSize: 14,
-            bold: true,
-            align: "right",
-            fontFace: bodyFontFace,
-          },
+        text: waterMark ? "Made with Ai Flavoured" : "",
+        options: {
+          x: 10,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
+          fontSize: 14,
+          color: "f41c76",
+          align: "right",
+          fontFace: font.body,
         },
       },
-      {
-        placeholder:{
-          options: {
-            name: "slideNumber",
-            type: "body",
-            x: 0.5,
-            y: '94%',
-            w: 0.7,
-            h: 0.4,
-            fontSize: 12,
-            align: 'center',
-            valign: 'middle',
-            fontFace: bodyFontFace,
-          },
-          text: "SlideNumber Placeholder",
-        
-        }
+    }, 
+    {
+      placeholder:{
+        options: {
+          name: "slideNumber",
+          type: "body",
+          x: 0.5,
+          y: '95%',
+          w: 0.7,
+          h: 0.4,
+          fontSize: 12,
+          align: 'center',
+          valign: 'middle',
+          fontFace: font.body,
+        },
+        text: "SlideNumber Placeholder",
+      
       }
+    }
     ],
   });
   return pptx;
@@ -1084,37 +1091,38 @@ const titleOnly = async (pptx: pptxgen, font: Font, waterMark: boolean) => {
       // Footer
       {
         text: {
-          text: waterMark ? "Made with Ai Flavoured" : "",
-          options: {
-            x: 10,
-            y: 4,
-            w: 3.3,
-            h: 6.5,
-            bold: true,
-            fontSize: 14,
-            align: "right",
-            fontFace: bodyFontFace,
-          },
+        text: waterMark ? "Made with Ai Flavoured" : "",
+        options: {
+          x: 10,
+          y: '95%',
+          w: 3,
+          h: 0.28,
+          bold: true,
+          fontSize: 14,
+          color: "f41c76",
+          align: "right",
+          fontFace: font.body,
         },
       },
-      {
-        placeholder:{
-          options: {
-            name: "slideNumber",
-            type: "body",
-            x: 0.5,
-            y: '94%',
-            w: 0.7,
-            h: 0.4,
-            fontSize: 12,
-            align: 'center',
-            valign: 'middle',
-            fontFace: bodyFontFace,
-          },
-          text: "SlideNumber Placeholder",
-        
-        }
+    }, 
+    {
+      placeholder:{
+        options: {
+          name: "slideNumber",
+          type: "body",
+          x: 0.5,
+          y: '95%',
+          w: 0.7,
+          h: 0.4,
+          fontSize: 12,
+          align: 'center',
+          valign: 'middle',
+          fontFace: font.body,
+        },
+        text: "SlideNumber Placeholder",
+      
       }
+    }
     ],
   });
   return pptx;
@@ -1138,6 +1146,7 @@ const blank = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
          title: `blank`,
          objects: [
            // Background
+           
            { rect: { x: 0.5, y: 0.5, w: 12.33, h: 6.5, fill: { color: "faf4f4" },shadow: {
             type: 'outer',
             color: '000000',
@@ -1172,35 +1181,36 @@ const blank = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
                 text: waterMark ? "Made with Ai Flavoured" : "",
                 options: {
                   x: 10,
-                  y: 4,
-                  w: 3.3,
-                  h: 6.5,
-                  bold : true,
+                  y: '95%',
+                  w: 3,
+                  h: 0.28,
+                  bold: true,
                   fontSize: 14,
                   color: "f41c76",
                   align: "right",
+                  fontFace: font.body,
                 },
               },
-            },
+            }, 
             {
               placeholder:{
                 options: {
                   name: "slideNumber",
                   type: "body",
                   x: 0.5,
-                  y: '94%',
+                  y: '95%',
                   w: 0.7,
                   h: 0.4,
                   fontSize: 12,
                   align: 'center',
                   valign: 'middle',
-                  fontFace: fontFace,
+                  fontFace: font.body,
                 },
                 text: "SlideNumber Placeholder",
               
               }
             }
-             ]
+          ]
       });
       return pptx;
 
@@ -1298,37 +1308,38 @@ const contentWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
           // Footer
           {
             text: {
-              text: waterMark ? "Made with Ai Flavoured" : "",
-              options: {
-                x: 10,
-                y: 4,
-                w: 3.3,
-                h: 6.5,
-                bold: true,
-                fontSize: 14,
-                align: "right",
-                fontFace: bodyFontFace,
-              },
+            text: waterMark ? "Made with Ai Flavoured" : "",
+            options: {
+              x: 10,
+              y: '95%',
+              w: 3,
+              h: 0.28,
+              bold: true,
+              fontSize: 14,
+              color: "f41c76",
+              align: "right",
+              fontFace: font.body,
             },
           },
-          {
-            placeholder:{
-              options: {
-                name: "slideNumber",
-                type: "body",
-                x: 0.5,
-                y: '94%',
-                w: 0.7,
-                h: 0.4,
-                fontSize: 12,
-                align: 'center',
-                valign: 'middle',
-                fontFace: bodyFontFace,
-              },
-              text: "SlideNumber Placeholder",
-            
-            }
+        }, 
+        {
+          placeholder:{
+            options: {
+              name: "slideNumber",
+              type: "body",
+              x: 0.5,
+              y: '95%',
+              w: 0.7,
+              h: 0.4,
+              fontSize: 12,
+              align: 'center',
+              valign: 'middle',
+              fontFace: font.body,
+            },
+            text: "SlideNumber Placeholder",
+          
           }
+        }
         ],
       });
 
@@ -1419,44 +1430,45 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
           // Footer
           {
             text: {
-              text: waterMark ? "Made with Ai Flavoured" : "",
-              options: {
-                x: 9,
-                y: 4,
-                w: 3.2,
-                h: 6.5,
-                bold: true,
-                fontSize: 14,
-                align: "right",
-                fontFace: bodyFontFace,
-              },
+            text: waterMark ? "Made with Ai Flavoured" : "",
+            options: {
+              x: 10,
+              y: '95%',
+              w: 3,
+              h: 0.28,
+              bold: true,
+              fontSize: 14,
+              color: "f41c76",
+              align: "right",
+              fontFace: font.body,
             },
           },
-          {
-            placeholder:{
-              options: {
-                name: "slideNumber",
-                type: "body",
-                x: 0.5,
-                y: '94%',
-                w: 0.7,
-                h: 0.4,
-                fontSize: 12,
-                align: 'center',
-                valign: 'middle',
-                fontFace: bodyFontFace,
-              },
-              text: "SlideNumber Placeholder",
-            
-            }
+        }, 
+        {
+          placeholder:{
+            options: {
+              name: "slideNumber",
+              type: "body",
+              x: 0.5,
+              y: '95%',
+              w: 0.7,
+              h: 0.4,
+              fontSize: 12,
+              align: 'center',
+              valign: 'middle',
+              fontFace: font.body,
+            },
+            text: "SlideNumber Placeholder",
+          
           }
+        }
         ],
       });
 
       return pptx;
     }
 
-export const ppPartyThemePresentation = async ({author, title, pptxData, imageSearch, modelForColorAndTitle, waterMark}: PresentaionData) => {
+export const ppPartyThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData) => {
       console.log("presentaion function call");
       try {
         let templatePicker = Math.floor(Math.random() * 4);
@@ -1481,148 +1493,148 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
         // pptx.theme = { headFontFace: "Book Antiqua", bodyFontFace: "Book Antiqua" };
         
     
-      // const data: Presentation = await convertSlidesStringToObject(pptxData);
-      const data : Presentation = [
-    {
-      "titleAndContent": {
-        "title": "Content List",
-        "body": [
-          "Introduction to AI Flavoured",
-          "Project Overview",
-          "Core Functionalities",
-          "Intelligent Summarization",
-          "Interactive Engagement",
-          "Multilingual Support",
-          "Personalized Learning Experiences",
-          "Technical Aspects and Benefits",
-          "Future Scopes",
-          "Thank You"
-        ]
-      }
-    },
-    {
-      "titleSlide":{
-            "title" : "Introduction to AI Flavoured",
-            "body" : "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning."
-      }
-    },
-    {
-      "titleAndContent": {
-        "title": "Introduction to AI Flavoured",
-        "body": [
-          "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning.",
-          "The platform features advanced summarization engines, interactive communication, multilingual support, and personalized learning experiences.",
-          "It aims to address challenges such as information overload, complex documents, and language barriers."
-        ]
-      }
-    },
-    {
-      "sectionHeader":{
-            "title" : "Project Overview",
-            "body" : "AI Flavoured empowers users to efficiently extract insights from written content."
-      }
-    },
-    {
-      "twoContent": {
-        "title": "Core Functionalities",
-        "content": [
-          "Intelligent Summarization",
-          "Interactive Engagement",
-          "Multilingual Support",
-          "Personalized Learning Experiences"
-        ],
-        "content2": [
-          "Streamlines information retrieval",
-          "Improves knowledge acquisition",
-          "Fosters collaboration",
-          "Enhances learning environments"
-        ]
-      }
-    },
-    {
-      "comparison":{
-            "title" : "Core Functionalities",
-            "subheading": "Core Functionalities",
-            "content": ["Intelligent Summarization", "Interactive Engagement", "Multilingual Support", "Personalized Learning Experiences"],
-            "subheading2": "Benefits",
-            "content2" : ["Streamlines information retrieval", "Improves knowledge acquisition", "Fosters collaboration", "Enhances learning environments"]
-      }
-    },
-    {
-      "team" : {
-        "title" : "This is my First ai team",
-        "first" :{
-          "name" : "Sourav Sharma",
-          "picture" : "Cat"
-        },
-        "second" : {
-          "name" : "Sourav Sharma",
-          "picture" : "dog"
-        },
-        "third" : {
-          "name" : "Sourav Sharma",
-          "picture" : "Parrot"
+      const data: Presentation = await convertSlidesStringToObject(pptxData);
+  //     const data : Presentation = [
+  //   {
+  //     "titleAndContent": {
+  //       "title": "Content List",
+  //       "body": [
+  //         "Introduction to AI Flavoured",
+  //         "Project Overview",
+  //         "Core Functionalities",
+  //         "Intelligent Summarization",
+  //         "Interactive Engagement",
+  //         "Multilingual Support",
+  //         "Personalized Learning Experiences",
+  //         "Technical Aspects and Benefits",
+  //         "Future Scopes",
+  //         "Thank You"
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     "titleSlide":{
+  //           "title" : "Introduction to AI Flavoured",
+  //           "body" : "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning."
+  //     }
+  //   },
+  //   {
+  //     "titleAndContent": {
+  //       "title": "Introduction to AI Flavoured",
+  //       "body": [
+  //         "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning.",
+  //         "The platform features advanced summarization engines, interactive communication, multilingual support, and personalized learning experiences.",
+  //         "It aims to address challenges such as information overload, complex documents, and language barriers."
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     "sectionHeader":{
+  //           "title" : "Project Overview",
+  //           "body" : "AI Flavoured empowers users to efficiently extract insights from written content."
+  //     }
+  //   },
+  //   {
+  //     "twoContent": {
+  //       "title": "Core Functionalities",
+  //       "content": [
+  //         "Intelligent Summarization",
+  //         "Interactive Engagement",
+  //         "Multilingual Support",
+  //         "Personalized Learning Experiences"
+  //       ],
+  //       "content2": [
+  //         "Streamlines information retrieval",
+  //         "Improves knowledge acquisition",
+  //         "Fosters collaboration",
+  //         "Enhances learning environments"
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     "comparison":{
+  //           "title" : "Core Functionalities",
+  //           "subheading": "Core Functionalities",
+  //           "content": ["Intelligent Summarization", "Interactive Engagement", "Multilingual Support", "Personalized Learning Experiences"],
+  //           "subheading2": "Benefits",
+  //           "content2" : ["Streamlines information retrieval", "Improves knowledge acquisition", "Fosters collaboration", "Enhances learning environments"]
+  //     }
+  //   },
+  //   {
+  //     "team" : {
+  //       "title" : "This is my First ai team",
+  //       "first" :{
+  //         "name" : "Sourav Sharma",
+  //         "picture" : "Cat"
+  //       },
+  //       "second" : {
+  //         "name" : "Sourav Sharma",
+  //         "picture" : "dog"
+  //       },
+  //       "third" : {
+  //         "name" : "Sourav Sharma",
+  //         "picture" : "Parrot"
         
-        }
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Intelligent Summarization",
-        "content": [
-          "AI Flavoured's summarization engine condenses complex documents into concise summaries.",
-          "This feature helps users quickly grasp the essence of lengthy texts."
-        ],
-        "caption": "Efficiently extract key insights from vast amounts of information."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Interactive Engagement",
-        "content": [
-          "The platform offers interactive communication features to enhance user engagement.",
-          "Users can interact with the content, ask questions, and receive instant feedback."
-        ],
-        "caption": "Foster a more engaging and interactive learning experience."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Multilingual Support",
-        "content": [
-          "AI Flavoured supports multiple languages, breaking down language barriers.",
-          "This feature ensures accessibility for a global audience."
-        ],
-        "caption": "Promote inclusivity and accessibility in document comprehension."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Personalized Learning Experiences",
-        "content": [
-          "The platform offers personalized learning experiences tailored to individual needs.",
-          "Users receive recommendations and insights based on their preferences and learning patterns."
-        ],
-        "caption": "Enhance learning outcomes through personalized content."
-      }
-    },
-    {
-      "titleAndContent": {
-        "title": "Technical Aspects and Benefits",
-        "body": [
-          "AI Flavoured showcases the feasibility and operational benefits of AI in document comprehension.",
-          "It streamlines information retrieval, improves knowledge acquisition, and fosters collaboration.",
-          "The project aims to stay at the forefront of AI-powered education and knowledge sharing."
-        ]
-      }
-    },
-    {
-      "titleSlide": {
-        "title": "Thank You",
-        "body": "Thank you for your attention. We hope AI Flavoured will revolutionize your document comprehension and learning experience."
-      }
-    },
-  ]
+  //       }
+  //     }
+  //   },
+  //   {
+  //     "contentWithCaption": {
+  //       "title": "Intelligent Summarization",
+  //       "content": [
+  //         "AI Flavoured's summarization engine condenses complex documents into concise summaries.",
+  //         "This feature helps users quickly grasp the essence of lengthy texts."
+  //       ],
+  //       "caption": "Efficiently extract key insights from vast amounts of information."
+  //     }
+  //   },
+  //   {
+  //     "contentWithCaption": {
+  //       "title": "Interactive Engagement",
+  //       "content": [
+  //         "The platform offers interactive communication features to enhance user engagement.",
+  //         "Users can interact with the content, ask questions, and receive instant feedback."
+  //       ],
+  //       "caption": "Foster a more engaging and interactive learning experience."
+  //     }
+  //   },
+  //   {
+  //     "contentWithCaption": {
+  //       "title": "Multilingual Support",
+  //       "content": [
+  //         "AI Flavoured supports multiple languages, breaking down language barriers.",
+  //         "This feature ensures accessibility for a global audience."
+  //       ],
+  //       "caption": "Promote inclusivity and accessibility in document comprehension."
+  //     }
+  //   },
+  //   {
+  //     "contentWithCaption": {
+  //       "title": "Personalized Learning Experiences",
+  //       "content": [
+  //         "The platform offers personalized learning experiences tailored to individual needs.",
+  //         "Users receive recommendations and insights based on their preferences and learning patterns."
+  //       ],
+  //       "caption": "Enhance learning outcomes through personalized content."
+  //     }
+  //   },
+  //   {
+  //     "titleAndContent": {
+  //       "title": "Technical Aspects and Benefits",
+  //       "body": [
+  //         "AI Flavoured showcases the feasibility and operational benefits of AI in document comprehension.",
+  //         "It streamlines information retrieval, improves knowledge acquisition, and fosters collaboration.",
+  //         "The project aims to stay at the forefront of AI-powered education and knowledge sharing."
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     "titleSlide": {
+  //       "title": "Thank You",
+  //       "body": "Thank you for your attention. We hope AI Flavoured will revolutionize your document comprehension and learning experience."
+  //     }
+  //   },
+  // ]
 
       let index = 0
       let slideNumber = 1;
@@ -2039,7 +2051,7 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
               });
               if (typeof (pictureTO) === 'string') {
                 const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureTO) as string;
-                slideTO.addImage({ data: base64WithHeader, w: 10.5, h: 5.5, placeholder: "picture" });
+                slideTO.addImage({ data: base64WithHeader, w: 10.5, h: 5.5, x: 1, y :1.5, placeholder: "picture" });
               }
               slideTO.addText(slideNumber.toString(), {
                 color: colors.body,
@@ -2051,19 +2063,10 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
               pptx = await blank(pptx, font, waterMark);
               const slideB = pptx.addSlide({ masterName: "blank" });
               const pictureB = slideDataB!.picture;
-              slideB.addShape(pptx.ShapeType.rect, {
-                x: 0,
-                y: 0,
-                w: '100%',
-                h: '100%',
-                fill: {
-                  type: 'solid',
-                  color: 'FFC0CB',
-                }
-              });
+
               if (typeof (pictureB) === 'string') {
-                const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;
-                slideB.addImage({ path: base64WithHeader, w: 11.33, h: 5.5, x: 1, y: 1, placeholder: "picture" });
+                // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;
+                slideB.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 11.33, h: 5.5, x: 1, y: 1, placeholder: "picture" });
               }
               slideB.addText(slideNumber.toString(), {
                 color: colors.body,
@@ -2134,13 +2137,28 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
                 color: colors.title,
               });
               if (typeof (picturePWC) === 'string') {
-                const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-                slidePWC.addImage({ data: base64WithHeader, w: 6, h: 6, placeholder: "picture" });
+                // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
+                slidePWC.addImage({ data: base64, w: 6, h: 6, placeholder: "picture" });
               }
+              if(Array.isArray(captionPWC)){
+                let captionPWCString = captionPWC.map((item, index) =>{
+                  let charCount = item.length;
+                  if(charCount > maxCharCountForContent){
+                return ` ${item} \n`
+                  }else{
+                   return `${index + 1}. ${item}`
+                  }
+                }).join('\n');
+                slidePWC.addText(captionPWCString, {
+                  color : colors.body,
+                  placeholder: "caption",
+                });
+              }else{
               slidePWC.addText(captionPWC, {
+                color : colors.body,
                 placeholder: "caption",
-                color: colors.body,
-              });
+              });}
+  
               slidePWC.addText(slideNumber.toString(), {
                 color: colors.body,
                 placeholder: 'slideNumber'
@@ -2262,7 +2280,7 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
             console.log("exiting")
             //temporarily saving the file
 
-            fs.writeFileSync(`output/${title}.pptx`, new Uint8Array(buffer));
+            fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
 
             // try{
             //   const res = await fetch('http://localhost:3000/api/runpythonscript',{
@@ -2280,20 +2298,22 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
             //   console.log("Error in creating pdf",e)
             // }
 
-            //     const bufferString = Buffer.from(buffer)
-      //     const pptxBufferBase64 = bufferString.toString('base64')
-      //     const fileName = `${title}_AiFlavoured.pptx`
-      //     const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-      //     const fileSize = buffer?.byteLength;
-      //     // const param = await createChatSession(userId,fileName)
-      //     const data = {
-      //       fileName,
-      //       fileType,
-      //       fileSize,
-      //       pptxBufferBase64,
-      //     }
-      //     console.log("exitng from presention")
-      //     return data;
+          const bufferString = Buffer.from(buffer)
+          const pptxBufferBase64 = bufferString.toString('base64')
+          const fileName = `${author}_AiFlavoured.pptx`
+          const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+          const fileSize = buffer?.byteLength;
+          const filePath = `output/${author}.pptx`
+          // const param = await createChatSession(userId,fileName)
+          const data = {
+            fileName,
+            fileType,
+            fileSize,
+            pptxBufferBase64,
+            filePath
+          }
+          console.log("exitng from presention")
+          return data;
     
         } else {
           console.error("Failed to generate buffer from streamData");

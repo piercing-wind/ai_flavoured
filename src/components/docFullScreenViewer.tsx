@@ -8,7 +8,7 @@ import { HashLoader } from "react-spinners";
 import { FormError } from "./auth/form-error";
 import { useResizeDetector } from "react-resize-detector";
 
-export default function DocuFullScreenViewer({fileUrl}: {fileUrl: string}) {
+export default function DocFullScreenViewer({fileUrl}: {fileUrl: string}) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
   const {width, ref} = useResizeDetector();
@@ -42,7 +42,7 @@ export default function DocuFullScreenViewer({fileUrl}: {fileUrl: string}) {
             }
             onLoadError={(error) => {
               <div className=" flex items-center justify-center h-screen">
-                <FormError message={"unable to load pdf"} />
+                <FormError message={"unable to load Document"} />
                 <p className="text-red">Fail to load document!</p>
               </div>;
             }}

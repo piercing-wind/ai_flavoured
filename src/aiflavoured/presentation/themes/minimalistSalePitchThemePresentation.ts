@@ -17,7 +17,7 @@ import { add } from "lodash";
 interface Slides {
   intro?: {
     title: string;
-    body:  string;
+    body:  string[] | string;
   };
       titleSlide?: {
             title: string;
@@ -62,7 +62,7 @@ titleOnly?: {
   pictureWithCaption?: {
     title: string;
     picture: string;
-    caption: string;
+    caption: string[] | string;
   };
   team?: {
     title: string;
@@ -94,7 +94,7 @@ type Font = {
 //start the slide with title only
 //then intro
 
-//title and body
+//for agenda
 const intro = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
   const FontFacetitle = font.title
   const bodyFontFace = font.body
@@ -114,7 +114,7 @@ const intro = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
   const bodyw = 5.67;
   const bodyh = 3.42;
   const bodyFontSize = 20;
-  const bodyAlign = "center";
+  const bodyAlign = "left";
   const bodyValign = "middle";
 
 
@@ -453,6 +453,7 @@ const titleAndContent = async (pptx: pptxgen, font :Font, waterMark : boolean) =
               fontSize: 14,
               color: "f41c76",
               align: "right",
+              fontFace: fontFace,
             },
           },
         },
@@ -1049,6 +1050,20 @@ const overview = async (pptx: pptxgen, font : Font, waterMark : boolean) => {
       //   angle: 45,
       //   opacity: 0.5
       // } } },
+       // picture
+       {
+        placeholder: {
+          options: {
+            name: "picture",
+            type: "pic",
+            x: picturex,
+            y: picturey,
+            w: picturew,
+            h: pictureh,
+          },
+          text: "Picture Placeholder",
+        },
+      },
       // Title
       {
         placeholder: {
@@ -1087,20 +1102,6 @@ const overview = async (pptx: pptxgen, font : Font, waterMark : boolean) => {
           text: "Body Placeholder",
         }
       }, 
-      // picture
-      {
-        placeholder: {
-          options: {
-            name: "picture",
-            type: "pic",
-            x: picturex,
-            y: picturey,
-            w: picturew,
-            h: pictureh,
-          },
-          text: "Subtitle Placeholder",
-        },
-      },
       // Footer
       {
         text: {
@@ -1393,7 +1394,7 @@ const blank = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
            // { image: { x:0, y:0, w:'100%', h:'100%', path: bgimage, sizing : {type : 'cover', w: '100%', h: '100%'}} },
            {
              placeholder: {
-                   options: {
+                options: {
                  name: "picture",
                  type: "body",
                  x: picturex,
@@ -1423,11 +1424,29 @@ const blank = async (pptx: pptxgen , font : Font, waterMark : boolean )=> {
                   fontSize: 14,
                   color: "f41c76",
                   align: "right",
+                  fontFace: fontFace,
                 },
               },
             },
-             ],
-             slideNumber: { x: 0.5, y: "94%", w: 0.7, h: 0.4 , color : "f41c76", fontFace: "Calibri"},
+            {
+              placeholder:{
+                options: {
+                  name: "slideNumber",
+                  type: "body",
+                  x: 0.5,
+                  y: '94%',
+                  w: 0.7,
+                  h: 0.4,
+                  fontSize: 12,
+                  align: 'center',
+                  valign: 'middle',
+                  fontFace: font.body,
+                },
+                text: "SlideNumber Placeholder",
+              
+              }
+            }
+             ]
       });
       return pptx;
     }
@@ -1583,14 +1602,14 @@ const pictureWithCaption = async (pptx: pptxgen , font : Font , waterMark : bool
       const titleValign = "middle";
     
       // Picture section settings
-      const picturex = 6.65;
+      const picturex = 6.67;
       const picturey = 0;
-      const picturew = 6.69;
+      const picturew = 6.66;
       const pictureh = 7.5;
     
       // Caption section settings
-      const captionx = 8.05;
-      const captiony = 0.44;
+      const captionx = 0.5;
+      const captiony = 2.01;
       const captionw = 6.32;
       const captionh = 5.05;
       const captionFontSize = 18;
@@ -1700,7 +1719,7 @@ const pictureWithCaption = async (pptx: pptxgen , font : Font , waterMark : bool
       return pptx;
     }
 
-export const minimalistSalePitchThemePresentation = async ({author, title, pptxData, imageSearch, modelForColorAndTitle, waterMark}: PresentaionData) => {
+export const minimalistSalePitchThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData) => {
       console.log("presentaion function call");
       try {
         let index = 0;
@@ -1727,168 +1746,7 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
         
     
 
-      // const data: Presentation = await convertSlidesStringToObject(pptxData);
-      const data : Presentation = [
-        {
-          "titleOnly":{
-            "title" :"AI Flavoured",
-          }
-        },
-    {
-      "titleAndContent": {
-        "title": "Content List",
-        "body": [
-          "Introduction to AI Flavoured",
-          "Project Overview",
-          "Core Functionalities",
-          "Intelligent Summarization",
-          "Interactive Engagement",
-          "Multilingual Support",
-          "Personalized Learning Experiences",
-          "Technical Aspects and Benefits",
-          "Future Scopes",
-          "Thank You"
-        ]
-      }
-    },
-    {
-      "sectionTitle":{
-            "title" : "Introduction to AI Flavoured",
-            "picture" : "AI Flavoured empowers users to efficiently extract insights from written content."
-      }
-    },
-    {
-      "overview":{
-            "title" : "Project Overview",
-            "content" : "AI Flavoured empowers users to efficiently extract insights from written content.",
-            "picture" : "AI Flavoured empowers users to efficiently extract insights from written content."
-      }
-    },
-    {
-      "titleSlide":{
-            "title" : "Introduction to AI Flavoured",
-            "body" : "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning."
-      }
-    },
-    {
-      "titleAndContent": {
-        "title": "Introduction to AI Flavoured",
-        "body": [
-          "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning.",
-          "The platform features advanced summarization engines, interactive communication, multilingual support, and personalized learning experiences.",
-          "It aims to address challenges such as information overload, complex documents, and language barriers."
-        ]
-      }
-    },
-    {
-      "sectionTitle":{
-            "title" : "Project Overview",
-            "picture" : "AI Flavoured empowers users to efficiently extract insights from written content."
-      }
-    },
-    {
-      "twoContent": {
-        "title": "Core Functionalities",
-        "content": [
-          "Intelligent Summarization",
-          "Interactive Engagement",
-          "Multilingual Support",
-          "Personalized Learning Experiences"
-        ],
-        "content2": [
-          "Streamlines information retrieval",
-          "Improves knowledge acquisition",
-          "Fosters collaboration",
-          "Enhances learning environments"
-        ]
-      }
-    },
-    {
-      "comparison":{
-            "title" : "Core Functionalities",
-            "subheading": "Core Functionalities",
-            "content": ["Intelligent Summarization", "Interactive Engagement", "Multilingual Support", "Personalized Learning Experiences"],
-            "subheading2": "Benefits",
-            "content2" : ["Streamlines information retrieval", "Improves knowledge acquisition", "Fosters collaboration", "Enhances learning environments"]
-      }
-    },
-    {
-      "team" : {
-        "title" : "This is my First ai team",
-        "first" :{
-          "name" : "Sourav Sharma",
-          "picture" : "Cat"
-        },
-        "second" : {
-          "name" : "Sourav Sharma",
-          "picture" : "dog"
-        },
-        "third" : {
-          "name" : "Sourav Sharma",
-          "picture" : "Parrot"
-        
-        }
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Intelligent Summarization",
-        "content": [
-          "AI Flavoured's summarization engine condenses complex documents into concise summaries.",
-          "This feature helps users quickly grasp the essence of lengthy texts."
-        ],
-        "caption": "Efficiently extract key insights from vast amounts of information."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Interactive Engagement",
-        "content": [
-          "The platform offers interactive communication features to enhance user engagement.",
-          "Users can interact with the content, ask questions, and receive instant feedback."
-        ],
-        "caption": "Foster a more engaging and interactive learning experience."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Multilingual Support",
-        "content": [
-          "AI Flavoured supports multiple languages, breaking down language barriers.",
-          "This feature ensures accessibility for a global audience."
-        ],
-        "caption": "Promote inclusivity and accessibility in document comprehension."
-      }
-    },
-    {
-      "contentWithCaption": {
-        "title": "Personalized Learning Experiences",
-        "content": [
-          "The platform offers personalized learning experiences tailored to individual needs.",
-          "Users receive recommendations and insights based on their preferences and learning patterns."
-        ],
-        "caption": "Enhance learning outcomes through personalized content."
-      }
-    },
-    {
-      "titleAndContent": {
-        "title": "Technical Aspects and Benefits",
-        "body": [
-          "AI Flavoured showcases the feasibility and operational benefits of AI in document comprehension.",
-          "It streamlines information retrieval, improves knowledge acquisition, and fosters collaboration.",
-          "The project aims to stay at the forefront of AI-powered education and knowledge sharing."
-        ]
-      }
-    },
-    {
-      "titleSlide": {
-        "title": "Thank You",
-        "body": "Thank you for your attention. We hope AI Flavoured will revolutionize your document comprehension and learning experience."
-      }
-    },
-  ]
-  
-  
+      const data: Presentation = await convertSlidesStringToObject(pptxData);
       
   let slideNumber =  1;
     for(let slide of data){
@@ -1916,10 +1774,25 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
               color : colors.title,
               placeholder: "title",
             });
-            slideIntro.addText(bodyIntro, {
-              color : colors.body,
-              placeholder: "body",
-            });
+            if (Array.isArray(bodyIntro)) {
+              let bodyIntroString = bodyIntro.map((item, index) => {
+                return `${index + 1}. ${item}`;
+              }
+              ).join('\n');
+              slideIntro.addText(bodyIntroString, {
+                color : colors.body,
+                placeholder: "body",
+                lineSpacing :lineSpacing,
+                lineSpacingMultiple : 2.0
+              });
+            }else{
+              slideIntro.addText(bodyIntro, {
+                color : colors.body,
+                placeholder: "body",
+                lineSpacing :lineSpacing,
+                lineSpacingMultiple : 2.0
+              });
+            }
             slideIntro.addText(slideNumber.toString(), {
               color : colors.body,
               placeholder : 'slideNumber'
@@ -2079,7 +1952,6 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
                 const titleO =  slideOverview!.title;
                 const contentO =  slideOverview!.content;
                 const pictureO = slideOverview!.picture;
-
                 slideO.background = { data: base64};
                 slideO.addText(titleO, {
                   color : colors.title,
@@ -2119,11 +1991,14 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
                     });
                   }
                 } 
-                if(pictureO === 'string'){
-                  slideO.addImage({ path: "public/darkThemeMoon/titleSlide.jpg", w: 6.67, h: 7.5, placeholder : 'picture' });
+                if(typeof pictureO === 'string'){
+                  slideO.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 6.67, h: 7.5, placeholder : 'picture' });
                 }
                 
-                slideO.addImage({ path: 'public/minimalistSalePitchTheme/leftTriangle.png', w:2.24, h: 7.5, x:4.95, y:0});
+                // fill : {color : [3,6,8,10].includes(index) ? 'E9E6DF' : [0,2,5,12].includes(index) ? "000000" : "FFFFFF"}
+                const triangle = [3,6,8,10].includes(index) ? 'leftTriangle' : [0,2,5,12].includes(index) ? "leftTriangleBlack" : "leftTriangleWhite"
+
+                slideO.addImage({ path: `public/minimalistSalePitchTheme/${triangle}.png`, w:9.59, h: 7.5, x:1.4, y:0});
                 // slideO.addShape('rtTriangle', {
                   //   x:4.95,
                   //   y:0,
@@ -2150,22 +2025,22 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             });
             slideTC.addShape('line',{
               x :6.67,
-              y:0.78,
-              h:6.1,
+              y:1.78,
+              h:5,
               w:0,
               line :{color : colors.body, width : 1, dashType : "solid"},
               fill :{color : colors.body}
             })
             if (Array.isArray(contentTC)) {
               let contentTCString = contentTC.map((item, index) =>{
-                let charCount = item.length;
-                if(charCount > maxCharCountForContent){
-              return `${index + 1}. ${item} \n`
-                }else{
+              let charCount = item.length;
+              if(charCount > maxCharCountForContent){
+                return `${index + 1}. ${item} \n`
+              }else{
                  return `${index + 1}. ${item}`
-                }
+              }
               }).join('\n');
-              console.log(lineSpacing)
+ 
               slideTC.addText(contentTCString, {
                 color: colors.body,
                 placeholder: "leftContent",
@@ -2297,7 +2172,7 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             if (typeof(picture) === 'string') {
               // imageSearch variable === "Google Search"
               // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picture) as string;
-              slideSH.addImage({ data: base64, w: 6.68 , h: 7.5 , placeholder: "picture"});
+              slideSH.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 6.68 , h: 7.5 , placeholder: "picture"});
               // picture is a string to be displayed
               // slideSH.addText(picture, {
               //   placeholder: "picture",
@@ -2308,7 +2183,7 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
               y:0,
               w:2.6,
               h:7.5,
-              fill : {color : colors.body === "FFFFFF"? "000000" : "FFFFFF"}
+              fill : {color : [3,6,8,10].includes(index) ? 'E9E6DF' : [0,2,5,12].includes(index) ? "000000" : "FFFFFF"}
             })
             slideSH.addText(slideNumber.toString(), {
               color : colors.body,
@@ -2436,22 +2311,11 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             pptx =await blank(pptx, font, waterMark);
             const slideB = pptx.addSlide({ masterName: "blank" });
             const pictureB = slideDataB!.picture;
-            // slideB.addShape(pptxgen.)
-            slideB.addShape(pptx.ShapeType.rect, {
-              x: 0,
-              y: 0,
-              w: '100%',
-              h: '100%',
-              fill: {
-                  type: 'solid',
-                  color: 'FFC0CB',  
-       
-              }
-          });
+            // slideB.addShape(pptxgen.)s
             if (typeof(pictureB) === 'string') {
               //imageSearch variable === "Google Search"
               const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;            
-              slideB.addImage({ path: base64WithHeader, w: 11.33 , h: 5.5 , x: 1, y: 1, placeholder: "picture"});
+              slideB.addImage({ data: base64WithHeader, w: 11.33 , h: 5.5 , x: 1, y: 1, placeholder: "picture"});
             }
             slideB.addText(slideNumber.toString(), {
               color : colors.body,
@@ -2532,28 +2396,43 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             })
             if (typeof(picturePWC) === 'string') {
               //imageSearch variable === "Google Search"
-              const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-              slidePWC.addImage({ data: base64WithHeader, w: 5.19 , h: 7.06, placeholder: "picture"});
+              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
+              slidePWC.addImage({ data: base64, w: 6.6 , h: 7.5, placeholder: "picture"});
             } 
+
+            if(Array.isArray(captionPWC)){
+              let captionPWCString = captionPWC.map((item, index) =>{
+                let charCount = item.length;
+                if(charCount > maxCharCountForContent){
+              return ` ${item} \n`
+                }else{
+                 return `${index + 1}. ${item}`
+                }
+              }).join('\n');
+              slidePWC.addText(captionPWCString, {
+                color : colors.body,
+                placeholder: "caption",
+              });
+            }else{
             slidePWC.addText(captionPWC, {
               color : colors.body,
               placeholder: "caption",
-            });
+            });}
+
             slidePWC.addShape('rtTriangle',{
               x:6.65,
               y:-0,
               w:2.23,
               h:7.5,
-              fill : {color : colors.body === "FFFFFF"? "000000" : "FFFFFF"},
-              rotate : 180
+              fill : {color : [3,6,8,10].includes(index) ? 'E9E6DF' : [0,2,5,12].includes(index) ? "000000" : "FFFFFF"}
             })
             slidePWC.addShape('rtTriangle',{
-              x:11.01,
+              x:10.97,
               y:5.18,
               w:3.63,
               h:1.02,
-              fill : {color : colors.body === "FFFFFF"? "000000" : "FFFFFF"},
-              rotate : 90
+              fill : {color : [3,6,8,10].includes(index) ? 'E9E6DF' : [0,2,5,12].includes(index) ? "000000" : "FFFFFF"},
+              rotate : 270
             })
             slidePWC.addText(slideNumber.toString(), {
               color : colors.body,
@@ -2676,7 +2555,7 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             console.log("exiting")
             //temporarily saving the file
 
-            fs.writeFileSync(`output/${title}.pptx`, new Uint8Array(buffer));
+            fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
 
             // try{
             //   const res = await fetch('http://localhost:3000/api/runpythonscript',{
@@ -2694,20 +2573,22 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             //   console.log("Error in creating pdf",e)
             // }
 
-            //     const bufferString = Buffer.from(buffer)
-      //     const pptxBufferBase64 = bufferString.toString('base64')
-      //     const fileName = `${title}_AiFlavoured.pptx`
-      //     const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-      //     const fileSize = buffer?.byteLength;
-      //     // const param = await createChatSession(userId,fileName)
-      //     const data = {
-      //       fileName,
-      //       fileType,
-      //       fileSize,
-      //       pptxBufferBase64,
-      //     }
-      //     console.log("exitng from presention")
-      //     return data;
+            const bufferString = Buffer.from(buffer)
+            const pptxBufferBase64 = bufferString.toString('base64')
+            const fileName = `${author}_AiFlavoured.pptx`
+            const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            const fileSize = buffer?.byteLength;
+            const filePath = `output/${author}.pptx`
+            // const param = await createChatSession(userId,fileName)
+            const data = {
+              fileName,
+              fileType,
+              fileSize,
+              pptxBufferBase64,
+              filePath
+            }
+            console.log("exitng from presention")
+            return data;
     
         } else {
           console.error("Failed to generate buffer from streamData");

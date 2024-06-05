@@ -6,8 +6,7 @@ import base64
 
 def pptx_to_pdf(pptx_path):
     # Prepare a temporary file for the PDF output
-    with NamedTemporaryFile(delete=False, suffix='.pdf') as pdf_temp_file:
-        pdf_temp_filename = pdf_temp_file.name
+    pdf_temp_filename = os.path.splitext(pptx_path)[0] + '.pdf'
 
     # Convert PPTX to PDF using PowerPoint COM automation
     powerpoint = comtypes.client.CreateObject("PowerPoint.Application")

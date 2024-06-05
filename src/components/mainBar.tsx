@@ -66,18 +66,18 @@ export const MainBar = ({
   const [model, setModel] = useState("gpt-3.5-turbo-0125");
   const [openPPTXConfig, setOpenPPTXConfig] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<FileObject[]>([]);
+ 
   const router = useRouter();
  
-  const checkUserSubscription = async () => {
-    if (user.subscription === "free") {
+
+  useEffect(() => {
+    
+  //todo create a quota database to by bass this condition
+    if (user.subscription === "free" && model !== 'gpt-3.5-turbo-0125') {
       router.push(`/pricing`);
-      return;
     }
-    setModel("gpt-4-turbo");
-  };
-  const updateModel = () => {
-    setModel("gpt-3.5-turbo-0125");
-  };
+  }, [model]);
+
 
   const handleSelectChange = (selectedUrl: string) => {
     setPdf(selectedUrl);
@@ -105,12 +105,35 @@ export const MainBar = ({
     setSelectedFiles(selectedFiles);
   };
   
-  const generatePPTX = async (slides : number, wordsAmount : string, audience : string, imageSearch : string , aiModel : string) => {
+  const generatePPTX = async (
+    slides : number, 
+    wordsAmount : string, 
+    audience : string, 
+    imageSearch : string, 
+    ppmodel: string,
+    variant : string,
+    themeFunction : string,
+    textInputValue :  string
+  ) => {
+    const waterMark = user.subscription === "free" ? true : false;
+    const data : z.infer<typeof presentationSchema> = {
+      selectedFiles,
+      user, 
+      slides, 
+      wordsAmount, 
+      audience, 
+      imageSearch, 
+      ppmodel,
+      waterMark,
+      variant: variant,
+      textInputValue: textInputValue,
+      themeFunction: themeFunction
 
-    const data : z.infer<typeof presentationSchema> = {selectedFiles, user, slides, wordsAmount, audience, imageSearch, model , aiModel}
+    }
+    console.log(data);
     const presentationUrl = await generatePresentaionAndStore(data);  
     if(presentationUrl){
-      router.push(presentationUrl)
+      // router.push(presentationUrl);
     }
   }
   useEffect(() => {
@@ -127,34 +150,43 @@ export const MainBar = ({
             getSelectedFiles={getSelectedFiles}
           />
         )}
-        <div className="flex p-3 items-center justify-between border-b border-gray-400 shadow-md">
-          <div className="rounded-r-sm  w-full flex items-center text-nowrap">
+        <div className="relative flex flex-wrap p-3 items-center justify-between border-b border-gray-400 shadow-md">
+          <div className="rounded-r-sm flex items-center text-nowrap">
             <MdFolderZip className="text-2xl" /> &nbsp; <b>{chatName}</b> &nbsp;
             <FileList userFiles={userFiles} handleChange={handleSelectChange} />
           </div>
-          <div className="">
-            <Button
-              onClick={() => {
-                setWarningOn();
-              }}
-              className=" text-nowrap h-[2rem] "
-              size="sm"
-            >
-              Create Presentation
-            </Button>
-          </div>
-          <div className="mx-2">
-            <ThemeSwitch detectTheme={handleThemeChnage} />
-          </div>
-          <div className=" flex items-center ml-4 rounded-md">
-            <AiModelSelector
-              model={model}
-              checkUserSubscription={checkUserSubscription}
-              updateModel={updateModel}
-            />
-          </div>
+          <div className="flex flex-wrap items-center justify-center">
+            <div className="">
+              <Button
+                onClick={() => {
+                  setWarningOn();
+                }}
+                className=" text-nowrap h-[2rem] "
+                size="sm"
+                >
+                Create Presentation
+              </Button>
+            </div>
+            <div className="mx-2">
+              <ThemeSwitch detectTheme={handleThemeChnage} />
+            </div>
+            <div className=" flex items-center ml-4 rounded-md">
+              <AiModelSelector
+                model={model}
+                setModel={setModel}
+                />
+            </div>
         </div>
-       { openPPTXConfig && <DrawerForPPTXConfiguration user={user} setOpenPPTXConfigOff={setOpenPPTXConfigOff} openPptxConfig={openPPTXConfig} generatePPTX={generatePPTX}/>}
+       <div className="absolute w-full top-full">
+       { openPPTXConfig && <DrawerForPPTXConfiguration 
+                            user={user} 
+                            setOpenPPTXConfigOff={setOpenPPTXConfigOff} 
+                            openPptxConfig={openPPTXConfig} 
+                            generatePPTX={generatePPTX}
+                            
+                            />}
+        </div> 
+        </div>
         <div className="flex flex-grow justify-between">
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel className="flex-1 xl:flex w-6/12" defaultSize={1}>

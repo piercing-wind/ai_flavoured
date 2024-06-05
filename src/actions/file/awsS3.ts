@@ -6,11 +6,21 @@ import { dbq } from "@/db/db"
 import * as z from "zod"
 import { uploadToUserFileTBSchema } from "@/schemas"
 // import {auth} from "@/auth"
-
+export type UserFile = {
+  id: number;
+  userId: string;
+  fileKey: string;
+  fileName: string;
+  url: string;
+  createdAt: Date;
+  chatId: string;
+  fileType: string;
+  generator: string;
+};
 const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>, generator : string = 'user') => {
   const { fileKey, fileName, userId, url, chatId , fileType } = data;
   try{  
-        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "chatId", "fileType" , "generator") VALUES ($1, $2, $3, $4, $5, $6, $7)', [ fileKey, userId,fileName, url, chatId, fileType, generator])
+        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "chatId", "fileType" , "generator") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [ fileKey, userId,fileName, url, chatId, fileType, generator])
         return res;
       }catch(e){
         console.log(e)
@@ -28,7 +38,7 @@ const acceptedFileType = [
 ]
 
 
-export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string, chatId : string , generator : string) => {
+export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string, chatId : string , generator? : string) => {
   try {
 
     // const session = await auth();
@@ -61,10 +71,10 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
     // Handle validation errors
     const validationResult = uploadToUserFileTBSchema.safeParse(data);
     if (validationResult.success) {
-      const resp = await uploadToUserFileTable(data, generator);
-      
+      const userFile : UserFile = await uploadToUserFileTable(data, generator);
+
+      return Promise.resolve({awsS3: {url : signedUrl, userFile }});
     } 
-    return Promise.resolve({awsS3: {url : signedUrl, data }});
   } catch (error) {
     console.log(error);
     throw error;

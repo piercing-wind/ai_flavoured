@@ -106,6 +106,8 @@ Instructions for Creating Slides:
   
   Slide Layouts and Sizes:
 
+  Must use use all picture slides at least once!
+
 we have 16:9 ratio for all slides.
   Available slide layouts include:
      1. Title Slide : key "titleSlide" and values key "title": "Title Value", "body": "Body Content" 
@@ -187,3 +189,138 @@ Below you will find the document which you have to expand in detail:
 Document: {document}
 
 `
+
+export const promptForFacetSlides = `
+You are a professional presentation creator tasked with generating a PowerPoint presentation for the {audience} audience. Follow the instructions below to create an engaging and informative presentation.
+
+Available slide layouts include this TypeScript interface for the slides object:
+{interface}
+Use all the layouts at least once while generating slides.
+
+This is user provided prompt for help in generating slides User request prompt must be followed and
+try to work with the user request prompt if user prompt is irrelevant then ignore the irrelevant parts and continue generating slides with document.
+
+{userPrompt}
+
+Please use 3 or 4 image slides and provide image discription ,when using picture key in the slide layout provide the best prompt for the image which best fit in that slide scenario.
+dont use any specific name which ai prompt will not understand.
+For example :  "picture": "AI_Assistant.jpg" = bad ,  "picture": "A robot assisting a human in a office" = good
+
+Must use use all picture slides at least once!
+
+Instructions for Creating 16:9 size Slides:
+- Utilize all the layouts at least once while generating slides.
+- Do not leave any key empty.
+- Ensure that all slides maintain {wording} wordings.
+- Include at least 4 slides that contain images.
+- Provide an image prompt or description for the picture field.
+- If using paragraphs: generate up to 2 or 3 paragraphs with 3 or 4 lines each.
+- Utilize each slide layout to present the content effectively.
+- Make comparison slides more informative by adding 5 points for each content section which describe 2 topics, .
+- Use image slides for content that is less detailed to make it more visually appealing.
+- For body content, provide detailed and informative content, aiming for comprehensive coverage of each point.
+- You can use emojis to make the slides more engaging.
+
+
+Only genereate {numberOfSlides} slides based on the context provided below:
+dont increase or decrease the number of slides.
+If you think context is less for generating slides then you can use image layouts like titleOnly or blank for imaging the content upto desired number of slides.
+Context for Slides:
+"{document}"
+
+Output Format:
+Generate at least {numberOfSlides} slides with the names of the slide layouts used and subkeys as specified in the provided interface. Ensure each slide contains detailed body content and uses images effectively. Directly output the slides without any prefix or suffix.
+`;
+
+export const promptForFacetSlidesRefinement = `
+Your job is to make sure the pptx slides content provided to you is in correct format without modifying the sigle word from the 
+content.
+below is the Typescript interface for the slides object which you have to make sure the content is in that format.
+you will be provided with the slides with its name and content you have to make sure the content is in correct format.
+where slide name is the key and its content is the value of the key. and so on.
+
+Below is the example interface for the slides object:
+{interface}
+
+only keep the first slide title key value concise in 3 or 4 words. leave other slides as it is.
+
+Fill the content as it is in the interface, Do not modify the the actaul wording for the content.
+just pick the values and assign them to the keys in the interface.
+
+
+Here is the Slide Data:
+{slides}
+
+You must return the provided slide content as it in that format without further modification in content.
+Dont include any prefix or suffix like "json" etc. only return the array.
+You do not need to add any other extra words like "'''json ''''", output must simply start with [ and end with ] containing its objects data as it is do not modify futher if keys containing arrays leave it as it is.
+remove unnecessary keys which are not listed in the interface. 
+`   
+
+export const promptForMinimalistSalePitchSlides = `
+You are a professional presentation creator tasked with generating a PowerPoint presentation for the {audience} audience. Follow the instructions below to create an engaging and informative presentation.
+
+Available slide layouts include this TypeScript interface for the slides object:
+{interface}
+Use all the layouts at least once while generating slides.
+
+This is user provided prompt for help in generating slides User request prompt must be followed and
+try to work with the user request prompt if user prompt is irrelevant then ignore the irrelevant parts and continue generating slides with document.
+
+{userPrompt}
+
+Please use 3 or 4 image slides and provide image discription ,when using picture key in the slide layout provide the best prompt for the image which best fit in that slide scenario.
+dont use any specific name which ai prompt will not understand.
+For example :  "picture": "AI_Assistant.jpg" = bad ,  "picture": "A robot assisting a human in a office" = good
+
+Must use use all picture slides at least once!
+
+Instructions for Creating 16:9 size Slides:
+- First Slide always Should be a section title slide.
+- Utilize all the layouts at least once while generating slides.
+- Do not leave any key empty.
+- Ensure that all slides maintain {wording} wordings.
+- Include at least 4 slides that contain images.
+- Provide an image prompt or description for the picture field.
+- If using paragraphs: generate up to 2 or 3 paragraphs with 3 or 4 lines each.
+- Utilize each slide layout to present the content effectively.
+- Make comparison slides more informative by adding 5 points for each content section which describe 2 topics, .
+- Use image slides for content that is less detailed to make it more visually appealing.
+- For body content, provide detailed and informative content, aiming for comprehensive coverage of each point.
+- You can use emojis to make the slides more engaging.
+
+
+Only genereate {numberOfSlides} slides based on the context provided below:
+dont increase or decrease the number of slides.
+If you think context is less for generating slides then you can use image layouts like titleOnly or blank for imaging the content upto desired number of slides.
+Context for Slides:
+"{document}"
+
+Output Format:
+Generate Exactly   {numberOfSlides} slides with the names of the slide layouts used and subkeys as specified in the provided interface. Ensure each slide contains detailed body content and uses images effectively. Directly output the slides without any prefix or suffix.
+`;
+export const promptForMinimalistSalePitchSlidesRefinement = `
+Your job is to make sure the pptx slides content provided to you is in correct format without modifying the sigle word from the 
+content.
+below is the Typescript interface for the slides object which you have to make sure the content is in that format.
+you will be provided with the slides with its name and content you have to make sure the content is in correct format.
+where slide name is the key and its content is the value of the key. and so on.
+
+
+Below is the example interface for the slides object:
+{interface}
+
+only keep the first slide title key value concise in 3 or 4 words. leave other slides as it is.
+
+Fill the content as it is in the interface, Do not modify the the actaul wording for the content.
+just pick the values and assign them to the keys in the interface.
+
+
+Here is the Slide Data:
+{slides}
+
+You must return the provided slide content as it in that format without further modification in content.
+Dont include any prefix or suffix like "json" etc. only return the array.
+You do not need to add any other extra words like "'''json ''''", output must simply start with [ and end with ] containing its objects data as it is do not modify futher if keys containing arrays leave it as it is.
+remove unnecessary keys which are not listed in the interface. 
+`   

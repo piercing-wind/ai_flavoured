@@ -6,7 +6,7 @@ const exec = promisify(execCb);
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const respptxPath = body.path;
+  const respptxPath = body.respptxPath;
   console.log("Python script running");
   const pptxPath = path.resolve(respptxPath);
 
@@ -16,7 +16,10 @@ export async function POST(req: Request) {
     console.log("stderr", stderr);
 
     return Response.json({ pdfBase64: stdout }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      return new Response(JSON.stringify({ error: "Python executable not found" }), { status: 500 });
+    }
     console.log("Error in python script", error);
     return Response.json({ error: "Failed to execute python script" },{status: 500});
   }
