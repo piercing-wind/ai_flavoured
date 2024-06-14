@@ -77,7 +77,6 @@ export const aiSlidesForBiomePresentationTheme = async (model : string = 'gpt-4o
   
   type Presentation = Slides[]
   `
-  console.log("working on it...");
   let slideData : string = "";
   try{
       
@@ -106,7 +105,6 @@ export const aiSlidesForBiomePresentationTheme = async (model : string = 'gpt-4o
             audience : audience,
             interface: slidesInterfaceForRefinement,
       });
-      console.log(slides)
       const refineOutputChain = refineOutputPrompt.pipe(llm2).pipe(new StringOutputParser());
 
       const refinedSlides = await refineOutputChain.invoke({
@@ -117,6 +115,5 @@ export const aiSlidesForBiomePresentationTheme = async (model : string = 'gpt-4o
 }catch(e){
       console.log(e);
 }
-console.log(slideData)
 return slideData;
 };

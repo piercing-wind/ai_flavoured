@@ -36,6 +36,7 @@ export const Register = async (values: z.infer<typeof RegisterUserSchema>) => {
           email,
           password: hashedPassword,
           isTwoFAEnabled, // default is false
+          timeZone : Intl.DateTimeFormat().resolvedOptions().timeZone,  
         },
       });
       const verification = await generateVerficationToken(email);

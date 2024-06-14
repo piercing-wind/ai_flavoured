@@ -11,9 +11,10 @@ import {
     } from "../imagesData";
 import { Base64Image, Localbase64Image, getImagesFromGoogleAsBase64ArrayWithHeaders, localVarientsToBase64, varientsToBase64 } from "../getImagesFromGoogleAndConvertToBase64";
 import { convertSlidesStringToObject } from "../convertSlidesStringToObject";
-import { PresentaionData } from "./presentation";
+import { PresentationData } from "./presentation";
 import libre from "libreoffice-convert";
 import { add } from "lodash";
+import { PresentationImage } from "../generatePresentaionAndStore";
 interface Slides {
   intro?: {
     title: string;
@@ -1727,7 +1728,7 @@ const pictureWithCaption = async (pptx: pptxgen , font : Font , waterMark : bool
       return pptx;
     }
 
-export const biomePresentationTheme = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData) => {
+export const biomePresentationTheme = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData , photosWithLink : PresentationImage) => {
       console.log("presentaion function call");
       try {
         let index = 0;
@@ -1765,9 +1766,13 @@ export const biomePresentationTheme = async ({author, title, pptxData, imageSear
           title: "000000" , 
           body: "000000" 
         } 
+        let findPicture;
+        const ix = photosWithLink.findIndex((item) => item.slideNumber === slideNumber);
+        if( ix !== -1){
+           findPicture = photosWithLink[ix];
+         }  
         // const link = base64Images[index].link;
         const base64 = base64Images[index].base64;
-        const mime = base64Images[index].mime;
         const lineSpacing: number = 40;
     
           switch(key){    
@@ -2006,9 +2011,9 @@ export const biomePresentationTheme = async ({author, title, pptxData, imageSear
                     });
                   }
                 } 
-                if(typeof pictureO === 'string'){
-                  slideO.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 5.8, h: 6.76, placeholder : 'picture' });
-                }
+                if(typeof pictureO === 'string' && findPicture && ix !== -1){
+                 slideO.addImage({ path: findPicture?.picture, w: 5.8, h: 6.76, placeholder : 'picture' });
+               }
               
                 // slideO.addShape('rtTriangle', {
                   //   x:4.95,
@@ -2329,11 +2334,9 @@ export const biomePresentationTheme = async ({author, title, pptxData, imageSear
             const slideB = pptx.addSlide({ masterName: "blank" });
             const pictureB = slideDataB!.picture;
             // slideB.addShape(pptxgen.)
-            if (typeof(pictureB) === 'string') {
-              //imageSearch variable === "Google Search"
-              const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;            
-              slideB.addImage({ data: base64WithHeader, w: 11.33 , h: 5.5 , x: 1, y: 1, placeholder: "picture"});
-            }
+            if (typeof(pictureB) === 'string' && findPicture && ix !== -1) {
+           slideB.addImage({ path: findPicture.picture, w: 11.33 , h: 5.5 , x: 1, y: 1, placeholder: "picture"});
+         }
             slideB.addText(slideNumber.toString(), {
               color : colors.body,
               placeholder : 'slideNumber'
@@ -2379,11 +2382,12 @@ export const biomePresentationTheme = async ({author, title, pptxData, imageSear
                     placeholder: "content",
                     lineSpacing :lineSpacing
                   });
-    
-                }
+
+               }
             }
-            slideCWC.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 6.88, h: 4.35, placeholder : 'picture' });
-            slideCWC.addText(captionCWC, {
+              slideCWC.addImage({ path: findPicture?.picture, w: 6.88, h: 4.35, placeholder : 'picture' });
+              
+              slideCWC.addText(captionCWC, {
               color : colors.body,
               placeholder: "caption",
             });
@@ -2405,12 +2409,9 @@ export const biomePresentationTheme = async ({author, title, pptxData, imageSear
               placeholder: "title",
             });
             
-            if (typeof(picturePWC) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-              slidePWC.addImage({ data: base64, w: 7.33 , h: 6.62, placeholder: "picture"});
-            } 
-
+            if (typeof(picturePWC) === 'string' && findPicture && ix !== -1) {
+              slidePWC.addImage({ path: findPicture.picture, w: 7.33 , h: 6.62, placeholder: "picture"});
+            }
             if(Array.isArray(captionPWC)){
               let captionPWCString = captionPWC.map((item, index) =>{
                 let charCount = item.length;
@@ -2509,24 +2510,16 @@ export const biomePresentationTheme = async ({author, title, pptxData, imageSear
               opacity: 0.5
             },
             })
-            if (typeof(firstPicture) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(firstPicture) as string;
-              // slideTeam.addImage({ data: base64WithHeader, w: 3 , h: 3, placeholder: "lpic"});
-              slideTeam.addImage({ data: base64, w: 3.63 , h: 3.63, placeholder: "lpic"});
-            }
-            if (typeof(secondPicture) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(secondPicture) as string;
-              // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "mpic"});
-              slideTeam.addImage({ data: base64, w: 3.63 , h: 3.63, placeholder: "mpic"});
-            }
-            if (typeof(thirdPicture) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(thirdPicture) as string;
-              // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "rpic"});
-              slideTeam.addImage({ data: base64,  w: 3.63 , h: 3.6, placeholder: "rpic"});
-            }
+            let matchingPictures = photosWithLink.filter((item) => item.slideNumber === slideNumber);
+            let placeholders = ['lpic', 'mpic', 'rpic'];
+            
+            placeholders.forEach((placeholder) => {
+                if (matchingPictures.length > 0) {
+                    let picture = matchingPictures[0];
+                    slideTeam.addImage({ path: picture.picture, w: 3.63, h: 3.63, placeholder: placeholder });
+                    matchingPictures = matchingPictures.slice(1);
+                }
+            });
             slideTeam.addText(slideNumber.toString(), {
               color : colors.body,
               placeholder : 'slideNumber'

@@ -9,8 +9,10 @@ const nextConfig = {
                   "sharp$": false,
                   "onnxruntime-node$": false,
               };
-              
-     
+    
+             config.ignoreWarnings = [
+               /Critical dependency: the request of a dependency is an expression/,
+             ];               
             return config;
       },
       // experimental: {

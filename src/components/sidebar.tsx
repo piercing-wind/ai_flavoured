@@ -19,8 +19,15 @@ import { Success } from "./success";
 import { usePathname } from 'next/navigation'
 import { revalidate } from "@/actions/revalidate";
 import { useRouter } from "next/navigation";
+import { RiPresentationFill } from "react-icons/ri";
+import { Tooltip } from 'react-tooltip'
+import { IoDocumentsSharp } from "react-icons/io5";
+import { IoMdImages } from "react-icons/io";
+import { SiAudiomack } from "react-icons/si";
 
-import { presentation } from "@/aiflavoured/presentation/themes/presentation";
+
+
+import { PresentationData, presentation } from "@/aiflavoured/presentation/themes/presentation";
 import { aiSlidesForPresentation } from "@/aiflavoured/presentation/aiSlidesForPresentation";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
 import { getImagesFromGoogle, getImagesFromGoogleAsBase64ArrayWithoutHeaders } from "@/aiflavoured/presentation/getImagesFromGoogleAndConvertToBase64";
@@ -39,12 +46,20 @@ import { darkThemeMoonPresentation } from "@/aiflavoured/presentation/themes/dar
 import { minimalistSalePitchThemePresentation } from "@/aiflavoured/presentation/themes/minimalistSalePitchThemePresentation";
 import { scientificBluePresentationTheme } from "@/aiflavoured/presentation/themes/scientificBluePresentationTheme";
 import { biomePresentationTheme } from "@/aiflavoured/presentation/themes/biomePresentationTheme";
+import { pptxToPdf } from "@/actions/cloudconvert/cloudconvert";
+import { adobePPTXToPdf } from "@/actions/adobe/adobePPTXToPdf";
+import { imageGenerator } from "@/actions/huggingface/huggingFace";
+// import { texttoimage } from "@/actions/huggingface/texttoimage";
+import { PresentationImage, generatePresentaionAndStore } from "@/aiflavoured/presentation/generatePresentaionAndStore";
+import { convertSlidesStringToObject } from "@/aiflavoured/presentation/convertSlidesStringToObject";
+import { getPresentationData, storePresentationData } from "@/actions/presentationData/presentationData";
 
 
 interface ChatSession {
-  chatId: string;
+  session: string;
   chatName: string | null;
   userId: string;
+  sessionType: string;
   timestamp: Date;
 }
 
@@ -55,7 +70,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
   const router = useRouter();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [editingChatId, setEditingChatId] = useState<string | null>(null);
+  const [editingsession, setEditingsession] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [success, setSuccess] = useState(false);
   
@@ -79,10 +94,10 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
 
 
   const handleEdit = async () => {  
-    if (editingChatId !== null) {
+    if (editingsession !== null) {
       // updateOptimisticChatHistory(
       //   chatSessions.map((chat) => {
-      //     // if (chat.chatId === editingChatId) {
+      //     // if (chat.session === editingsession) {
       //     //   return {
       //     //     ...chat,
       //     //     chatName: inputValue,
@@ -94,7 +109,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
       // )
       try{
         console.log( inputValue)
-        await updateChatName(editingChatId, inputValue);
+        await updateChatName(editingsession, inputValue);
         setSuccess(true);
         setTimeout(() => {
             setSuccess(false);
@@ -106,9 +121,9 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
   }
   
   // Danger zone :
-  const handleDelete = async (chatId : string, userFiles : FileObject[] ) => {
+  const handleDelete = async (session : string, userFiles : FileObject[] ) => {
     console.log(userFiles)
-    await deleteChatSession(chatId),
+    await deleteChatSession(session),
       
     Promise.all(userFiles.map(file => deleteFromS3(file.fileKey)))
 
@@ -117,29 +132,12 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
 
   
   const handleAPI = async () => {
-    const data = {
-      author : "Sourabh",
-      title : "biomePresentationTheme",
-      pptxData : "text",
-      imageSearch : "Google Search",
-      modelForColorAndTitle : "gpt-3.5-turbo-0125",
-      waterMark : true
-    }
-    console.log("clickers")
-    //  await presentation(data);  *
-      // await facetThemePresentation(data);   
-    //  await ppPartyThemePresentation(data);  *
-    //  await darkThemeMoonPresentation(data);  *
-      await minimalistSalePitchThemePresentation(data);  
-      // await scientificBluePresentationTheme(data);   *
-    //  await biomePresentationTheme(data);
-  }
-
+ }
   return (
-    <div className={`${isSidebarOpen ? "w-72" : "w-0"}`}>
+    <div className={`${isSidebarOpen ? "w-72" : "w-0"} z-10`}>
       {success && <Success message="Updated successfully" />}
       <div
-        className={`relative z-20 text-white sidebar w-72 p-2 bg-zinc-900 h-screen transition-all duration-200 transform ${
+        className={`z-10 text-white sidebar w-72 p-2 bg-zinc-900 h-screen transition-all duration-200 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -153,26 +151,23 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
           <Divider />
         </div>
         <div className="mx-4 my-4">
-          <Link href="/chat">
+          <Link href="/x/chat">
           <Button className="text-sm my-4">
             <FaPlus /> &nbsp; New Chat
           </Button>
           </Link> 
-          <button onClick={handleAPI} >
-          <div className="flex items-center mx-2 my-5">
-            <TiFolderOpen className=" text-xl" /> &nbsp; Chat with Documents
-          </div>
-          </button>
-            <button onClick={async()=> {
-              const res = await fetch('/api/runpythonscript', {
-                method: 'POST',
-              });
-              console.log(res);
-            }} >
-          <div className="flex items-center mx-2 my-5">
-            <IoIosCreate className=" text-xl " /> &nbsp; Presentation AI
-          </div>
-            </button>
+
+            <Link href="/x/chat">
+               <div className="flex items-center mx-2 my-5">
+                  <TiFolderOpen className=" text-xl" /> &nbsp; Chat with Documents
+               </div>
+            </Link>
+
+          <Link href="/x/aipresentation">
+            <div className="flex items-center mx-2 my-5">
+              <IoIosCreate className=" text-xl " /> &nbsp; Presentation AI
+            </div>
+            </Link>
           <Divider />
 
           <div className="chathistory flex flex-col h-full">
@@ -192,25 +187,28 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                   .map((chathistory: any) => (
                     
                     // {
-                    <Link key={chathistory.chatId} href={
+                    <Link key={chathistory.session} href={
                       (() => {
-                        if (chathistory.userFiles && chathistory.userFiles[0]) {
-                          switch(chathistory.userFiles[0].generator){
-                            case "aiflavoured":
-                              return `/x/aipresentation/${chathistory.chatId}`;
-                            case "user":    
-                              return `/x/chat/${chathistory.chatId}`;
+                          switch(chathistory.sessionType){
+                            case "presentation":
+                              return `/x/aipresentation/${chathistory.session}`;
+                            case "chatwithdoc":    
+                              return `/x/chat/${chathistory.session}`;
+                              case "image":
+                              return `/x/image/${chathistory.session}`;
+                              case "audio":
+                              return `/x/audio/${chathistory.session}`;
                             default:
                               return "/error";
                           }
-                        } else {
-                          return "/error"; // return "/error" or any other default route
-                        }
+                      
                       })()
-                    }>
+                    }
+                    data-tooltip-id="tooltips"
+                    >
                       <div                       
                         className={`p-2 w-56 my-2 overflow-hidden truncate text-md flex items-center rounded-md justify-between hover:bg-gray-800 ${
-                          chathistory.chatId === params
+                          chathistory.session === params
                             ? " backdrop-blur-3xl bg-pink-900 font-semibold"
                             : ""
                         }`}
@@ -218,17 +216,56 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                          revalidate(pathname)
                         }}
                       >
-                        <div className=" items-center flex">
-                          {chathistory.userFiles.length === 0 ? (
-                            <div className="rounded-full p-1  w-1 bg-pink-600"></div>
-                          ) : chathistory.userFiles.length === 1 ? (
-                            <div className="rounded-full p-1  w-1 bg-purple-600"></div>
-                          ) : (
-                            <MdFolderZip className=" text-purple-300 text-lg" />
-                          )}{" "}
+                        <div className=" items-center flex" >
+                        {(() => {
+                           switch (chathistory.sessionType) {
+                              case "presentation":
+                                 return(
+                                       <>
+                                       <div className="p-1 text-xl text-pink-600"><RiPresentationFill/></div>
+                                       <Tooltip id="tooltips" place="top" >
+                                          <span>AI Presentation</span>
+                                       </Tooltip>
+                                       </>
+                                       )
+                              case "chatwithdoc":
+                                 return(
+                                    <>
+                                    <div className="p-1 text-xl text-blue-600"><IoDocumentsSharp /></div>
+                                    <Tooltip id="tooltips" place="top" >
+                                       <span>Chat With Docs</span>
+                                    </Tooltip>
+                                    </>
+                                    )
+                              case "image":
+                                 return(
+                                    <>
+                                    <div className="p-1 text-xl text-green-600"><IoMdImages/></div>
+                                    <Tooltip id="tooltips" place="top" >
+                                       <span>Image</span>
+                                    </Tooltip>
+                                    </>
+                                    )
+                              case "sessionType4":
+                                 return(
+                                    <>
+                                    <div className="p-1 text-xl text-yellow-600"><SiAudiomack /></div>
+                                    <Tooltip id="tooltips" place="top" >
+                                       <span>Audio</span>
+                                    </Tooltip>
+                                    </>
+                                    )
+                              default:
+                                 return chathistory.userFiles.length === 1 ? (
+                                 <div className="rounded-full p-1  w-1 bg-purple-600"></div>
+                                 ) : (
+                                 <MdFolderZip className=" text-purple-300 text-lg" />
+                                 );
+                           }
+                           })()}{" "}
                           &nbsp;&nbsp;
-                          {chathistory.chatId !== editingChatId ?
-                           ( chathistory.chatId === params ? <p className="truncate w-32">{chathistory.chatName}</p> : chathistory.chatName ): (<>
+                          {chathistory.session !== editingsession ?
+                           ( chathistory.session === params ? <p className="truncate w-32">{chathistory.chatName}</p> : chathistory.chatName ): (<>
                           <input 
                           value={inputValue !== null && inputValue !== undefined ? inputValue : chathistory.chatName}   
                           onChange={event => setInputValue(event.target.value)} 
@@ -236,15 +273,16 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                           style={{ backgroundColor: 'transparent', borderBottom: '1px solid pink'}}
                           ></input>
                           <div className="flex items-center text-lg">
-                          <button onClick={async () =>  {await handleEdit(); setEditingChatId(null)}} className="mx-2" ><IoMdCheckmark className="text-green-600"/></button>
-                          <button onClick={() => {setEditingChatId(null);setInputValue('')}} className=""><FcCancel /></button>
+                          <button onClick={async () =>  {await handleEdit(); setEditingsession(null)}} className="mx-2" ><IoMdCheckmark className="text-green-600"/></button>
+                          <button onClick={() => {setEditingsession(null);setInputValue('')}} className=""><FcCancel /></button>
                           </div>
                           </>)}
                         </div>
-                        {chathistory.chatId === params && editingChatId === null &&  (
+                              
+                        {chathistory.session === params && editingsession === null &&  (
                           <div className="flex items-center text-lg">
-                            <CiEdit className="mx-2" onClick={() => {setEditingChatId(chathistory.chatId); setInputValue(chathistory.chatName);}}/>
-                            <RiDeleteBin5Line className="mx-2" onClick={()=>{handleDelete(chathistory.chatId, chathistory.userFiles)}} />
+                            <CiEdit className="mx-2" onClick={() => {setEditingsession(chathistory.session); setInputValue(chathistory.chatName);}}/>
+                            <RiDeleteBin5Line className="mx-2" onClick={()=>{handleDelete(chathistory.session, chathistory.userFiles)}} />
                           </div>
                         )}
                       </div>
@@ -259,7 +297,7 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
           </div>
         </div>
         <button
-          className="absolute top-1/2 right-[-15px] transform -translate-y-1/2 py-3 bg-pink-600 hover:bg-pink-800 rounded-r-md"
+          className="absolute top-1/2 z-40 right-[-15px] transform -translate-y-1/2 py-3 bg-pink-600 hover:bg-pink-800 rounded-r-md"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           {isSidebarOpen ? <MdChevronLeft /> : <MdChevronRight />}

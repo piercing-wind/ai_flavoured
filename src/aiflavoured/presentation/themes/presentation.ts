@@ -1193,17 +1193,16 @@ const pictureWithCaption = async (pptx: pptxgen,font: Font, waterMark : boolean 
   return pptx;
 }
 
-export type PresentaionData = {
+export type PresentationData = {
   author : string,
   title : string,
-  pptxData : string,  
+  pptxData : string | Object ,  
   imageSearch : string,
-  modelForColorAndTitle : string,
   waterMark : boolean,
   variant? : string
 }
 
-export const presentation = async ({author, title, pptxData, imageSearch, modelForColorAndTitle, waterMark}: PresentaionData) => {
+export const presentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData) => {
   console.log("presentaion function call");
   try {
     let templatePicker = Math.floor(Math.random() * 4);

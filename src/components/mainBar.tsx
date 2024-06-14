@@ -27,7 +27,7 @@ export interface FileObject {
   fileKey: string;
   fileName: string;
   url: string;
-  chatId: string;
+  session: string;
   fileType: string;
   createdAt: Date;
   generator : string;
@@ -41,7 +41,7 @@ type UploaData = {
         fileName: string;
         userId: string;
         url: string;
-        chatId: string;
+        session: string;
         fileType: string;
     };
 };
@@ -190,14 +190,14 @@ export const MainBar = ({
         <div className="flex flex-grow justify-between">
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel className="flex-1 xl:flex w-6/12" defaultSize={1}>
-              <div className="w-full h-[calc(100vh-5rem)] overflow-auto ">
+              <div className="w-full">
                 <DocumentViewer docUrl={pdf} />
               </div>
             </ResizablePanel>
 
             <ResizableHandle withHandle />
             <ResizablePanel className="flex-1 px-2 " defaultSize={1}>
-              <div className="converstaion flex rounded-sm h-[calc(100vh-5rem)]">
+              <div className="converstaion flex rounded-sm h-[calc(100vh-4.5rem)]">
                 <Conversation
                   isLightMode={theme}
                   chatSession={params}

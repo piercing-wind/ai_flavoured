@@ -17,7 +17,7 @@ export const textSplitter = async (docs: Document[], userId : string, chatSessio
         const result = docs[i].pageContent;
         const splittedText = await splitter.createDocuments([result]);
         splittedText.forEach((doc) => {
-          doc.metadata = { ...doc.metadata, pageNumber: i + 1, user : userId, sessionId : chatSession};
+          doc.metadata = { ...doc.metadata, pageNumber: i + 1, user : userId, session : chatSession};
           splittedDocuments.push(doc);
         });
       }

@@ -8,13 +8,13 @@ export async function PUT(req:Request){
           const userId = file.data.userId;
           const fileKey = file.data.fileKey;
           const fileName = file.data.fileName;
-          const chatId = file.data.chatId;
+          const session = file.data.session;
           const fileType = file.data.fileType;
     
           console.log("from route", fileName);
           try{
             
-            await uploadFileCore(userId, fileKey, fileName, fileType, chatId); 
+            await uploadFileCore(userId, fileKey, fileName, fileType, session); 
     
           }catch(e){
             console.log(e);

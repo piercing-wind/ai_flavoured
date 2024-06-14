@@ -11,7 +11,8 @@ import {
     } from "../imagesData";
 import { Base64Image, Localbase64Image, getImagesFromGoogleAsBase64ArrayWithHeaders, localVarientsToBase64, varientsToBase64 } from "../getImagesFromGoogleAndConvertToBase64";
 import { convertSlidesStringToObject } from "../convertSlidesStringToObject";
-import { PresentaionData } from "./presentation";
+import { PresentationData } from "./presentation";
+import { PresentationImage } from "../generatePresentaionAndStore";
 interface Slides {
 titleSlide?: {
   title: string;
@@ -1408,17 +1409,16 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
       return pptx;
     };
 
-export const facetThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData, variant : string) => {
+export const facetThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink : PresentationImage, variant : string) => {
       console.log("presentaion function call");
       try {
-        let templatePicker = Math.floor(Math.random() * 4);
-        const templates = [presentationTemplateBlue, presentationTemplatePink, presentationTemplatePurple,presentationTemplateGradientPink];
-        const colorsTB = [{title: "1a1d27", body: "030f25"}, {title: "ffb8ea", body: "f2e8ef"}, {title: "3b0145", body: "f6e6f9"}, {title: "0c151b", body: "1d2428"}];
+
       //   const base64Images = await varientsToBase64(templates[templatePicker]) as Base64Image[] ; 
         const varient  =  themes.facetTheme;  
         const base64Images = await localVarientsToBase64(varient) as  Localbase64Image[]
         const colors : TBColor = {title: "3B3838", body: "222A35"}; 
         const font : Font = {title: "Calibri Light (Headings)", body: "Calibri"};
+         
         let pptx = new pptxgen();
     
         // Set PPTX Author and Company
@@ -1554,10 +1554,15 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
         
         const maxCharCountForBody = 55;
         const maxCharCountForContent = 35;
+        
+        let findPicture;
+        const ix = photosWithLink.findIndex((item) => item.slideNumber === slideNumber);
+        if( ix !== -1){
+           findPicture = photosWithLink[ix];
+         }  
     
         // const link = base64Images[index].link;
         const base64 = base64Images[index].base64;
-        const mime = base64Images[index].mime;
         const lineSpacing: number = 50;
     
           switch(key){        
@@ -1971,14 +1976,8 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
               placeholder: "title",
               color: colors.title
             });
-            if (typeof (pictureTO) === 'string') {
-              // imageSearch variable === "Google Search"
-              // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureTO) as string;
-              slideTO.addImage({ path: 'public/darkThemeMoon/comparison.jpg', w: 10.5, h: 5.5, x:1 , y:2, placeholder: "picture" });
-              // pictureTO is a string to be displayed
-              // slideTO.addText(pictureTO, {
-              //   placeholder: "picture",
-              // });
+            if (typeof (pictureTO) === 'string' && findPicture  && ix !== -1) {
+              slideTO.addImage({ path: findPicture.picture , w: 10.5, h: 5.5, x:1 , y:2, placeholder: "picture" });
             }
             slideTO.addText(slideNumber.toString(), {
               color: colors.body,
@@ -2002,10 +2001,8 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
 
               }
             });
-            if (typeof (pictureB) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;
-              slideB.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 11.33, h: 5.5, x: 1, y: 1, placeholder: "picture" });
+            if (typeof (pictureB) === 'string' && findPicture && ix !== -1) {
+              slideB.addImage({ path: findPicture.picture, w: 11.33, h: 5.5, x: 1, y: 1, placeholder: "picture" });
             }
             slideB.addText(slideNumber.toString(), {
               color: colors.body,
@@ -2077,11 +2074,9 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
                 placeholder: "title",
                 color: colors.title
               });
-              if (typeof (picturePWC) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-                slidePWC.addImage({ data: base64, w: 6, h: 6, placeholder: "picture" });
-              }
+              if (typeof (picturePWC) === 'string' && findPicture && ix !== -1) {
+                slidePWC.addImage({ path: findPicture.picture, w: 6, h: 6, placeholder: "picture" });
+               }
               if(Array.isArray(captionPWC)){
                 let captionPWCString = captionPWC.map((item, index) =>{
                   let charCount = item.length;
@@ -2180,24 +2175,17 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
                   opacity: 0.5
                 },
               })
-              if (typeof (firstPicture) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(firstPicture) as string;
-                // slideTeam.addImage({ data: base64WithHeader, w: 3 , h: 3, placeholder: "lpic"});
-                slideTeam.addImage({ data: base64, w: 3.63, h: 3.63, placeholder: "lpic" });
-              }
-              if (typeof (secondPicture) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(secondPicture) as string;
-                // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "mpic"});
-                slideTeam.addImage({ data: base64, w: 3.63, h: 3.63, placeholder: "mpic" });
-              }
-              if (typeof (thirdPicture) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(thirdPicture) as string;
-                // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "rpic"});
-                slideTeam.addImage({ data: base64, w: 3.63, h: 3.6, placeholder: "rpic" });
-              }
+              let matchingPictures = photosWithLink.filter((item) => item.slideNumber === slideNumber);
+              let placeholders = ['lpic', 'mpic', 'rpic'];
+              
+              placeholders.forEach((placeholder) => {
+                  if (matchingPictures.length > 0) {
+                      let picture = matchingPictures[0];
+                      slideTeam.addImage({ path: picture.picture, w: 3.63, h: 3.63, placeholder: placeholder });
+                      matchingPictures = matchingPictures.slice(1);
+                  }
+              });
+
               slideTeam.addText(slideNumber.toString(), {
                 color: colors.body,
                 placeholder: 'slideNumber'
@@ -2221,7 +2209,7 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
         if (buffer) {
             console.log("exiting")
             fs.writeFileSync(`output/${title}.pptx`, new Uint8Array(buffer));
-                const bufferString = Buffer.from(buffer)
+          const bufferString = Buffer.from(buffer)
           const pptxBufferBase64 = bufferString.toString('base64')
           const fileName = `${author}_AiFlavoured.pptx`
           const fileType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";

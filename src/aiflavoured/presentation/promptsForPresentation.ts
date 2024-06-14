@@ -264,19 +264,18 @@ Available slide layouts include this TypeScript interface for the slides object:
 {interface}
 Use all the layouts at least once while generating slides.
 
-This is user provided prompt for help in generating slides User request prompt must be followed and
-try to work with the user request prompt if user prompt is irrelevant then ignore the irrelevant parts and continue generating slides with document.
+This is the user-provided prompt for help in generating slides. The user request prompt must be followed, and if the user prompt is irrelevant, ignore the irrelevant parts and continue generating slides with the document.
 
 {userPrompt}
 
-Please use 3 or 4 image slides and provide image discription ,when using picture key in the slide layout provide the best prompt for the image which best fit in that slide scenario.
-dont use any specific name which ai prompt will not understand.
-For example :  "picture": "AI_Assistant.jpg" = bad ,  "picture": "A robot assisting a human in a office" = good
+Please use 3 or 4 image slides and provide image descriptions. When using the picture key in the slide layout, provide the best prompt for the image that best fits that slide scenario. 
+Do not use any specific names which AI prompts will not understand.
+For example: "picture": "AI_Assistant.jpg" = bad, "picture": "A robot assisting a human in an office" = good.
 
-Must use use all picture slides at least once!
+You must use all picture slides at least once!
 
 Instructions for Creating 16:9 size Slides:
-- First Slide always Should be a section title slide.
+- The first slide should always be a section title slide.
 - Utilize all the layouts at least once while generating slides.
 - Do not leave any key empty.
 - Ensure that all slides maintain {wording} wordings.
@@ -284,21 +283,23 @@ Instructions for Creating 16:9 size Slides:
 - Provide an image prompt or description for the picture field.
 - If using paragraphs: generate up to 2 or 3 paragraphs with 3 or 4 lines each.
 - Utilize each slide layout to present the content effectively.
-- Make comparison slides more informative by adding 5 points for each content section which describe 2 topics, .
+- Make comparison slides more informative by adding 5 points for each content section which describe 2 topics.
 - Use image slides for content that is less detailed to make it more visually appealing.
 - For body content, provide detailed and informative content, aiming for comprehensive coverage of each point.
 - You can use emojis to make the slides more engaging.
 
+Only generate {numberOfSlides} slides based on the context provided below:
+Do not increase or decrease the number of slides.
+If you think the context is insufficient for generating slides, you can use image layouts like titleOnly or blank for filling content up to the desired number of slides.
 
-Only genereate {numberOfSlides} slides based on the context provided below:
-dont increase or decrease the number of slides.
-If you think context is less for generating slides then you can use image layouts like titleOnly or blank for imaging the content upto desired number of slides.
 Context for Slides:
 "{document}"
 
 Output Format:
-Generate Exactly   {numberOfSlides} slides with the names of the slide layouts used and subkeys as specified in the provided interface. Ensure each slide contains detailed body content and uses images effectively. Directly output the slides without any prefix or suffix.
+Generate exactly {numberOfSlides} slides with the names of the slide layouts used and subkeys as specified in the provided interface. Ensure each slide contains detailed body content and uses images effectively. Directly output the slides without any prefix or suffix.
 `;
+
+
 export const promptForMinimalistSalePitchSlidesRefinement = `
 Your job is to make sure the pptx slides content provided to you is in correct format without modifying the sigle word from the 
 content.

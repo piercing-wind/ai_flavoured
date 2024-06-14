@@ -607,55 +607,55 @@ export const themes = {
   ],
   minimalistSalePitchTheme:[
     {
-      path : "public/minimalistSalePitchTheme/slide1.jpg",
+      path : "public/minimalistSalePitchTheme/Slide1.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide2.jpg",
+      path : "public/minimalistSalePitchTheme/Slide2.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide3.jpg",
+      path : "public/minimalistSalePitchTheme/Slide3.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide4.jpg",
+      path : "public/minimalistSalePitchTheme/Slide4.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide5.jpg",
+      path : "public/minimalistSalePitchTheme/Slide5.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide6.jpg",
+      path : "public/minimalistSalePitchTheme/Slide6.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide7.jpg",
+      path : "public/minimalistSalePitchTheme/Slide7.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide8.jpg",
+      path : "public/minimalistSalePitchTheme/Slide8.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide9.jpg",
+      path : "public/minimalistSalePitchTheme/Slide9.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide10.jpg",
+      path : "public/minimalistSalePitchTheme/Slide10.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide11.jpg",
+      path : "public/minimalistSalePitchTheme/Slide11.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide12.jpg",
+      path : "public/minimalistSalePitchTheme/Slide12.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/minimalistSalePitchTheme/slide13.jpg",
+      path : "public/minimalistSalePitchTheme/Slide13.jpg",
       mime: 'image/jpg'
     }
   ],
@@ -665,105 +665,105 @@ export const themes = {
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide2.jpg",
+      path : "public/scientificBluePresentationTheme/Slide2.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide3.jpg",
+      path : "public/scientificBluePresentationTheme/Slide3.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide4.jpg",
+      path : "public/scientificBluePresentationTheme/Slide4.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide5.jpg",
+      path : "public/scientificBluePresentationTheme/Slide5.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide6.jpg",
+      path : "public/scientificBluePresentationTheme/Slide6.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide7.jpg",
+      path : "public/scientificBluePresentationTheme/Slide7.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide8.jpg",
+      path : "public/scientificBluePresentationTheme/Slide8.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide9.jpg",
+      path : "public/scientificBluePresentationTheme/Slide9.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide10.jpg",
+      path : "public/scientificBluePresentationTheme/Slide10.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide11.jpg",
+      path : "public/scientificBluePresentationTheme/Slide11.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide12.jpg",
+      path : "public/scientificBluePresentationTheme/Slide12.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/scientificBluePresentationTheme/slide13.jpg",
+      path : "public/scientificBluePresentationTheme/Slide13.jpg",
       mime: 'image/jpg'
     }
   ],
   biomeTheme:[
     {
-      path : "public/biomeTheme/slide1.jpg",
+      path : "public/biomeTheme/Slide1.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide2.jpg",
+      path : "public/biomeTheme/Slide2.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide3.jpg",
+      path : "public/biomeTheme/Slide3.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide4.jpg",
+      path : "public/biomeTheme/Slide4.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide5.jpg",
+      path : "public/biomeTheme/Slide5.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide6.jpg",
+      path : "public/biomeTheme/Slide6.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide7.jpg",
+      path : "public/biomeTheme/Slide7.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide8.jpg",
+      path : "public/biomeTheme/Slide8.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide9.jpg",
+      path : "public/biomeTheme/Slide9.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide10.jpg",
+      path : "public/biomeTheme/Slide10.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide11.jpg",
+      path : "public/biomeTheme/Slide11.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide12.jpg",
+      path : "public/biomeTheme/Slide12.jpg",
       mime: 'image/jpg'
     },
     {
-      path : "public/biomeTheme/slide13.jpg",
+      path : "public/biomeTheme/Slide13.jpg",
       mime: 'image/jpg'
     }
   ],

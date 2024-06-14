@@ -11,8 +11,9 @@ import {
     } from "../imagesData";
 import { Base64Image, Localbase64Image, getImagesFromGoogleAsBase64ArrayWithHeaders, localVarientsToBase64, varientsToBase64 } from "../getImagesFromGoogleAndConvertToBase64";
 import { convertSlidesStringToObject } from "../convertSlidesStringToObject";
-import { PresentaionData } from "./presentation";
+import { PresentationData } from "./presentation";
 import libre from "libreoffice-convert";
+import { PresentationImage } from "../generatePresentaionAndStore";
 interface Slides {
       titleSlide?: {
             title: string;
@@ -72,7 +73,7 @@ titleOnly?: {
   };
 }
 
-type Presentation = Slides[]
+export type Presentation = Slides[]
 type TBColor = {
   title: string;
   body: string;
@@ -1358,14 +1359,14 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
       const titleValign = "middle";
 
       // Picture section settings
-      const picturex = 7.2;
-      const picturey = 1;
-      const picturew = 6;
-      const pictureh = 6;
+      const picturex = 6.79;
+      const picturey = 0.49;
+      const picturew = 6.03;
+      const pictureh = 6.49;
 
       // Caption section settings
-      const captionx = 0.5;
-      const captiony = 2.5;
+      const captionx = 0.73;
+      const captiony = 2.49;
       const captionw = 6;
       const captionh = 4;
       const captionFontSize = 18;
@@ -1468,7 +1469,7 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
       return pptx;
     }
 
-export const ppPartyThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData) => {
+export const ppPartyThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink : PresentationImage) => {
       console.log("presentaion function call");
       try {
         let templatePicker = Math.floor(Math.random() * 4);
@@ -1494,148 +1495,7 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
         
     
       const data: Presentation = await convertSlidesStringToObject(pptxData);
-  //     const data : Presentation = [
-  //   {
-  //     "titleAndContent": {
-  //       "title": "Content List",
-  //       "body": [
-  //         "Introduction to AI Flavoured",
-  //         "Project Overview",
-  //         "Core Functionalities",
-  //         "Intelligent Summarization",
-  //         "Interactive Engagement",
-  //         "Multilingual Support",
-  //         "Personalized Learning Experiences",
-  //         "Technical Aspects and Benefits",
-  //         "Future Scopes",
-  //         "Thank You"
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "titleSlide":{
-  //           "title" : "Introduction to AI Flavoured",
-  //           "body" : "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning."
-  //     }
-  //   },
-  //   {
-  //     "titleAndContent": {
-  //       "title": "Introduction to AI Flavoured",
-  //       "body": [
-  //         "AI Flavoured is a project that leverages artificial intelligence to revolutionize document comprehension and learning.",
-  //         "The platform features advanced summarization engines, interactive communication, multilingual support, and personalized learning experiences.",
-  //         "It aims to address challenges such as information overload, complex documents, and language barriers."
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "sectionHeader":{
-  //           "title" : "Project Overview",
-  //           "body" : "AI Flavoured empowers users to efficiently extract insights from written content."
-  //     }
-  //   },
-  //   {
-  //     "twoContent": {
-  //       "title": "Core Functionalities",
-  //       "content": [
-  //         "Intelligent Summarization",
-  //         "Interactive Engagement",
-  //         "Multilingual Support",
-  //         "Personalized Learning Experiences"
-  //       ],
-  //       "content2": [
-  //         "Streamlines information retrieval",
-  //         "Improves knowledge acquisition",
-  //         "Fosters collaboration",
-  //         "Enhances learning environments"
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "comparison":{
-  //           "title" : "Core Functionalities",
-  //           "subheading": "Core Functionalities",
-  //           "content": ["Intelligent Summarization", "Interactive Engagement", "Multilingual Support", "Personalized Learning Experiences"],
-  //           "subheading2": "Benefits",
-  //           "content2" : ["Streamlines information retrieval", "Improves knowledge acquisition", "Fosters collaboration", "Enhances learning environments"]
-  //     }
-  //   },
-  //   {
-  //     "team" : {
-  //       "title" : "This is my First ai team",
-  //       "first" :{
-  //         "name" : "Sourav Sharma",
-  //         "picture" : "Cat"
-  //       },
-  //       "second" : {
-  //         "name" : "Sourav Sharma",
-  //         "picture" : "dog"
-  //       },
-  //       "third" : {
-  //         "name" : "Sourav Sharma",
-  //         "picture" : "Parrot"
-        
-  //       }
-  //     }
-  //   },
-  //   {
-  //     "contentWithCaption": {
-  //       "title": "Intelligent Summarization",
-  //       "content": [
-  //         "AI Flavoured's summarization engine condenses complex documents into concise summaries.",
-  //         "This feature helps users quickly grasp the essence of lengthy texts."
-  //       ],
-  //       "caption": "Efficiently extract key insights from vast amounts of information."
-  //     }
-  //   },
-  //   {
-  //     "contentWithCaption": {
-  //       "title": "Interactive Engagement",
-  //       "content": [
-  //         "The platform offers interactive communication features to enhance user engagement.",
-  //         "Users can interact with the content, ask questions, and receive instant feedback."
-  //       ],
-  //       "caption": "Foster a more engaging and interactive learning experience."
-  //     }
-  //   },
-  //   {
-  //     "contentWithCaption": {
-  //       "title": "Multilingual Support",
-  //       "content": [
-  //         "AI Flavoured supports multiple languages, breaking down language barriers.",
-  //         "This feature ensures accessibility for a global audience."
-  //       ],
-  //       "caption": "Promote inclusivity and accessibility in document comprehension."
-  //     }
-  //   },
-  //   {
-  //     "contentWithCaption": {
-  //       "title": "Personalized Learning Experiences",
-  //       "content": [
-  //         "The platform offers personalized learning experiences tailored to individual needs.",
-  //         "Users receive recommendations and insights based on their preferences and learning patterns."
-  //       ],
-  //       "caption": "Enhance learning outcomes through personalized content."
-  //     }
-  //   },
-  //   {
-  //     "titleAndContent": {
-  //       "title": "Technical Aspects and Benefits",
-  //       "body": [
-  //         "AI Flavoured showcases the feasibility and operational benefits of AI in document comprehension.",
-  //         "It streamlines information retrieval, improves knowledge acquisition, and fosters collaboration.",
-  //         "The project aims to stay at the forefront of AI-powered education and knowledge sharing."
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "titleSlide": {
-  //       "title": "Thank You",
-  //       "body": "Thank you for your attention. We hope AI Flavoured will revolutionize your document comprehension and learning experience."
-  //     }
-  //   },
-  // ]
-
+      
       let index = 0
       let slideNumber = 1;
       for(let slide of data){
@@ -1643,6 +1503,12 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
         
         const maxCharCountForBody = 55;
         const maxCharCountForContent = 35;
+        
+        let findPicture;
+        const ix = photosWithLink.findIndex((item) => item.slideNumber === slideNumber);
+        if( ix !== -1){
+           findPicture = photosWithLink[ix];
+         }  
     
         // const link = base64Images[index].link;
         const base64 = base64Images[index].base64;
@@ -2049,10 +1915,10 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
                 placeholder: "title",
                 color: colors.title,
               });
-              if (typeof (pictureTO) === 'string') {
-                const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureTO) as string;
-                slideTO.addImage({ data: base64WithHeader, w: 10.5, h: 5.5, x: 1, y :1.5, placeholder: "picture" });
-              }
+              if (typeof (pictureTO) === 'string' && findPicture && ix !== -1) {
+               slideTO.addImage({ path: findPicture.picture, w: 10.49, h: 5.62, x: 1.37, y :1.40, placeholder: "picture" });
+        
+               }
               slideTO.addText(slideNumber.toString(), {
                 color: colors.body,
                 placeholder: 'slideNumber'
@@ -2064,10 +1930,9 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
               const slideB = pptx.addSlide({ masterName: "blank" });
               const pictureB = slideDataB!.picture;
 
-              if (typeof (pictureB) === 'string') {
-                // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;
-                slideB.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 11.33, h: 5.5, x: 1, y: 1, placeholder: "picture" });
-              }
+              if (typeof (pictureB) === 'string' && findPicture && ix !== -1) {
+               slideB.addImage({ path: findPicture.picture, w: 11.33, h: 5.5, x: 1, y: 1, placeholder: "picture" }); 
+            }
               slideB.addText(slideNumber.toString(), {
                 color: colors.body,
                 placeholder: 'slideNumber'
@@ -2136,10 +2001,10 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
                 placeholder: "title",
                 color: colors.title,
               });
-              if (typeof (picturePWC) === 'string') {
-                // const base64WithHeader: string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-                slidePWC.addImage({ data: base64, w: 6, h: 6, placeholder: "picture" });
-              }
+              if (typeof (picturePWC) === 'string' && findPicture && ix !== -1) {
+                  slidePWC.addImage({ path: findPicture.picture, w: 6, h: 6, placeholder: "picture" });
+                  // photosWithLink.splice(ix, 1);
+               }
               if(Array.isArray(captionPWC)){
                 let captionPWCString = captionPWC.map((item, index) =>{
                   let charCount = item.length;
@@ -2238,24 +2103,17 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
                   opacity: 0.5
                 },
               })
-              if (typeof (firstPicture) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(firstPicture) as string;
-                // slideTeam.addImage({ data: base64WithHeader, w: 3 , h: 3, placeholder: "lpic"});
-                slideTeam.addImage({ data: base64, w: 3.63, h: 3.63, placeholder: "lpic" });
-              }
-              if (typeof (secondPicture) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(secondPicture) as string;
-                // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "mpic"});
-                slideTeam.addImage({ data: base64, w: 3.63, h: 3.63, placeholder: "mpic" });
-              }
-              if (typeof (thirdPicture) === 'string') {
-                //imageSearch variable === "Google Search"
-                // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(thirdPicture) as string;
-                // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "rpic"});
-                slideTeam.addImage({ data: base64, w: 3.63, h: 3.6, placeholder: "rpic" });
-              }
+              let matchingPictures = photosWithLink.filter((item) => item.slideNumber === slideNumber);
+              let placeholders = ['lpic', 'mpic', 'rpic'];
+              
+              placeholders.forEach((placeholder) => {
+                  if (matchingPictures.length > 0) {
+                      let picture = matchingPictures[0];
+                      slideTeam.addImage({ path: picture.picture, w: 3.63, h: 3.63, placeholder: placeholder });
+                      matchingPictures = matchingPictures.slice(1);
+                  }
+              });
+
               slideTeam.addText(slideNumber.toString(), {
                 color: colors.body,
                 placeholder: 'slideNumber'
@@ -2280,23 +2138,7 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
             console.log("exiting")
             //temporarily saving the file
 
-            fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
-
-            // try{
-            //   const res = await fetch('http://localhost:3000/api/runpythonscript',{
-            //     method : 'POST',
-            //     body   : JSON.stringify({path : `output/${title}.pptx`}),
-            //   })
-            //   if(res.ok){
-            //     const resData = await res.json()
-            //     const pdfBase64 = resData.pdfBase64
-            //     console.log("file created")
-            //     fs.writeFileSync(`output/${title}.pdf`, pdfBase64, 'base64');
-            //   }
-
-            // }catch(e){
-            //   console.log("Error in creating pdf",e)
-            // }
+          fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
 
           const bufferString = Buffer.from(buffer)
           const pptxBufferBase64 = bufferString.toString('base64')

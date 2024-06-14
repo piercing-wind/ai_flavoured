@@ -7,7 +7,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 import { ClipLoader, HashLoader, MoonLoader } from "react-spinners";
 import { FormError } from "@/components/auth/form-error";
 import { useResizeDetector } from "react-resize-detector";
-import Styles from "@/app/chat/chat.module.css";
+import Styles from "@/app/x/chat/chat.module.css";
 import { Button } from "./ui/button";
 import { IoChevronDown } from "react-icons/io5";
 import { IoIosArrowUp } from "react-icons/io";
@@ -88,10 +88,11 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
     }
   }, [currentPage]);
   
+  const zoomSize = [0.5, 0.8, 1, 1.5, 2, 2.5];
 
   return (
-    <div className="pdfviewr flex flex-col w-full h-full">
-      <div className=" h-10 w-full border flex items-center justify-between gap-2 min-w-[470px]">
+    <div className="pdfviewr w-full h-[calc(100vh-7rem)]">
+      <div className="top-0 h-10 w-full flex items-center justify-between gap-2 min-w-[470px]">
         <Button
           disabled={currentPage <= 1 ? true : false}
           onClick={() => {
@@ -173,48 +174,16 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem
+               {zoomSize.map((size, index) => (
+              <DropdownMenuItem 
+                key={index}
                 onSelect={() => {
-                  setScale(0.5);
+                  setScale(size);
                 }}
               >
-                50 %
+                {size * 100} %
               </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  setScale(0.8);
-                }}
-              >
-                80 %
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  setScale(1);
-                }}
-              >
-                100 %
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  setScale(1.5);
-                }}
-              >
-                150 %
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  setScale(2);
-                }}
-              >
-                200 %
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  setScale(2.5);
-                }}
-              >
-                250 %
-              </DropdownMenuItem>
+               ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <Button
@@ -227,10 +196,9 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
           <DocFullScreenViewer fileUrl={docUrl} />
         </div>
       </div>
-      
-
-      <div ref={ref} className="flex-1 w-full max-h-screen overflow-y-auto p-2">
-        <div >
+      <div className={`w-full h-full overflow-y-auto mr-5 ${Styles.chatscroll}`}>
+      <div ref={ref} className="flex-1 w-full max-h-screen">
+        <div  className='relative -z-10'>
           <Document
             loading={
               <div className=" flex items-center justify-center h-screen">
@@ -269,6 +237,7 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
             ))}
           </Document>
         </div>
+      </div>
       </div>
     </div>
   );

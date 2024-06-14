@@ -29,11 +29,11 @@ export default function FullScreenPresentationViewer({filePath, isOpen, setIsOpe
       }
     }}
     >
-      <DialogContent showClose={false} className=" bg-transparent backdrop-blur-sm max-h-[calc(100vh-3rem)] max-w-7xl w-full overflow-y-auto">
+      <DialogContent onClick={(e)=>e.stopPropagation()}showClose={false} className=" bg-transparent backdrop-blur-sm max-h-[calc(100vh-3rem)] max-w-7xl w-full overflow-y-auto">
       <div className="fixed top-0 right-0 m-2 cursor-pointer z-50" onClick={(e)=>{e.stopPropagation(); setIsOpen(false)}}>
         <MdOutlineClose />
       </div> 
-        <div ref={ref} className={` mt-2 `}>
+        <div ref={ref} className={` mt-2 `} onClick={(e)=>e.stopPropagation()}>
           <Document
             loading={
               <div className=" flex items-center justify-center h-screen">

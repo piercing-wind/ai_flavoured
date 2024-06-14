@@ -38,7 +38,7 @@ export const DragAndDrop = () => {
   const [loader, setloader] = useState(false);
   const [openFileManager, setOpenFileManager] = useState(false);
   const [inputFiles, setInputFiles] = useState([]);
-  const [session, setSession] = useState(null);
+  const [userSession, setUserSession] = useState(null);
   const [isSubscribed, setSubscribed] = useState("free");
   const fileInput = useRef(null);
   const [validating, setValidating] = useState(false);
@@ -55,7 +55,7 @@ export const DragAndDrop = () => {
   }
 
   const checkUserSubscription = async () => {
-    if (isSubscribed === "free" || session.subscription === "free") {
+    if (isSubscribed === "free" || userSession.subscription === "free") {
       router.push(`/pricing`);
       return;
     }
@@ -110,7 +110,7 @@ export const DragAndDrop = () => {
     const fetchSession = async () => {
       const data = await Session();
       const user = data.session;
-      setSession(user);
+      setUserSession(user);
       setSubscribed(user.subscription);
       // const model = await getUserModel(user.id);
     };
@@ -120,19 +120,19 @@ export const DragAndDrop = () => {
 
   useEffect(() => {
     const updateFileLength = () => {
-      if (session.subscription === "free" && inputFiles.length >= 2) {
+      if (userSession.subscription === "free" && inputFiles.length >= 2) {
         setDisabled(true);
       } else {
         setDisabled(false);
         setFileLengthError(false);
       }
       
-      if (session.subscription === "free" && inputFiles.length > 2) {
+      if (userSession.subscription === "free" && inputFiles.length > 2) {
         setFileLengthError(true);
       }
     };
 
-    if (session && session.subscription !== null) {
+    if (userSession && userSession.subscription !== null) {
       updateFileLength();
     }
   }, [inputFiles]);
@@ -146,8 +146,7 @@ export const DragAndDrop = () => {
       setDragging(false);
     }
     
-    if (session === null) {
-      console.log("No user found");
+    if (userSession === null) {
       return;
     }
     
@@ -160,7 +159,6 @@ export const DragAndDrop = () => {
       setError(`You can only upload two files  at once`);
       return;
     }
-    console.log(files.length);
     if (files.length >= 2) {
       setOpenFileManager(true);
       setDisabled(true);
@@ -219,18 +217,19 @@ export const DragAndDrop = () => {
     const files = inputFiles.length > 0 ? inputFiles : singleFiles;
     const uploadedFiles = [];
     const fileName = files.length > 1 ? "new folder 1" : files[0].name;
-    const user = session;
-    const chatId = await createChatSession(user.id, fileName);
+    const user = userSession;
+    const session = await createChatSession(user.id, fileName, "chatwithdoc");
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
+
         const data = await uploadToS3(
           file.name,
           file.type,
           file.size,
           user.id,
-          chatId,
+          session,
            "user"
         );
         const uploadUrl = data.awsS3.url;
@@ -277,7 +276,7 @@ export const DragAndDrop = () => {
         setloader(false);
         setRedirect(true);
         setSuccess("File upload successfull");
-        router.push(`x/chat/${chatId}`);
+        router.push(`/x/chat/${session}`);
       }
     } catch (e) {
       console.log(e);
@@ -290,8 +289,6 @@ export const DragAndDrop = () => {
   const handleClickFromButton = () => {
     fileInput.current.click();
   };
-  console.log(loader)
-  console.log(validating)
 
   return (
     <div className="relative text-center w-full flex justify-center">

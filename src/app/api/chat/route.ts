@@ -19,9 +19,10 @@ export async function POST(req:NextRequest){
 
   const body = await req.json();
   const userMessage = body.userMessage
-  const chatId = body.chatId;
+  const session = body.session;
   const prevChat = body.prevChat;
   const aiModel = body.aiModel;
+  console.log(session)
   // s ?? [];
   // console.log("Messages",messages)
   // const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
@@ -33,7 +34,7 @@ export async function POST(req:NextRequest){
     k: 12,
     filter: {
       //filter property works and search in metadata column
-      sessionId: chatId,
+      session: session,
       //do not use file base, use the paticular chat session id
     },
   });

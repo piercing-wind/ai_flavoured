@@ -2,7 +2,7 @@
 import { google } from 'googleapis';
 import { imageToBase64, localImageToBase64 } from '../imgs/imageToBase64';
 import {imgs} from './imagesData';
-import { googleImagePicker, googleImagesDesignFilterAI } from './googleImagesDesignFilterAI';
+import { googleImagePicker, googleImagesDesignFilterAI, imagePicker } from './googleImagesDesignFilterAI';
 
 export type ImageData = {
       kind: string;
@@ -27,7 +27,6 @@ export type Images =  ImageData[];
 
 export const getImagesFromGoogle =async ( query : string) =>{
       try {
-      console.log('Getting images from google')
       const customsearch = google.customsearch('v1')
       const googleAPIKey = process.env.GOOGLE_API_KEY;
       const searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
@@ -38,7 +37,6 @@ export const getImagesFromGoogle =async ( query : string) =>{
                   num: 10,
                   key: googleAPIKey,
             });
-            console.log("exiting from google")
             if(response.data.items){
             return response.data.items as Images;
             }
@@ -133,6 +131,38 @@ export const getImagesFromGoogleAsBase64ArrayWithHeaders =async ( query : string
             console.log(e);
       }
 }
+
+export const googleImagesFromGoogle =async ( query : string) =>{
+   try {
+         const images : Images = []
+         const result = await getImagesFromGoogle(query);
+         if(result){
+         for(let i=0; i < result.length; i++){
+               const mime : string = result[i].mime;
+               if(mime != 'image/webp'){
+                  images.push(result[i]);
+               }
+         }
+         const filterAI = await imagePicker('gpt-4o', images, query) as string[];
+         if(filterAI){
+               const normalizedArray = filterAI.map(item => item.toLowerCase().replace(/[.!]/g, ''));
+               const index = normalizedArray.indexOf('yes');
+               if(index !== -1){
+                  return images[index].link;
+               }else if(filterAI.length === 0){
+                  return images[1].link;
+               }else{   
+                  return images[1].link;
+               }
+         }            
+         }
+   } catch (e) {
+         console.log(e);
+   }
+}
+
+
+
 
 type Template = {
       link : string;

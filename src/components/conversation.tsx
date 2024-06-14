@@ -7,6 +7,7 @@ import {UserIcon} from "@/components/userIcon";
 import { PulseLoader } from "react-spinners";
 import {storeMessage, getMessages, formatMessages} from '@/actions/chat/messages';
 import DOMPurify from 'dompurify';
+import Styles from "@/app/x/chat/chat.module.css";
 
 // type Message = {
 //   message: string;
@@ -79,7 +80,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
           setIsThinking(false);
 
           //Todo handle the error if not saved somehow which is rare but can happen due to network error!
-          await storeMessage({ title: `Summary of ${file.fileName}`, chatId: chatSession.slug, message: summary, role: 'aiflavoured', timestamp: new Date().toISOString(),});
+          await storeMessage({ title: `Summary of ${file.fileName}`, session: chatSession.slug, message: summary, role: 'aiflavoured', timestamp: new Date().toISOString(),});
           setMessages(newMessages);
         }catch(e){
           console.log(e);
@@ -103,7 +104,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
     const userMessage = question && question !== "" ? question : userInput;
    
     setMessages((prevMessages: Message[]) => [...prevMessages, {message: userMessage, role: 'human', timestamp: new Date()}]);  
-    const res = await storeMessage({chatId : chatSession.slug, message : userMessage, role : 'human', timestamp: new Date().toISOString()});
+    const res = await storeMessage({session : chatSession.slug, message : userMessage, role : 'human', timestamp: new Date().toISOString()});
     
     setUserInput("");
     
@@ -114,7 +115,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
       body: JSON.stringify({
         prevChat : formattedMessage,
         userMessage: userMessage, // Added a comma here
-        chatId: chatSession.slug,
+        session: chatSession.slug,
         aiModel: aiModel,
       }),
     });
@@ -129,7 +130,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
         setSystemMessage("");
         setDisable(false);
         setMessages((prevMessages: Message[])=>[...prevMessages,{message :  accumulatedChunks, role :  'aiflavoured', timestamp: new Date()}]);
-        const  res = storeMessage({chatId : chatSession.slug, message : accumulatedChunks, role : 'aiflavoured', timestamp: new Date().toISOString()});
+        const  res = storeMessage({session : chatSession.slug, message : accumulatedChunks, role : 'aiflavoured', timestamp: new Date().toISOString()});
         console.log( "done");
         return;
             }      
@@ -165,7 +166,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
         
         return (
     <div className="w-full flex flex-col h-full">
-      <div className="flex flex-col space-y-2 overflow-y-scroll h-[calc(100vh-5rem)]">
+      <div className={`flex flex-col space-y-2 overflow-y-scroll h-[calc(100vh-5rem)] ${Styles.chatscroll}`}>
       {messages.map((chat, index) => (
         chat.role === 'human' 
           ? (

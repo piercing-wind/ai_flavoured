@@ -10,19 +10,22 @@ export default {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        const validatedFields = LoginUserSchema.safeParse(credentials);
-        if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
-          const user = await getUserByEmail(email);
-          if (!user || !user.password) return null;
-          const passwordMatch = await bcrypt.compare(password, user.password);
-          if (passwordMatch) return user;
-        }
-        return null;
+          try {
+          const validatedFields = LoginUserSchema.safeParse(credentials);
+          if (validatedFields.success) {
+            const { email, password } = validatedFields.data;
+            const user = await getUserByEmail(email);
+            if (!user || !user.password) return null;
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (passwordMatch) return user;
+          }
+        } catch (error) {
+          return null;
+        }a
       },
     }),
     GithubProvider({
-      clientId: process.env.AUTH_GITHUB_ID,
+      clientId: process.env.AUTH_GITHUB_ID,  
       clientSecret: process.env.AUTH_GITHUB_SECRET,
       // profile(profile) {
       //   console.log(GithubProvider);
@@ -66,4 +69,5 @@ export default {
   ],
   trustHostedDomain: true,
   trustHost: true,
+  debugger : false,
 };

@@ -1052,7 +1052,7 @@ interface Slides {
 
 type Presentation = Slides[]
 
-export type PresentaionData = {
+export type PresentationData = {
   author : string,
   title : string,
   pptxData : string,  
@@ -1061,7 +1061,7 @@ export type PresentaionData = {
 }
 
 
-export const presentation = async ({author, title, pptxData, imageSearch, modelForColorAndTitle}: PresentaionData) => {
+export const presentation = async ({author, title, pptxData, imageSearch, modelForColorAndTitle}: PresentationData) => {
   // const titleQueryForGoogleSearchImages = await getTheTopicOfPresentaionAI('gpt-4o', pptxData)
   // console.log("titleQueryForGoogleSearchImages", titleQueryForGoogleSearchImages);
   // const images : ImageData[] = imageSearch === "Google Search" ? await getImagesFromGoogle(titleQueryForGoogleSearchImages) : [];

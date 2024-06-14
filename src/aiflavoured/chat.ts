@@ -16,7 +16,7 @@ async function combineDocumentsToString(documents: Document[]): Promise<string> 
   return documents.map((doc: any) => doc.pageContent).join(" ");
 }
 
-async function oldChatRetriver(chatId: string){
+async function oldChatRetriver(session: string){
   const oldChat = "l";
 
   return oldChat;

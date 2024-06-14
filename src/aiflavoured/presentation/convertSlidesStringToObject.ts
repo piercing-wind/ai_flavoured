@@ -1,7 +1,7 @@
 "use server";
 
 export const convertSlidesStringToObject = async (
-  slides: string
+  slides: string | Object 
 ): Promise<any> => {
   if (typeof slides === "string") {
     return JSON.parse(slides);

@@ -1,7 +1,7 @@
 .chatscroll::-webkit-scrollbar {
-  width: 5px;
-  
-  display: flex;
+  width: 7px;
+  cursor: pointer;
+  background-color: transparent ;
 }
 
 .chatscroll::-webkit-scrollbar-track {
@@ -17,6 +17,7 @@
 
 .chatscroll::-webkit-scrollbar-thumb:hover {
   background: #b6065e;
+  cursor: pointer;
   /* box-shadow: 0 0 5px  #ff0783; */
 }
 

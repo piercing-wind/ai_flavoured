@@ -25,7 +25,7 @@ export const LogoText = ({ className }: { className?: string }) => {
       <img
         src="/logo3.svg"
         alt=""
-        className=" w-8 h-8 filter contrast-150 saturate-150 rounded-full "
+        className=" w-full h-full filter contrast-150 saturate-150 rounded-full "
       />
     </div>
   );

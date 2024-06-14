@@ -3,7 +3,6 @@ import { documentToText } from "@/aiflavoured/documentsToText";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
 import { aiSlidesForPresentation } from "@/aiflavoured/presentation/aiSlidesForPresentation";
 import { aiSlidesForFacetThemePresentation } from "@/aiflavoured/presentation/aiSlidesForFacetThemePresentation";
-import { PresentaionData, presentation } from "@/aiflavoured/presentation/themes/presentation";
 import { aiSlidesForMinimalistSalePitchThemePresentation } from "@/aiflavoured/presentation/aiSlidesForMinimalistSalePitchThemePresentation";
 import { aiSlidesForBiomePresentationTheme } from "@/aiflavoured/presentation/aiSlidesForBiomePresentationTheme";
 
@@ -13,7 +12,7 @@ interface FileObject {
       fileKey: string;
       fileName: string;
       url: string;
-      chatId?: string;
+      session?: string;
       fileType: string;
       createdAt?: Date;
     }
@@ -62,7 +61,6 @@ export async function POST(req: NextRequest){
       if (themeFunction in themeFunctionMapping) {
         const themeFunctionToCall = themeFunctionMapping[themeFunction as keyof typeof themeFunctionMapping];
         pptxData = await themeFunctionToCall(model, numberOfSlides, pptxDocSummary , audience, wordAmount, textInputValue);
-
       }
 
 

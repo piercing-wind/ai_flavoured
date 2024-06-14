@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 type Message = {
   message: string;
   role: string;
-  chatId: string;
+  session: string;
   timestamp: string;
   title?: string;
 };
@@ -19,10 +19,10 @@ type formatedMessage ={
 
 export const storeMessage = async (data: Message) => {
   try {
-    const { chatId, title, message, role, timestamp } = data;
+    const { session, title, message, role, timestamp } = data;
     await dbq(
-      'INSERT INTO "messageHistory" ("chatId", "title", "message", "role", "timestamp") VALUES ($1, $2, $3, $4, $5) ',
-      [chatId, title, message, role, timestamp]
+      'INSERT INTO "messageHistory" ("session", "title", "message", "role", "timestamp") VALUES ($1, $2, $3, $4, $5) ',
+      [session, title, message, role, timestamp]
     );
     return { success: "Message stored successfully" };
   } catch (e) {
@@ -30,10 +30,10 @@ export const storeMessage = async (data: Message) => {
   }
 };
 
-export const getMessages = async (chatId: string) => {
+export const getMessages = async (session: string) => {
   const messages = await db.messageHistory.findMany({
     where: {
-      chatId,
+      session,
     },
     orderBy: {
       timestamp: "asc",

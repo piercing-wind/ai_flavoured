@@ -14,7 +14,7 @@ html {
 }
 
 w{
-  color:#1e1c1d
+  color:rgb(233, 13, 123)
 }
 
 :root {
@@ -62,7 +62,7 @@ body {
   }
 
   .dark {
-    --background: rgb(0, 0, 0);
+    --background: rgb(23, 22, 22);
     --foreground: 210 60% 100%;
 
     --card: 222.2 84% 4.9%;
@@ -134,3 +134,22 @@ body {
   background-size: cover;
   background-position: center;
 }
+
+.premium-text-gradient {
+   background: -webkit-linear-gradient(45deg, #e066a7, #6b2b6c, #e066a7, #f41347);
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+ }
+.unlimited-title-text-gradient {
+   background: -webkit-linear-gradient(45deg, #044781, #e11be4, #ffe816, #fe003b);
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+ }
+ .unlimited-text-gradient {
+   background: -webkit-linear-gradient(45deg, #044781, #971299, #f9722e, #fe003b);
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+ }
