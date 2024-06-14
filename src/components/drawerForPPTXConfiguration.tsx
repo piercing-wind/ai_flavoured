@@ -110,7 +110,7 @@ export const DrawerForPPTXConfiguration = ({
 
       <div className="bg-slate-100 dark:bg-neutral-950 p-4 rounded-md">
       <div className="flex space-x-4 items-center m-2">
-        {/* thems */}
+        {/* themes */}
       <div className="flex items-center justify-center ">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -20,7 +20,7 @@ export const Login = async (values: z.infer<typeof LoginUserSchema>) => {
   const existingUser = await dbq('SELECT * FROM "User" WHERE email = $1', [email]);
 
   if(!existingUser || !existingUser.email || !existingUser.password){
-    return {error: "Email does not exist!"}
+    return {error: "This email is already in use with other login provider. Please login with that provider."}
   }
   if(!existingUser.emailVerified){
     const verification = await generateVerficationToken(existingUser.email);
@@ -66,7 +66,7 @@ export const Login = async (values: z.infer<typeof LoginUserSchema>) => {
 
 
   try {
-    await signIn("credentials", {
+   const s =  await signIn("credentials", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,

@@ -15,7 +15,7 @@ export default async function ChatLayout({
   const user = session.user;
   const chatSessions = await getAllPreviousSessions(user.id || "");
   return (
-    <div className="fullbody w-full flex h-screen">
+    <div className="fullbody w-full flex flex-row h-screen">
       {/* Include shared UI here e.g. a header or sidebar */}
 
       <Sidebar chatSessions={chatSessions} />

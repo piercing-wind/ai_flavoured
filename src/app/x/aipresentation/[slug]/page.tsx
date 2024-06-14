@@ -16,20 +16,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
             notFound();
       }
       const chatSessions = await getAllPreviousSessions(user.id || "");
-      // const hasNonUserGenerator = chatSessions.some(session => 
-      //   session.userFiles.some(file => file.generator !== "aiflavoured")
-      // );
-      // if(hasNonUserGenerator){
-      //   notFound();
-      // }
+ 
       const chatSession = chatSessions.find(
-            (session) => session.chatId === params.slug
+            (session) => session.session === params.slug
       );  
       const userFiles = chatSession ? chatSession.userFiles : [];   
       const hasUserGenerator = userFiles.find(
-        (file) => file.generator !== "aiflavoured"
+        (file) => file.generator === "aiflavoured"
       );
-      if (hasUserGenerator) {
+      if (!hasUserGenerator) {
         notFound();
       }   
 return (

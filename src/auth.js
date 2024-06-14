@@ -4,6 +4,8 @@ import { getUserById } from "./db/users";
 import { db } from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getTwoFAConfirmationByUserId } from "./data/twoFAConfirmation";
+import { getSubscriptionQuota } from "./actions/subscriptionQuota";
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -14,7 +16,7 @@ export const {
     signIn: "/login",
     error: "/error",
   },
-  events: {
+  events: { 
     async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
@@ -22,15 +24,30 @@ export const {
       }); // update user
     },
   },
-  adapter: PrismaAdapter(db),
+  adapter: {
+   ...PrismaAdapter(db),
+   async createUser(profile) {
+     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+     return db.user.create({
+       data: {
+         email: profile.email,
+         name: profile.name,
+         image: profile.image,
+         timeZone: timeZone,  // Storing the timezone
+       },
+     });
+   },
+ },
   callbacks: {
     async signIn({ user, account }) {
+      try{
+
       //allow only verified users to sign in
       const existingUser = await getUserById(user.id);
-      if (account.provider === "credentials"){
-      
-      if (!existingUser.emailVerified) return false;
+      if (account.provider === "credentials" && !existingUser.emailVerified){
+      return false;
       }
+
       if(existingUser.isTwoFAEnabled){
         const twoFAConfirmation = await getTwoFAConfirmationByUserId(existingUser.id);
         if(!twoFAConfirmation){
@@ -40,20 +57,41 @@ export const {
           where: {
             id: twoFAConfirmation.id,
           },});
-      };
+      };       
+      }catch(e){
+        if(e instanceof CredentialsSignin){
+          console.log("Error : ", e.message);
+          return Error(e.message);  
+        }
+      }
 
       return true;
     },
     async jwt({ token, user }) {
       // console.log("User : ", user);
-       
-
+      // console.log("Token : ", token);
       if (!token.sub) return token; // if no user, return empty token
       const existingUser = await getUserById(token.sub);
+
+      //initializing the Base Quota for the new user
+      if(user){
+        const subscriptionQuota = await getSubscriptionQuota(user.id);
+        if(subscriptionQuota.error){
+        await db.subscriptionQuota.create({
+          data: {
+            userId: user.id,
+          },
+        });
+      }
+      
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      token.timeZone = timeZone;
+      }
       if (!existingUser) return token; // if no user, return empty token
       token.role = existingUser.role;
       token.subscription = existingUser.subscription;
       token.id = existingUser.id;
+
 
       // console.log("JWT : ", token);
       return token;
@@ -63,6 +101,7 @@ export const {
         session.user.role = token.role;
         session.user.subscription = token.subscription;
         session.user.id = token.id;
+        session.user.timeZone = token.timeZone;
       }
       
       //console.log("Session : ", token);

@@ -68,7 +68,6 @@ titleOnly?: {
 
 type Presentation = Slides[]
   `    
-  console.log("working on it...");
   let slideData : string = "";
   try{
       
@@ -97,7 +96,6 @@ type Presentation = Slides[]
             audience : audience,
             interface: slidesInterfaceForRefinement,
       });
-      console.log(slides)
       const refineOutputChain = refineOutputPrompt.pipe(llm2).pipe(new StringOutputParser());
 
       const refinedSlides = await refineOutputChain.invoke({
@@ -108,6 +106,5 @@ type Presentation = Slides[]
 }catch(e){
       console.log(e);
 }
-console.log(slideData)
 return slideData;
 };

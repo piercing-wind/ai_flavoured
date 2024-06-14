@@ -34,7 +34,7 @@ export const uploadToUserFileTBSchema = z.object({
   fileName: z.string(),
   userId: z.string(),
   url: z.string(),
-  chatId: z.string(),
+  session: z.string(),
   fileType: z.string(),
 });
 
@@ -51,7 +51,7 @@ export const presentationSchema = z.object({
     fileKey: z.string(),
     fileName: z.string(),
     url: z.string(),
-    chatId: z.string(),
+    session: z.string(),
     fileType: z.string(),
     createdAt: z.optional(z.date()),
     generator : z.string()

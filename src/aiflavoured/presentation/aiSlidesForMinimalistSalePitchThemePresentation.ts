@@ -75,8 +75,7 @@ export const aiSlidesForMinimalistSalePitchThemePresentation = async (model : st
   }
   
   type Presentation = Slides[]
-  `
-  console.log("working on it...");
+  `;
   let slideData : string = "";
   try{
       
@@ -105,7 +104,6 @@ export const aiSlidesForMinimalistSalePitchThemePresentation = async (model : st
             audience : audience,
             interface: slidesInterfaceForRefinement,
       });
-      console.log(slides)
       const refineOutputChain = refineOutputPrompt.pipe(llm2).pipe(new StringOutputParser());
 
       const refinedSlides = await refineOutputChain.invoke({
@@ -116,6 +114,5 @@ export const aiSlidesForMinimalistSalePitchThemePresentation = async (model : st
 }catch(e){
       console.log(e);
 }
-console.log(slideData)
 return slideData;
 };

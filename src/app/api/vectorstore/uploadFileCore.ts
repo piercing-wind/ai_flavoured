@@ -5,10 +5,10 @@ import { textToEmbeddingAndStore } from "@/aiflavoured/textToEmbeddingAndStore";
 
 
 
-export const uploadFileCore = async (userId: string, fileKey: string, fileName: string, fileType:string,chatId:string ) => {
+export const uploadFileCore = async (userId: string, fileKey: string, fileName: string, fileType:string,session:string ) => {
       const textFromDocuments = await documentToText(fileKey, userId, fileType);
 
-      const splittedDocuments = await textSplitter( textFromDocuments, userId, chatId);
+      const splittedDocuments = await textSplitter( textFromDocuments, userId, session);
 
       const vectoring = await textToEmbeddingAndStore(splittedDocuments);
 

@@ -3,22 +3,23 @@ import { dbq } from "@/db/db";
 import { db } from "@/lib/db";
 // import { url } from "inspector";
 
-export const createChatSession = async (userId: string, fileName : string) => {
-  const createChatSession = await db.chatSessionId.create({
+export const createChatSession = async (userId: string, fileName : string, sessionType: string) => {
+  const createChatSession = await db.session.create({
     data: {
       userId: userId,
       chatName: fileName,
+      sessionType : sessionType,
     },select :{
-      chatId : true
+      session : true
     }
   });
-  return createChatSession.chatId; 
+  return createChatSession.session; 
 };
 
-export const  findChatSession = async (slug : string) => {
+export const findChatSession = async (slug : string) => {
  
- const chatSession = await db.chatSessionId.findUnique({
-      where: { chatId: slug },     
+ const chatSession = await db.session.findUnique({
+      where: { session: slug },     
     });
 
     if (chatSession) {
@@ -30,20 +31,20 @@ export const  findChatSession = async (slug : string) => {
 
 
 export const getAllPreviousSessions = async (userId : string) => {
-  
-  const chatSessions = await db.chatSessionId.findMany({
-    where: { userId: userId },
-    include: { userFiles: true },
-  });
-  // console.log(chatSessions);
+   // console.log("hellloooooooooo"); 
+   const chatSessions = await db.session.findMany({
+      where: { userId: userId },
+      include: { userFiles: true },
+   });
+   // console.log(chatSessions);
   return chatSessions;
 }
 
 //update the chatName
-export const updateChatName = async (chatId : string, newChatName: string) => {
+export const updateChatName = async (session : string, newChatName: string) => {
   console.log("updating chat name")
-  const updatedChat = await db.chatSessionId.update({
-    where: { chatId: chatId },
+  const updatedChat = await db.session.update({
+    where: { session: session },
     data: { chatName: newChatName },
   });
   // console.log(updatedChat);
@@ -51,13 +52,13 @@ export const updateChatName = async (chatId : string, newChatName: string) => {
 }
 
 
-//quering the userFile table for Pdf Urls with the help of chatid
+//quering the userFile table for Pdf Urls with the help of session
 
 export async function getDocUrls(slug : string){
  try{
   const docUrl = await db.userFile.findMany({
     where: {
-       chatId: slug 
+       session: slug 
       },
   });
   return docUrl;
@@ -73,27 +74,27 @@ export async function getDocUrls(slug : string){
 
 
 
-export async function deleteChatSession(chatId: string) {
+export async function deleteChatSession(session: string) {
   // Start a transaction
   // Delete related AIMemory entries
- const res =  dbq(`DELETE FROM "AIMemory" WHERE "metadata"->>'sessionId' = '${chatId}'`,[]);
+ const res =  dbq(`DELETE FROM "AIMemory" WHERE "metadata"->>'session' = '${session}'`,[]);
   await db.$transaction([
     // Delete related messageHistory entries
     db.messageHistory.deleteMany({
       where: {
-        chatId: chatId,
+        session: session,
       },
     }),
     // Delete related UserFile entries
     db.userFile.deleteMany({
       where: {
-        chatId: chatId,
+        session: session,
       },
     }),
-    // Finally, delete the chatSessionId
-    db.chatSessionId.delete({
+    // Finally, delete the session
+    db.session.delete({
       where: {
-        chatId: chatId,
+        session: session,
       },
     }),
   ]);

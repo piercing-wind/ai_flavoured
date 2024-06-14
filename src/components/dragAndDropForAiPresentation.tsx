@@ -23,6 +23,8 @@ import { generatePresentaionAndStore } from "@/aiflavoured/presentation/generate
 import { presentationSchema } from "@/schemas";
 import * as z from "zod"
 import { UserFile } from "@/actions/file/awsS3";
+import { getAiPresentationQuota } from "@/actions/subscriptionQuota";
+import { Pricing } from "./pricing";
 
 export const DragAndDropForAiPresentation = () => {
   const [fileLengthError, setFileLengthError] = useState(false);
@@ -33,7 +35,7 @@ export const DragAndDropForAiPresentation = () => {
   const [loader, setloader] = useState(false);
   const [openFileManager, setOpenFileManager] = useState(true);
   const [inputFiles, setInputFiles] = useState<File[]>([]);
-  const [session, setSession] = useState<any>(null);
+  const [userSession, setUserSession] = useState<any>(null);
   const [isSubscribed, setSubscribed] = useState("free");
   const fileInput = useRef<HTMLInputElement>(null);
   const [validating, setValidating] = useState(false);
@@ -49,6 +51,7 @@ export const DragAndDropForAiPresentation = () => {
   const [imageSearch, setImageSearch] = useState('Google Search');
   const [themeFunction, setThemeFunction] = useState('ppPartyThemePresentation');
   const [variant , setVariant] = useState('green')
+  const [pricing , setPricing ] = useState(false)
 
   //todo create a quota database to by bass this condition
   if(model === "gpt-4" && isSubscribed === "free") {
@@ -100,7 +103,7 @@ export const DragAndDropForAiPresentation = () => {
       const data = await Session();
       if ('session' in data) {
         const user : any = data.session;
-        setSession(user);
+        setUserSession(user);
         setSubscribed(user.subscription);
         // const model = await getUserModel(user.id);
       }
@@ -111,19 +114,19 @@ export const DragAndDropForAiPresentation = () => {
 
   useEffect(() => {
     const updateFileLength = () => {
-      if (session?.subscription === "free" && inputFiles.length >= 2) {
+      if (userSession?.subscription === "free" && inputFiles.length >= 2) {
         setDisabled(true);
       } else {
         setDisabled(false);
         setFileLengthError(false);
       }
       
-      if (session?.subscription === "free" && inputFiles.length > 2) {
+      if (userSession?.subscription === "free" && inputFiles.length > 2) {
         setFileLengthError(true);
       }
     };
 
-    if (session && session?.subscription !== null) {
+    if (userSession && userSession?.subscription !== null) {
       updateFileLength();
     }
   }, [inputFiles]);
@@ -131,12 +134,11 @@ export const DragAndDropForAiPresentation = () => {
 
   const handleFile = async (e : any, fromDrop = false) => {
     e.preventDefault();
-  
     if (fromDrop) {
       e.stopPropagation();
     }
   
-    if (session === null) {
+    if (userSession === null) {
       console.log("No user found");
       return;
     }
@@ -146,6 +148,7 @@ export const DragAndDropForAiPresentation = () => {
       console.log("No file selected");
       return;
     }
+  
   
     setInputFiles([file]);
 
@@ -196,14 +199,23 @@ export const DragAndDropForAiPresentation = () => {
 
 
   const processFiles = async (singleFiles : any) => {
+    try{
+      const presenationQuota = await getAiPresentationQuota(userSession.id);
+      if(presenationQuota <= 0){
+        console.log("You have reached the limit of presentation generation")
+        return
+      }
+    }catch(e){console.log(e)}
+
     setloader(true);
     setError("");
     setSuccess("");
+
     const files = inputFiles.length > 0 ? inputFiles : singleFiles;
     const uploadedFiles : UserFile[] = [];
     const fileName = files.length > 1 ? "new folder 1" : files[0].name;
-    const user = session;
-    const presentationId : string = await createChatSession(user.id, fileName);
+    const user = userSession;
+    const presentationId : string = await createChatSession(user.id, fileName, "presentation");
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -218,7 +230,7 @@ export const DragAndDropForAiPresentation = () => {
         );
         if (data && 'awsS3' in data ) {
           const uploadUrl = (data.awsS3 as any).url;
-          
+            
         try {
           //this section is for uploading in the aws s3 bucket
           const res = await fetch(uploadUrl, {
@@ -245,7 +257,7 @@ export const DragAndDropForAiPresentation = () => {
     //awsS3 upload ends here
     try {
       const data : z.infer<typeof presentationSchema> = {
-        user : session,
+        user : userSession,
         selectedFiles : uploadedFiles, 
         textInputValue, 
         slides, 
@@ -257,13 +269,13 @@ export const DragAndDropForAiPresentation = () => {
         ppmodel : model,
         waterMark: isSubscribed === "free" ? true : false
       }
-      console.log("calling ppt store")
-      // const response = await generatePresentaionAndStore(data, presentationId);  
+
+      const response = await generatePresentaionAndStore(data, presentationId);  
        setloader(false);
        setRedirect(true);
        setSuccess("File upload successfull");
-      //  router.push(response!);
-    
+       router.push(response!);
+  
     } catch (e) {
       console.log(e);
     }
@@ -274,7 +286,8 @@ export const DragAndDropForAiPresentation = () => {
     }
   };
   return (
-    <div className="relative text-center w-full flex items-center justify-center flex-col">
+    <div className=" text-center w-full flex items-center justify-center flex-col">
+      {/* <Pricing  setPricing={setPricing}/> */}
       {fileLengthError && (
         <FileSelectorWarning
           file={inputFiles.length}

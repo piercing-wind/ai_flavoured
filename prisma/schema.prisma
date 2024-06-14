@@ -20,7 +20,7 @@ enum Generator{
   aiflavoured
 }
 
-enum SubscriptionName {
+enum SubscriptionStatus {
   free
   premium
   unlimited
@@ -39,12 +39,15 @@ model User {
   accounts      Account[]
   password      String?  
   role          UserRole @default(USER)
-  subscription String?   @default("free")   
+  subscription  SubscriptionStatus   @default(free)
+  subscriptionQuotas  subscriptionQuota[]   
   accountCreationTimestamp  DateTime @default(now())
+  timeZone      String 
   isTwoFAEnabled Boolean @default(false)
   twoFAConfirmation    TwoFAConfirmation?
   uploads      UserFile[]
-  chatSessions  chatSessionId[]
+  chatSessions  session[]
+  userPromptImages userPromptImage[]
 }
 
 model Account {
@@ -101,6 +104,20 @@ model TwoFAConfirmation{
 }
 
 // This is the AIMemory model { UserID and FileKey is Stored into the metadata}
+model session {
+  session     String  @id @default(cuid())
+  sessionType String 
+  chatName   String?
+  userId     String
+  timestamp  DateTime      @default(now())
+  messages   messageHistory[]
+  userFiles  UserFile[]
+  userPromptImages userPromptImage[]
+  
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aipresentationData aipresentationData?
+  @@unique([userId, session])
+}
 
 model AIMemory {
   id        Int @id @default(autoincrement())
@@ -114,38 +131,80 @@ model UserFile {
   fileKey   String
   fileName  String
   url       String
-  chatId    String 
+  session   String 
+  theme     String?
   generator Generator @default(user)
   fileType  String @default("")
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chatSession chatSessionId @relation(fields: [chatId], references: [chatId])
+  chatSession session @relation(fields: [session], references: [session], onDelete :Cascade) 
 
   @@unique([userId, fileKey])
 }
 
-model chatSessionId {
-  chatId     String  @id @default(cuid())
-  chatName   String?
-  userId     String
-  timestamp  DateTime      @default(now())
-  messages   messageHistory[]
-  userFiles  UserFile[]
-  
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([userId, chatId])
-}
 
 model messageHistory {
   id          Int           @id @default(autoincrement())
-  chatId      String        @db.VarChar(255)
+  session      String        @db.VarChar(255) 
   title       String?
   message     String    
   role        MessageRole    
   timestamp   DateTime      @default(now())
 
-  chatSession chatSessionId @relation(fields: [chatId], references: [chatId])
+  chatSession session @relation(fields: [session], references: [session], onDelete : Cascade)
 
-  @@index([chatId])
+  @@index([session])
 }
+
+model aipresentationData {
+  id  String  @id @default(cuid())
+  presentationSession String @unique
+  author  String
+  title   String
+  pptxData  Json   
+  presentationImage Json
+  imageSearch  String
+  waterMark  Boolean @default(true)
+  variant  String?
+  createdAt  DateTime? @default(now())
+  chatSession session @relation(fields: [presentationSession], references: [session], onDelete: Cascade)
+}
+model userPromptImage {
+  id        String @id @default(cuid())
+  userId    String
+  session   String 
+  fileKey   String
+  fileName  String
+  url       String
+  fileType  String
+  prompt    String 
+  like      Boolean?
+  generator Generator @default(user)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Session session @relation(fields: [session], references: [session], onDelete : Cascade) 
+
+  @@unique([userId, fileKey])
+}
+
+
+model subscriptionQuota{
+  id  String  @id @default(cuid())
+  userId   String @unique
+  subscription   DateTime @default(now())
+  renewal   DateTime? @default(now())
+  subscriptionStatus   SubscriptionStatus @default(free)
+  aiChatWithDoc   Int @default(2)
+  aipresentation   Int @default(1)
+  gpt3_5Questions   Int @default(1000) 
+  gpt4Question   Int @default(0)
+  gpt4oQuestion   Int @default(0)
+  aiImages    Int @default(0)
+  aiVoices   Int? @default(0)
+  textToSpeech Int @default (0)
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+

@@ -5,6 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { dbq } from "@/db/db"
 import * as z from "zod"
 import { uploadToUserFileTBSchema } from "@/schemas"
+import { ThemeDefault } from "@tsparticles/engine";
 // import {auth} from "@/auth"
 export type UserFile = {
   id: number;
@@ -13,14 +14,15 @@ export type UserFile = {
   fileName: string;
   url: string;
   createdAt: Date;
-  chatId: string;
+  session: string;
   fileType: string;
   generator: string;
 };
-const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>, generator : string = 'user') => {
-  const { fileKey, fileName, userId, url, chatId , fileType } = data;
+const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>, generator : string = 'user', theme? : string) => {
+  const { fileKey, fileName, userId, url, session , fileType } = data;
   try{  
-        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "chatId", "fileType" , "generator") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [ fileKey, userId,fileName, url, chatId, fileType, generator])
+        const res = await dbq('INSERT INTO "UserFile" ("fileKey", "userId", "fileName", "url", "session", "fileType" , "generator", "theme") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+         [ fileKey, userId,fileName, url, session, fileType, generator, theme])
         return res;
       }catch(e){
         console.log(e)
@@ -38,9 +40,8 @@ const acceptedFileType = [
 ]
 
 
-export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string, chatId : string , generator? : string) => {
+export const uploadToS3 = async (fileName : string, fileType : string, fileSize : number, user: string, session : string , generator? : string, theme? : string) => {
   try {
-
     // const session = await auth();
     // if (!session || !session.user?.id) {
     //   return {failure : "User not authenticated"}
@@ -62,19 +63,22 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
       }
     });
 
-    const signedUrl = await getSignedUrl(client, command, { expiresIn: 60 }); // URL expires in 60 seconds
-    const downloadUrl = await generatePublicFileAccessURL(fileKey);
+    const [signedUrl, downloadUrl] = await Promise.all([
+      getSignedUrl(client, command, { expiresIn: 60 }), // URL expires in 60 seconds
+      generatePublicFileAccessURL(fileKey)
+    ])
     
     //upload to user file table in database (postgres)
 
-    const data = { fileKey, fileName, userId, url : downloadUrl, chatId , fileType};
+    const data = { fileKey, fileName, userId, url : downloadUrl, session , fileType};
     // Handle validation errors
     const validationResult = uploadToUserFileTBSchema.safeParse(data);
-    if (validationResult.success) {
-      const userFile : UserFile = await uploadToUserFileTable(data, generator);
-
-      return Promise.resolve({awsS3: {url : signedUrl, userFile }});
+    if (!validationResult.success) {
+      return {failure : "Validation Error"}
     } 
+    const userFile : UserFile = await uploadToUserFileTable(data, generator, theme);
+
+    return Promise.resolve({awsS3: {url : signedUrl, userFile }});
   } catch (error) {
     console.log(error);
     throw error;

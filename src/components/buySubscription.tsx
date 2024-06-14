@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 export const BuySubscription = ({closeSubscriptionreq}: {closeSubscriptionreq : () => void}) => {
       const router = useRouter(); 
 return (
-    <div className="absolute backdrop-blur-sm w-full h-full flex items-center justify-center top-0 z-20 " onClick={()=>{closeSubscriptionreq()}}>
+    <div className="absolute left-0 backdrop-blur-sm w-full h-full flex items-center justify-center top-0 z-20 " onClick={()=>{closeSubscriptionreq()}}>
 
       <div className="subscribe-background-image text-opacity-80 w-1/3 sm:w-1/2 relative border rounded-lg text-black p-4 text-left" onClick={(e) => e.stopPropagation()}>
            <div onClick={()=>closeSubscriptionreq()} className="absolute top-4 right-4 text-lg cursor-pointer"><MdOutlineClose /></div>

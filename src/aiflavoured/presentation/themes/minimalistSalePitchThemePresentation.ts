@@ -11,9 +11,10 @@ import {
     } from "../imagesData";
 import { Base64Image, Localbase64Image, getImagesFromGoogleAsBase64ArrayWithHeaders, localVarientsToBase64, varientsToBase64 } from "../getImagesFromGoogleAndConvertToBase64";
 import { convertSlidesStringToObject } from "../convertSlidesStringToObject";
-import { PresentaionData } from "./presentation";
+import { PresentationData } from "./presentation";
 import libre from "libreoffice-convert";
-import { add } from "lodash";
+import { add, find } from "lodash";
+import { PresentationImage } from "../generatePresentaionAndStore";
 interface Slides {
   intro?: {
     title: string;
@@ -1719,7 +1720,7 @@ const pictureWithCaption = async (pptx: pptxgen , font : Font , waterMark : bool
       return pptx;
     }
 
-export const minimalistSalePitchThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentaionData) => {
+export const minimalistSalePitchThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink : PresentationImage) => {
       console.log("presentaion function call");
       try {
         let index = 0;
@@ -1747,7 +1748,8 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
     
 
       const data: Presentation = await convertSlidesStringToObject(pptxData);
-      
+
+       
   let slideNumber =  1;
     for(let slide of data){
       let key = Object.keys(slide)[0];
@@ -1757,9 +1759,14 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
           title: [0, 2, 5, 12].includes(index) ? "FFFFFF": '000000' , 
           body: [0, 2, 5, 12].includes(index) ? "FFFFFF": '000000' 
         } 
-        // const link = base64Images[index].link;
+        let findPicture;
+        const ix = photosWithLink.findIndex((item) => item.slideNumber === slideNumber);
+        if( ix !== -1){
+           findPicture = photosWithLink[ix];
+         }  
+        
         const base64 = base64Images[index].base64;
-        const mime = base64Images[index].mime;
+
         const lineSpacing: number = 40;
     
           switch(key){    
@@ -1991,21 +1998,14 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
                     });
                   }
                 } 
-                if(typeof pictureO === 'string'){
-                  slideO.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 6.67, h: 7.5, placeholder : 'picture' });
+                if(typeof pictureO === 'string' && findPicture && ix !== -1){
+                 slideO.addImage({ path: findPicture.picture, w: 6.67, h: 7.5, placeholder : 'picture' });
                 }
                 
                 // fill : {color : [3,6,8,10].includes(index) ? 'E9E6DF' : [0,2,5,12].includes(index) ? "000000" : "FFFFFF"}
-                const triangle = [3,6,8,10].includes(index) ? 'leftTriangle' : [0,2,5,12].includes(index) ? "leftTriangleBlack" : "leftTriangleWhite"
-
+                const triangle = [3,6,8,10].includes(index) ? 'leftTriangle' : [0,2,5,12].includes(index) ? "leftTriangleBlack" : "leftTriangleW"
                 slideO.addImage({ path: `public/minimalistSalePitchTheme/${triangle}.png`, w:9.59, h: 7.5, x:1.4, y:0});
-                // slideO.addShape('rtTriangle', {
-                  //   x:4.95,
-                  //   y:0,
-                  //   h:7.5,
-                  //   w:2.24,
-                  //   fill : {color : colors.body === "FFFFFF"? "000000" : "FFFFFF"}
-                  // })
+              
                   slideO.addText(slideNumber.toString(), {
                     color : colors.body,
                     placeholder : 'slideNumber'
@@ -2169,14 +2169,8 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
               color : colors.title,
               placeholder: "title",
             });
-            if (typeof(picture) === 'string') {
-              // imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picture) as string;
-              slideSH.addImage({ path: "public/darkThemeMoon/comparison.jpg", w: 6.68 , h: 7.5 , placeholder: "picture"});
-              // picture is a string to be displayed
-              // slideSH.addText(picture, {
-              //   placeholder: "picture",
-              // });
+            if (typeof(picture) === 'string' && findPicture && ix !== -1) {
+             slideSH.addImage({ path: findPicture.picture, w: 6.68 , h: 7.5 , placeholder: "picture"});
             }
             slideSH.addShape('rtTriangle',{
               x:6.65,
@@ -2312,11 +2306,9 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
             const slideB = pptx.addSlide({ masterName: "blank" });
             const pictureB = slideDataB!.picture;
             // slideB.addShape(pptxgen.)s
-            if (typeof(pictureB) === 'string') {
-              //imageSearch variable === "Google Search"
-              const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(pictureB) as string;            
-              slideB.addImage({ data: base64WithHeader, w: 11.33 , h: 5.5 , x: 1, y: 1, placeholder: "picture"});
-            }
+            if (typeof(pictureB) === 'string' && findPicture && ix !== -1 ) {
+             slideB.addImage({ path: findPicture.picture, w: 11.33 , h: 5.5 , x: 1, y: 1, placeholder: "picture"});
+           }
             slideB.addText(slideNumber.toString(), {
               color : colors.body,
               placeholder : 'slideNumber'
@@ -2394,10 +2386,9 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
               line :{color : colors.body, width : 1, dashType : "solid"},
               fill:{color: colors.body}
             })
-            if (typeof(picturePWC) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(picturePWC) as string;
-              slidePWC.addImage({ data: base64, w: 6.6 , h: 7.5, placeholder: "picture"});
+            if (typeof(picturePWC) === 'string' && findPicture && ix !== -1) {
+              slidePWC.addImage({ path: findPicture.picture, w: 6.6 , h: 7.5, placeholder: "picture"});
+              photosWithLink.splice(ix, 1); 
             } 
 
             if(Array.isArray(captionPWC)){
@@ -2513,24 +2504,16 @@ export const minimalistSalePitchThemePresentation = async ({author, title, pptxD
               opacity: 0.5
             },
             })
-            if (typeof(firstPicture) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(firstPicture) as string;
-              // slideTeam.addImage({ data: base64WithHeader, w: 3 , h: 3, placeholder: "lpic"});
-              slideTeam.addImage({ data: base64, w: 3.63 , h: 3.63, placeholder: "lpic"});
-            }
-            if (typeof(secondPicture) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(secondPicture) as string;
-              // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "mpic"});
-              slideTeam.addImage({ data: base64, w: 3.63 , h: 3.63, placeholder: "mpic"});
-            }
-            if (typeof(thirdPicture) === 'string') {
-              //imageSearch variable === "Google Search"
-              // const base64WithHeader : string = await getImagesFromGoogleAsBase64ArrayWithHeaders(thirdPicture) as string;
-              // slideTeam.addImage({ data: base64WithHeader, w: 2.5 , h: 2.5, placeholder: "rpic"});
-              slideTeam.addImage({ data: base64,  w: 3.63 , h: 3.6, placeholder: "rpic"});
-            }
+            let matchingPictures = photosWithLink.filter((item) => item.slideNumber === slideNumber);
+            let placeholders = ['lpic', 'mpic', 'rpic'];
+            
+            placeholders.forEach((placeholder) => {
+                if (matchingPictures.length > 0) {
+                    let picture = matchingPictures[0];
+                    slideTeam.addImage({ path: picture.picture, w: 3.63, h: 3.63, placeholder: placeholder });
+                    matchingPictures = matchingPictures.slice(1);
+                }
+            });
             slideTeam.addText(slideNumber.toString(), {
               color : colors.body,
               placeholder : 'slideNumber'

@@ -1,15 +1,17 @@
 import React from 'react';
 import Styles from '@/components/ui/button.module.css'
+import { actionAsyncStorage } from 'next/dist/client/components/action-async-storage.external';
 
-interface ButtonProps {
+export interface ButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
   className?: string;
   size?: 'default' | 'sm' | 'lg' | 'icon';
   disabled?: boolean;
+  action?: ()=>void;
 }
 
-const sizeClasses = {
+export const sizeClasses = {
   default: "h-10 px-4 py-2",
   sm: "h-9 rounded-md px-3",
   lg: "h-11 rounded-md px-8",

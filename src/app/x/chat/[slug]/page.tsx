@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
 
   const chatSession = chatSessions.find(
-    (session) => session.chatId === params.slug
+    (session) => session.session === params.slug
   );
   const userFiles = chatSession ? chatSession.userFiles : [];
   const hasNonUserGenerator = userFiles.find(
