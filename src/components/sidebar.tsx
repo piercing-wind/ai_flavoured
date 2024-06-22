@@ -53,6 +53,7 @@ import { imageGenerator } from "@/actions/huggingface/huggingFace";
 import { PresentationImage, generatePresentaionAndStore } from "@/aiflavoured/presentation/generatePresentaionAndStore";
 import { convertSlidesStringToObject } from "@/aiflavoured/presentation/convertSlidesStringToObject";
 import { getPresentationData, storePresentationData } from "@/actions/presentationData/presentationData";
+import { textToimage } from "@/actions/stabilityai/textToImage";
 
 
 interface ChatSession {
@@ -162,6 +163,9 @@ export const Sidebar = ({ chatSessions }: SidebarProps) => {
                   <TiFolderOpen className=" text-xl" /> &nbsp; Chat with Documents
                </div>
             </Link>
+            {/* <button onClick={()=>{textToimage()}}>
+               Test
+            </button> */}
 
           <Link href="/x/aipresentation">
             <div className="flex items-center mx-2 my-5">
