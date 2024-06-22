@@ -25,13 +25,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
     }
   }
 
+  
   const chatSessions = await getAllPreviousSessionsWithImage(user.id || "");
 
   const chatSession = chatSessions.find(
     (sessions) => sessions.session === params.slug
   );
-  const userPromptImages = chatSession ? chatSession.userPromptImages : [];
-//   console.log('UserPromptImage',userPromptImages)
+  const prevUserPromptImages = chatSession ? 
+  [...chatSession.userPromptImages].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) : [];
+   // console.log(prevUserPromptImages);
   if (chatSession?.sessionType !== 'image') {
     notFound();
   }
@@ -42,7 +44,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
          <ImageSessionBar
             user={user}
             params={params}
-            userPromptImages={userPromptImages}
+            prevUserPromptImages={prevUserPromptImages}
             chatName={'chatName' in userChatSession ? userChatSession.chatName || "" : ""}
          />
       </div>

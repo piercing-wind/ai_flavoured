@@ -15,7 +15,7 @@ export const texttoimageforpresentation = async (imagePrompt : string, user : st
    })
    const result = await imageBlob.arrayBuffer();   
    const buffer = Buffer.from(result); 
-   const imageName = `${imagePrompt}.png`
+   const imageName = `${imagePrompt.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, "_")}.png`
    const uploadRes = await uploadToS3(imageName, 'image/png', buffer.length, user,param, 'aiflavoured')   
 if('failure' in uploadRes) throw new Error('Error uploading to S3')
    const res = await fetch(uploadRes.awsS3.url,{

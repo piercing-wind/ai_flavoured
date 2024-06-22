@@ -6,6 +6,7 @@ An Array of routes which are accessible to the public and
 export const publicRoutes = [
       '/',
       '/new-verification',
+      '/share'
 ];
 
 /*

@@ -1,10 +1,11 @@
+import { fetchShareUrl } from '@/actions/userPromptImage/userPromptImage'
 import { ImageResponse } from 'next/og'
  
 // Route segment config
 export const runtime = 'edge'
  
 // Image metadata
-export const alt = 'About Acme'
+export const alt = 'Ai Flavoured Image'
 export const size = {
   width: 1200,
   height: 630,
@@ -14,9 +15,7 @@ export const contentType = 'image/png'
  
 // Image generation
 export default async function Image({ params }: { params: { id: string } }) {
-  // Font
-  const image = decodeURIComponent(params.id)
-  console.log("from oepen gea",image)
+   const image = await fetchShareUrl(params.id);
   const interSemiBold = fetch(
     new URL(image, import.meta.url)
   ).then((res) => res.arrayBuffer())
@@ -28,14 +27,14 @@ export default async function Image({ params }: { params: { id: string } }) {
         style={{
           fontSize: 128,
           background: 'white',
-          width: '100%',
+          width: '10%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        About Acme
+       Ai Flavoured
       </div>
     ),
     // ImageResponse options

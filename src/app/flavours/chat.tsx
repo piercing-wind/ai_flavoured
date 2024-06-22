@@ -1,5 +1,5 @@
 "use client";
-import { ChatCompletion } from "@/ai_models/gpt-3.5-turbo";
+import { ChatCompletion } from "@/openai_models/gpt-3.5-turbo";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import {
