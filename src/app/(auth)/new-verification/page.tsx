@@ -2,7 +2,9 @@ import { NewVerificationContent } from "./newVerification";
 import { Suspense } from "react";
 import { BackButtonLink } from "../backbuttonLink";
 
-const Verification = () => {
+const Verification = ({searchParams}:{searchParams:{ [key : string] : string}}) => {
+   
+   const  callbackUrl = searchParams.callbackUrl;
   return (
     <>
       <div className="z-10 md:px-14 xl:px-28 py-9 justify-center items-center">
@@ -12,7 +14,7 @@ const Verification = () => {
         <Suspense>
         <NewVerificationContent />
         </Suspense>
-        <BackButtonLink link="/login" text="" label="Back to Login" />
+        <BackButtonLink link={`/login?callbackUrl=${callbackUrl}`} text="" label="Back to Login" />
       </div>
     </>
   );

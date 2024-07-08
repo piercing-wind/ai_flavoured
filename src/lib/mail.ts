@@ -51,7 +51,7 @@ export const sendPasswordResetEmail = async (name: string, email: string, token:
 
 
 
-export const sendVerificationEmail = async (name: string, email: string, token: string) => {
+export const sendVerificationEmail = async (name: string, email: string, token: string, callbackUrl?: string, plan?: string) => {
   try {
     const MessageData = {
       from: `Ai Flavoured <help@${process.env.MAILGUN_DOMAIN || ""}>`,
@@ -60,7 +60,7 @@ export const sendVerificationEmail = async (name: string, email: string, token: 
       text: `your account has been created!`,
       html: `
     <h1>Welcome ${name}</h1>
-    <p>Please click on the <a href="${process.env.WEBSITE_URL}/new-verification?token=${token}">Click Here</a> to verify your email.</p>
+    <p>Please click on the <a href="${process.env.WEBSITE_URL}/new-verification?token=${token}&callbackUrl=${callbackUrl || '/'}&plan=${plan}">Click Here</a> to verify your email.</p>
   `,
     };
 

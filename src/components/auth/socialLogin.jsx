@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 
-export const SocialLogin = ({label}) => {
+export const SocialLogin = ({label, callbackUrl, plan}) => {
   return (
     <div className="sm:flex gap-4 w-full mt-4">
       {/* <SocialButton icon={<FcGoogle className="h-5 w-5"/>} type="Google" styles={styles}/>
@@ -15,9 +15,11 @@ export const SocialLogin = ({label}) => {
         action={async () => {
           "use server";
           try {
-            await signIn("google", { redirectTo: process.env.REDIRECT_URL });
-          } catch (err) {
+            const s = await signIn("google", { redirectTo: callbackUrl ? plan ? `${callbackUrl}?plan=${plan}` : callbackUrl : process.env.REDIRECT_URL });
+            console.log("client ", s)
+         } catch (err) {
             if (err instanceof AuthError) {
+               if(err.errorCode === "OAuthProviderError"){}
               throw err;
             }
             throw err;
@@ -38,9 +40,10 @@ export const SocialLogin = ({label}) => {
         action={async () => {
           "use server";
           try {
-            await signIn("github", { redirectTo: process.env.REDIRECT_URL });
+            await signIn("github", { redirectTo: callbackUrl ? plan ? `${callbackUrl}?plan=${plan}` : callbackUrl  : process.env.REDIRECT_URL });
           } catch (err) {
             if (err instanceof AuthError) {
+               if(err.errorCode === "OAuthProviderError"){}
               throw err;
             }
             throw err;

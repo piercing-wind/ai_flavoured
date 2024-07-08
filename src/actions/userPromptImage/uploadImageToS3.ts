@@ -13,13 +13,14 @@ export type Data = {
    generator: 'user' | 'aiflavoured';
    like: boolean | null;
    upscaled: boolean | null;
+   imageModel : 'sdxl' | 'dalle'
    };
 
 
-export const uploadImageToS3 = async (fileName : string, fileType : string, fileSize : number, userId: string, upscaled:boolean | null = null) : Promise<{awsS3 : {url : string, data : Data}}> => {
+export const uploadImageToS3 = async (fileName : string, fileType : string, fileSize : number, userId: string, imageModel : 'sdxl' | 'dalle', upscaled:boolean | null = null) : Promise<{awsS3 : {url : string, data : Data}}> => {
    try {
      const client = await awsS3Config();
-     const fileKey = userId.toString() + "/" + Date.now().toString() + fileName.replace(" ", "_");
+     const fileKey = 'Userdata/' + userId.toString() + "/" + Date.now().toString() + fileName.replace(" ", "_");
      const command = new PutObjectCommand({
        Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
        Key: fileKey,
@@ -37,7 +38,7 @@ export const uploadImageToS3 = async (fileName : string, fileType : string, file
      ])
      
  
-     const data : Data = { fileKey, fileName, fileType, url : downloadUrl, generator : 'user', like : null, id: uuidv4(), upscaled };
+     const data : Data = { fileKey, fileName, fileType, url : downloadUrl, generator : 'user', like : null, id: uuidv4(), upscaled, imageModel};
      // Handle validation errors
 
  
@@ -50,13 +51,7 @@ export const uploadImageToS3 = async (fileName : string, fileType : string, file
  
  //for public access
  export const generatePublicFileAccessURL = async (fileKey: string): Promise<string> => {
-   const url =
-     "https://" +
-     process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME +
-     ".s3." +
-     process.env.NEXT_PUBLIC_AWS_S3_REGION +
-     ".amazonaws.com/" +
-     fileKey;
+   const url = process.env.AWS_CLOUDFRONT_URL + '/' + fileKey;
    return url;
  };
  

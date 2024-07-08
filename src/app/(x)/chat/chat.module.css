@@ -1,0 +1,66 @@
+.chatscroll::-webkit-scrollbar {
+  width: 7px;
+  cursor: pointer;
+  background-color: transparent ;
+}
+
+.chatscroll::-webkit-scrollbar-track {
+  background: transparent;
+  transform : translateZ(0)
+}
+
+.chatscroll::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #ff0783;
+
+}
+
+.chatscroll::-webkit-scrollbar-thumb:hover {
+  background: #b6065e;
+  cursor: pointer;
+  /* box-shadow: 0 0 5px  #ff0783; */
+}
+
+.hide_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide_scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes neon-snake {
+  0% {
+    border-color: #ff4d4d transparent transparent transparent;
+    box-shadow: 0 0 3px #ff4d4d, 0 0 0px #ff4d4d;
+  }
+  25% {
+    border-color: transparent #ff4d4d transparent transparent;
+    box-shadow: 0 0 3px #ff4d4d, 0 0 0px #ff4d4d;
+  }
+  50% {
+    border-color: transparent transparent #ff4d4d transparent;
+    box-shadow: 0 0 3px #ff4d4d, 0 0 0px #ff4d4d;
+  }
+  75% {
+    border-color: transparent transparent transparent #ff4d4d;
+    box-shadow: 0 0 3px #ff4d4d, 0 0 0px #ff4d4d;
+  }
+  100% {
+    border-color: #ff4d4d transparent transparent transparent;
+    box-shadow: 0 0 3px #ff4d4d, 0 0 0px #ff4d4d;
+  }
+}
+.neonButton {
+  border: 2px solid transparent;
+  position: relative;
+  animation: neon-snake 2s linear infinite;
+  transition: all 0.3s ease-in-out;
+  /* background-color: transparent; */
+  border-radius: 5px;
+}
+
+.neonButton:hover {
+  /* color: #140a0e; */
+  text-shadow: 0 0 2px #ec64bc, 0 0 4px #fe0077, 0 0 8px #f60e86;
+}

@@ -9,18 +9,25 @@ import { getTwoFATokenByEmail } from "@/data/twoFAToken";
 import { sendVerificationEmail, sendTwoFAEmail } from "@/lib/mail";
 import { dbq } from "@/db/db";
 import { getTwoFAConfirmationByUserId } from "@/data/twoFAConfirmation";
+import { isRedirectError } from "next/dist/client/components/redirect";
+
+
+//this login function is used to login the user from the EMAIL and PASSWORD
 
 export const Login = async (values: z.infer<typeof LoginUserSchema>) => {
-  const validate = LoginUserSchema.safeParse(values);
+ 
+   const validate = LoginUserSchema.safeParse(values);
   if (!validate.success) {
     return { error: "Invalid Email or Password" };
   }
   const { email, password, code } = validate.data;
 
   const existingUser = await dbq('SELECT * FROM "User" WHERE email = $1', [email]);
+  
+  if(existingUser.password === null) return {error : "This email is already in use with other login provider. Please login with that provider."}
 
-  if(!existingUser || !existingUser.email || !existingUser.password){
-    return {error: "This email is already in use with other login provider. Please login with that provider."}
+  if(existingUser.error){
+    return {error: "The email you entered is not registered with us. Please register first."}
   }
   if(!existingUser.emailVerified){
     const verification = await generateVerficationToken(existingUser.email);
@@ -66,12 +73,19 @@ export const Login = async (values: z.infer<typeof LoginUserSchema>) => {
 
 
   try {
-   const s =  await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
+    
+    return { success: "Signed in successfully" };
   } catch (error) {
+      console.log(error)
+      if (isRedirectError(error)) {
+      throw error;
+   }
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
@@ -83,5 +97,5 @@ export const Login = async (values: z.infer<typeof LoginUserSchema>) => {
       }
     }
     throw error;
-  }
+   }
 };

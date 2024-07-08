@@ -30,7 +30,7 @@ export const FileList = ({
     if (userFiles[0]) {
       handleClick(userFiles[0].url, userFiles[0].fileName);
     }
-  }, []);
+  }, [handleClick, userFiles]);
 
   return (
     <div className="p-2">

@@ -42,7 +42,7 @@ export const upscaleImage = async (fileName : string, url : string,value : numbe
       if(!upscaleBuffer) throw new Error('Error upscaling image');
       fs.writeFileSync(`output/${fileName.replace('.png', '')}.png`, upscaleBuffer)
     
-      const uploadUrl = await uploadImageToS3(`${fileName.replace('.png', '')}upsacled.png`, 'image/png', upscaleBuffer.byteLength, userId, upscaled);
+      const uploadUrl = await uploadImageToS3(`${fileName.replace('.png', '')}upsacled.png`, 'image/png', upscaleBuffer.byteLength, userId, 'sdxl', upscaled);
       const uploadRes = await fetch(uploadUrl.awsS3.url,{
          method: 'PUT',
          body: upscaleBuffer,
@@ -62,7 +62,8 @@ export const upscaleImage = async (fileName : string, url : string,value : numbe
          fileType : uploadUrl.awsS3.data.fileType,
          generator : uploadUrl.awsS3.data.generator,
          like : uploadUrl.awsS3.data.like,
-         upscaled : uploadUrl.awsS3.data.upscaled
+         upscaled : uploadUrl.awsS3.data.upscaled,
+         imageModel : uploadUrl.awsS3.data.imageModel
       };
       return [cloudData];
    }catch(e){

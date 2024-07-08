@@ -18,7 +18,7 @@ import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { useState, useTransition } from "react";
 import { Register } from "@/actions/register";
-export const RegisterForm = () => {
+export const RegisterForm = ({callbackUrl, plan}:{callbackUrl : string, plan : string}) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -36,7 +36,7 @@ export const RegisterForm = () => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      Register(values).then((data) => {
+      Register(values,callbackUrl, plan).then((data) => {
         setError(data.error);
         setSuccess(data.success);
       });

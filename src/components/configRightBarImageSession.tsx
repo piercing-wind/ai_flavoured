@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
 import { GoInfo } from "react-icons/go";
 import { Input } from "./ui/input";
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
 
 interface AspectRatio {
   [key: string]: {
@@ -65,20 +65,17 @@ export const RightBar = ({
     setIsCollapsed(!isCollapsed);
   };
   const aspectRatio: AspectRatio = {
-    "21:9": { tip: "2560 X 1080", width: 2560, height: 1080 },
-    "16:9": { tip: "1920 X 1080", width: 1920, height: 1080 },
-    "3:2": { tip: "1920 X 1280", width: 1920, height: 1280 },
-    "5:4": { tip: "1280 X 1024", width: 1280, height: 1024 },
-    "1:1": { tip: "1024 X 1024", width: 1024, height: 1024 },
-    "4:5": { tip: "1024 X 1280", width: 1024, height: 1280 },
-    "2:3": { tip: "1024 X 1536", width: 1024, height: 1536 },
-    "9:16": { tip: "1080 X 1920", width: 1080, height: 1920 },
-    "9:21": { tip: "1080 X 2520", width: 1080, height: 2520 },
-    "16:9 S": { tip: "1024 X 576", width: 1024, height: 576 },
-    "9:16 S": { tip: "576 X 1024", width: 576, height: 1024 },
-    "1:1 S": { tip: "768 X 768", width: 768, height: 768 },
-  };
-
+   "1:1": { tip: "1024 X 1024", width: 1024, height: 1024 },
+   "5:4": { tip: "1152 X 896", width: 1152, height: 896 },
+   "3:2": { tip: "1216 X 832", width: 1216, height: 832 },
+   "16:9": { tip: "1344 X 768", width: 1344, height: 768 },
+   "21:9": { tip: "1536 X 640", width: 1536, height: 640 },
+   "9:16": { tip: "640 X 1536", width: 640, height: 1536 },
+   "4:5": { tip: "896 X 1152", width: 896, height: 1152 },
+   "2:3": { tip: "832 X 1216", width: 832, height: 1216 },
+   "16:9 S": { tip: "768 X 1344", width: 768, height: 1344 }
+ };
+//   1024x1024, 1152x896, 1216x832, 1344x768, 1536x640, 640x1536, 768x1344, 832x1216, 896x1152
 
   const samplers = [
     "DDIM",
@@ -214,7 +211,7 @@ export const RightBar = ({
               }}
             />
           </div>
-          <Tooltip id="steps">
+          <Tooltip id="steps" className="z-10">
             <p>Number of steps to denoise the image.</p>
             <p>Minimum 10, Maximum 50</p>
           </Tooltip>
@@ -271,7 +268,7 @@ export const RightBar = ({
               }}
             />
           </div>
-          <Tooltip id="weight" className=" overflow-hidden" place="left-start">
+          <Tooltip id="weight" className=" overflow-hidden z-10" place="left-start">
             <p>
               Add Weight between 1 and 0
             </p>

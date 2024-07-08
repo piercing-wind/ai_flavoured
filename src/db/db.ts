@@ -1,15 +1,40 @@
 import pg from "pg";
 
+// export const pool = new pg.Pool({
+//   host: process.env.HOST,
+//   user: process.env.USER_NAME,
+//   password: process.env.PASSWORD,
+//   port: 5432 || process.env.PORT,
+//   database: process.env.DATABASE_NAME,
+//   idleTimeoutMillis: 30000,
+// });
+// export const pool = new pg.Pool({
+//   host: process.env.SUPABASE_HOST,
+//   user: process.env.SUPABASE_USER,
+//   password: process.env.SUPABASE_PASSWORD,
+//   port: 6543 || process.env.SUPABASE_PORT,
+//   database: process.env.SUPABASE_DB_NAME,
+//   idleTimeoutMillis: 30000,
+// });
 export const pool = new pg.Pool({
-  user: process.env.USER_NAME,
-  password: process.env.PASSWORD,
-  host: process.env.HOST,
-  port: 5432 || process.env.PORT,
-  database: process.env.DATABASE_NAME,
+  host: process.env.NEON_HOST,
+  user: process.env.NEON_USER,
+  password: process.env.NEON_PASSWORD,
+  port: 5432 || process.env.NEON_PORT,
+  database: process.env.NEON_DB_NAME,
   idleTimeoutMillis: 30000,
+  ssl: {
+   rejectUnauthorized: false
+  }
 });
-
-
+// export const pool = new pg.Pool({
+//    host: process.env.AWS_RDS_DATABASE_HOST,
+//    database: process.env.AWS_PG_DATABASE_NAME,
+//    user: process.env.AWS_PG_USER,
+//    password: process.env.AWS_PG_PASSWORD,
+//    port: 5432 || process.env.AWS_PG_PORT,
+//    idleTimeoutMillis: 30000,
+//  });
 
 /**
  * **DataBase Query** 
@@ -68,6 +93,19 @@ export const dbqM = async (queries : string, values: any): Promise<any> => {
        // console.log(result.rows);
        return result.rows;
      }
+   } catch (error) {
+     console.error(error);
+     return { error: "Database query failed!" };
+   } finally {
+     client.release();
+   }
+ };
+
+ export const dbquery = async (queries : string, values: any): Promise<any> => {
+   const client = await pool.connect();
+   try {
+     const result = await client.query(queries,values);
+     return result
    } catch (error) {
      console.error(error);
      return { error: "Database query failed!" };

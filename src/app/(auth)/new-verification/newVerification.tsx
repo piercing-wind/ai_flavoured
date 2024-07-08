@@ -10,31 +10,39 @@ export const NewVerificationContent = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [verificationCompleted, setVerificationCompleted] = useState(false);
 
   const searchPramas = useSearchParams();
   const token = searchPramas.get("token");
+  const callbackUrl = searchPramas.get("callbackUrl");
 
+ 
   const onSubmit = useCallback(async () => {
-    if (!token) {
-      setError("Missing Token");
-      return;
-    }
-  setLoading(true);
+   if (verificationCompleted || !token) { // Check if verification has been completed
+     return;
+   }
+
+   setLoading(true);
    await newVerification(token)
-      .then((data: any) => {
-        setSuccess(data.success);
-        setError(data.error);
-      })
-      .catch(() => {
-        setError("Something went wrong!");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [token]);
-  useEffect(() => {
-    onSubmit();
-  }, [onSubmit]);
+     .then((data: any) => {
+       setSuccess(data.success);
+       setError(data.error);
+       if (data.success) {
+         setVerificationCompleted(true);
+       }
+     })
+     .catch(() => {
+       setError("Something went wrong!");
+     })
+     .finally(() => {
+       setLoading(false);
+     });
+ }, [token, verificationCompleted]); 
+
+ useEffect(() => {
+   onSubmit();
+ }, [onSubmit]);
+
 
   return (
     <>

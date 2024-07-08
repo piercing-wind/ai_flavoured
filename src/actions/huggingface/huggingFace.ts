@@ -32,7 +32,7 @@ export async function imageGenerator(data: { prompt: string, width?: number, hei
    const result = await imageBlob.arrayBuffer();   
    const buffer = Buffer.from(result); 
    const imageName = `${prompt.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, "_")}.png`
-   const uploadUrl = await uploadImageToS3(imageName, 'image/png', buffer.byteLength,userId);
+   const uploadUrl = await uploadImageToS3(imageName, 'image/png', buffer.byteLength,userId, 'sdxl');
    const res = await fetch(uploadUrl.awsS3.url,{
       method: 'PUT',
       body: buffer,
@@ -45,13 +45,15 @@ export async function imageGenerator(data: { prompt: string, width?: number, hei
    })
    if(!res.ok) throw new Error('Error uploading image to S3');
    const cloudData : Data = {
+      id :  Date.now().toString(),
       url : uploadUrl.awsS3.data.url,
       fileKey : uploadUrl.awsS3.data.fileKey, 
       fileName : uploadUrl.awsS3.data.fileName, 
-      userId : uploadUrl.awsS3.data.userId,
       fileType : uploadUrl.awsS3.data.fileType,
       like : uploadUrl.awsS3.data.like,
       generator : uploadUrl.awsS3.data.generator,
+      upscaled : null,
+      imageModel : 'sdxl',
    };
    return cloudData;
 }

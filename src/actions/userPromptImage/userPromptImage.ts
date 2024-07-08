@@ -3,11 +3,15 @@ import { Database } from "@/components/imageSessionBar";
 import { db } from "@/lib/db";
 import { Data } from "./uploadImageToS3";
 
-export const getAllPreviousSessionsWithImage = async (userId : string) => {
+export const getAllPreviousSessionsWithImage = async (userId : string, imageModel : 'sdxl'| 'dalle' ) => {
    const chatSessions = await db.session.findMany({
       where: { userId: userId },
       include: { userPromptImages: {
-         include: { images: true }
+         include: { images: {
+            where: {
+               imageModel: imageModel
+            }
+         } }
       } },
    });
   return chatSessions;

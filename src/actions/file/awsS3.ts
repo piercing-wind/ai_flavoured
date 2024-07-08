@@ -1,6 +1,6 @@
 "use server"
 import { awsS3Config } from "@/aws/awsS3config";
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand,DeleteObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { dbq } from "@/db/db"
 import * as z from "zod"
@@ -18,6 +18,12 @@ export type UserFile = {
   fileType: string;
   generator: string;
 };
+//for public access
+export const generatePublicFileAccessURL = async (fileKey: string): Promise<string> => {
+   const url = process.env.AWS_CLOUDFRONT_URL + '/' + fileKey;
+  return url;
+};
+
 const uploadToUserFileTable = async (data: z.infer<typeof uploadToUserFileTBSchema>, generator : string = 'user', theme? : string) => {
   const { fileKey, fileName, userId, url, session , fileType } = data;
   try{  
@@ -36,6 +42,7 @@ const acceptedFileType = [
   "image/jpeg",
   "image/png",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "text/plain",
   // add more image types if needed
 ]
 
@@ -51,7 +58,7 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
       return {failure : "File type not supported"}
     }
     const client = await awsS3Config();
-    const fileKey = userId.toString() + "/" + Date.now().toString() + fileName.replace(" ", "_");
+    const fileKey = 'Userdata/' + userId.toString() + "/" + Date.now().toString() + fileName.replace(" ", "_");
     
     const command = new PutObjectCommand({
       Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
@@ -85,25 +92,17 @@ export const uploadToS3 = async (fileName : string, fileType : string, fileSize 
   }
 };
 
-//for public access
-export const generatePublicFileAccessURL = async (fileKey: string): Promise<string> => {
-  const url =
-    "https://" +
-    process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME +
-    ".s3." +
-    process.env.NEXT_PUBLIC_AWS_S3_REGION +
-    ".amazonaws.com/" +
-    fileKey;
-  return url;
-};
 
-
-
-export const deleteFromS3 = async (fileKey: string) => {
+export const deleteFromS3 = async (fileKey: string[]) => {
+   if (fileKey.length === 0) {
+      return { success: "No files to delete" };
+    }
   const client = await awsS3Config();
-  const command = new DeleteObjectCommand({
+  const command = new DeleteObjectsCommand({
     Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
-    Key: fileKey,
+    Delete :{
+      Objects : fileKey.map(key => ({Key : key}))
+    }
   });
   try{
   await client.send(command);
@@ -125,3 +124,51 @@ export const deleteFromS3 = async (fileKey: string) => {
 //   const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 }); // URL expires in 1 hour
 //   return signedUrl;
 // };
+const acceptedFileTypeinSUpport = [
+   "application/pdf",
+   "image/jpeg",
+   "image/png",
+   "text/plain",
+   'image/jpg',
+   'image/gif',
+   'image/bmp',
+   'image/webp',
+   'video/mp4',
+   'video/mpeg',
+   'video/ogg',
+   'video/quicktime',
+   'video/webm',
+   'video/x-msvideo',
+   // add more image types if needed
+ ]
+
+export const uploadToSupportAttachment = async (fileName : string, fileType : string, fileSize : number, user: string) :Promise<{uploadUrl : string, downloadUrl : string}> => {
+   try {
+
+     const userId = user;
+     if(!acceptedFileTypeinSUpport.includes(fileType)){
+       throw new Error("File type not supported") 
+     }
+     const client = await awsS3Config();
+     const fileKey = 'Userdata/' + userId.toString() + "/" + Date.now().toString() + fileName.replace(" ", "_");
+     
+     const command = new PutObjectCommand({
+       Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
+       Key: fileKey,
+       ContentType :fileType,
+       ContentLength : fileSize,
+       Metadata:{
+         userId : userId,
+       }
+     });
+ 
+     const [signedUrl, downloadUrl] = await Promise.all([
+       getSignedUrl(client, command, { expiresIn: 60 }), // URL expires in 60 seconds
+       generatePublicFileAccessURL(fileKey)
+     ])
+     
+     return Promise.resolve({uploadUrl : signedUrl, downloadUrl : downloadUrl});
+   } catch (error) {
+     throw new Error( (error as Error).message);
+   }
+ };

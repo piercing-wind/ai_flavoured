@@ -18,11 +18,21 @@ const config: Config = {
       "2xl": "1536px",
     },
     extend: {
+      colors:{
+         'warm-white': '#fff4f4',
+         'aiflavoured': '#ff0786',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      height: {
+         inherit: 'inherit',
+       },
+       boxShadow: {
+         'eqshadow' : '0 0 0 1px rgba(0, 0, 0, 0.05)',
+       },
     },
   },
   plugins: [],

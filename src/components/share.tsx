@@ -191,7 +191,7 @@ const Share = React.forwardRef<HTMLDivElement, ShareProps>((props, ref) => {
           <RedditIcon classNameForBg="#d60113" />
          </div>
         </RedditShareButton>
-        <WorkplaceShareButton url={shareUrl}>
+        <WorkplaceShareButton url={shareUrl} >
         <div className={SocialStyle.slideInFromBottom}>
           <WorkplaceIcon />
          </div>
@@ -205,5 +205,5 @@ const Share = React.forwardRef<HTMLDivElement, ShareProps>((props, ref) => {
     </>
   );
 });
-
+Share.displayName = "Share";
 export default Share;

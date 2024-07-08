@@ -2,8 +2,9 @@
 import {useState} from 'react'
 import { CgClose } from "react-icons/cg";
 import { Button } from '@/components/ui/button';
+import { PurchaseButton } from './closeButton';
 
-export const FileSelectorWarning = ({file,selectAgain, uploadFirstTwo,setFileLengthError}:{file: number,selectAgain : () => void, uploadFirstTwo : () => void,setFileLengthError : (value: boolean) => void}) => {
+export const FileSelectorWarning = ({file,selectAgain, uploadFirstTwo,setPricing, setFileLengthError}:{file: number,selectAgain : () => void, uploadFirstTwo : () => void,setPricing:(v:boolean)=> void,setFileLengthError : (value: boolean) => void}) => {
 
       return (
         <div className="absolute backdrop-blur-sm bg-transparent w-full h-full flex items-center justify-center z-50 top-0">
@@ -20,6 +21,11 @@ export const FileSelectorWarning = ({file,selectAgain, uploadFirstTwo,setFileLen
             <div className=' space-x-3'>
             <Button onClick={() => {setFileLengthError(false);selectAgain();}} size="sm" variant={'default'} className='border border-pink-600 shadow-xl hover:bg-pink-100 font-semibold w-32'>Select Again</Button>
             <Button onClick={() => {setFileLengthError(false);uploadFirstTwo();} } size="sm" variant={'default'} className='border bg-slate-950 text-white border-black shadow-xl hover:bg-slate-800 font-semibold w-32'>Upload first 2</Button>
+            <button onClick={()=>{setPricing(true); setFileLengthError(false); selectAgain();}}>
+            <PurchaseButton className='text-md ml-3 p-4  text-white bg-gradient-to-r from-pink-400 to-purple-800 hover:from-pink-300 hover:to-purple-700'>
+              Upgrade to premium
+            </PurchaseButton>
+            </button>
             </div>
             <p></p>
           </div>

@@ -17,7 +17,7 @@ export const contentType = 'image/png'
 export default async function Image({ params }: { params: { id: string } }) {
    const image = await fetchShareUrl(params.id);
   const interSemiBold = fetch(
-    new URL(image, import.meta.url)
+    new URL(image.url, import.meta.url)
   ).then((res) => res.arrayBuffer())
  
   return new ImageResponse(

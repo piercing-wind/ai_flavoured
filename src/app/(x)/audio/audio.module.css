@@ -1,0 +1,17 @@
+.hide_scrollbar::-webkit-scrollbar {
+   display: none;
+ }
+ .hide_scrollbar {
+   -ms-overflow-style: none;
+   scrollbar-width: none;
+ }
+ .btn_gradient_border {
+   border: 2px double transparent;
+   background-image: linear-gradient(rgb(13, 14, 33), rgb(13, 14, 33)), radial-gradient(circle at left top, rgb(1, 110, 218), rgb(217, 0, 192));
+   background-origin: border-box;
+   background-clip: padding-box, border-box;
+ }
+ .btn_gradient_border:hover {
+   box-shadow: rgba(111, 76, 255, 0.5) 0px 0px 20px 0px;
+   transition: all 0.3s ease;
+ }

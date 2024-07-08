@@ -7,5 +7,5 @@ export const createSession = async (name: string,  sessionType : string) => {
     const userSession = await auth();
     if (!userSession) return "/login";
     const session = await createChatSession(userSession?.user?.id || "", name, sessionType);
-    return `/x/${sessionType}/${session}`;
+    return `/${sessionType}/${session}`;
  };   

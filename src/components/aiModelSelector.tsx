@@ -10,8 +10,7 @@ import { Button } from "./ui/button";
 import { Divider } from "./divider";
 
 
-
-export const AiModelSelector = ({model, setModel , presentation = false, subscription = 'free'}:{model: string, setModel : (v:string)=>void, presentation?: boolean, subscription?: string}) => {
+export const AiModelSelector = ({model, setModel , presentation = false, subscription}:{model: string, setModel : (v:string)=>void, presentation?: boolean, subscription: string}) => {
   return (
     <>
       <DropdownMenu>
@@ -61,39 +60,42 @@ export const AiModelSelector = ({model, setModel , presentation = false, subscri
           <DropdownMenuItem onClick={() => setModel('gpt-4o')}
           className="flex flex-col"
           >
-            <div className="flex items-center justify-between w-full ">
-            <ChatGPTIcon />
-            <Button size={"sm"} className=" h-5">
-              GPT - 4o
-            </Button>
-            <div className="bg-gradient-to-br text-xs from-pink-200 via-purple-200 to-violet-300 rounded-lg px-1 border">
-              {/* <div className="absolute rounded-s-none top-0 left-2 h-2 w-5 bg-pink-500 blur-sm" /> */}
-              <p className="shiny-text rounded-lg px-1 font-semibold bg-pink-400 z-20">
-                Pro
-              </p>
+           <div className="w-full">
+            <div className="flex items-center w-full ">
+                <ChatGPTIcon />
+                <Button size={"sm"} className=" h-5">
+                  GPT - 4o
+                </Button>
+                <div className="bg-gradient-to-br text-xs from-pink-200 via-purple-200 to-violet-300 rounded-lg px-1 border">
+                  {/* <div className="absolute rounded-s-none top-0 left-2 h-2 w-5 bg-pink-500 blur-sm" /> */}
+                  <p className="shiny-text rounded-lg px-1 font-semibold bg-pink-400 z-20">
+                    Pro
+                  </p>
+                </div>
             </div>
-            </div>
-          </DropdownMenuItem>
-            <p className="text-xs">Smart, Fast & Advanced</p>
+            <p className="text-xs opacity-70">Smart, Fast & Advanced</p>
             <Divider />
-          <DropdownMenuItem onClick={() => setModel('gpt-4')}
-          className="flex flex-col"
-          >
-            <div className="flex items-center justify-between w-full ">
-            <ChatGPTIcon />
-            <Button size={"sm"} className=" h-5">
-              GPT - 4
-            </Button>
-            <div className="bg-gradient-to-br text-xs from-pink-200 via-purple-200 to-violet-300 rounded-lg px-1 border">
-              {/* <div className="absolute rounded-s-none top-0 left-2 h-2 w-5 bg-pink-500 blur-sm" /> */}
-              <p className="shiny-text rounded-lg px-1 font-semibold bg-pink-400 z-20">
-                Pro
-              </p>
-            </div>
-            </div>
+          </div>
           </DropdownMenuItem>
-            <p className=" text-xs">Accurate, Advanced</p>
+          <DropdownMenuItem onClick={() => setModel('gpt-4')}
+          className="flex "
+          >
+            <div className="w-full justify-center">
+            <div className="flex items-center w-full ">
+               <ChatGPTIcon />
+               <Button size={"sm"} className=" h-5">
+                 GPT - 4
+               </Button>
+              <div className="bg-gradient-to-br text-xs from-pink-200 via-purple-200 to-violet-300 rounded-lg px-1 border">
+                <p className="shiny-text rounded-lg px-1 font-semibold bg-pink-400 z-20">
+                  Pro
+                </p>
+              </div>
+            </div>
+               <p className="w-full text-center text-xs opacity-70">Accurate, Advanced</p>
             <Divider/>
+          </div> 
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

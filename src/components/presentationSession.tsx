@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/resizable";
 import { Conversation } from "@/components/conversation";
 import { useEffect, useState } from "react";
-import {ThemeSwitch} from "@/components/ThemeSwitch";
+import {ModeToggle} from "@/components/themeModeChange";
 import { Button } from "@/components/ui/button";
 import { AiModelSelector } from "@/components/aiModelSelector";
 import { useRouter } from "next/navigation";  
@@ -24,6 +24,9 @@ import { useToast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { Progress } from "@/components/ui/progress"
 import { displayThemes, displayThemes1,displayThemes2,displayThemes3 } from "@/aiflavoured/presentation/displayThemes";
+import { Quota } from '@/app/(x)/chat/[slug]/page';
+import { Pricing } from './pricing';
+import { ServerUserProfile } from './header/links/serverUserProfile';
 
 
 
@@ -51,31 +54,30 @@ export const PresentationSession = React.memo(({
   params,
   userFiles,
   chatName,
+  quota
 }: {
 
   user: any;
   params: { slug: string };
   userFiles: FileObject[];
   chatName: string;
+  quota : Quota;
 }) => {
   const [pptxAsPDF, setPPTXAsPDFUrl] = useState("");
-  const [theme, setTheme] = useState<boolean>(true);
   const [model, setModel] = useState("gpt-3.5-turbo-0125");
   const [fileName, setFileName] = useState("");
   const [pptxUrl, setPPTXUrl] = useState("");
   const [subscriptionRequired, setSubscriptionRequired] = useState(false);
-  const router = useRouter();
   const [progress, setProgress] = useState<number>(1)
   const [startProgress, setStartProgress] = useState<boolean>(false)
   const { toast } = useToast();
-  
-console.log(fileName);
+  const [pricing, setPricing] = useState(false);
   const [themes, setThemes] = useState(displayThemes);
   const [currentpptxTheme, setCurrentTheme] = useState<string>('/displayThemes/ppPartyTheme.svg');
   const [apply, setApply] = useState<boolean>(false);
   const [themeFunction, setThemeFunction] = useState('ppPartyThemePresentation');
   const [variant , setVariant] = useState('green')
-
+  const applyRef = useRef<HTMLDivElement | null>(null);
   const  changepptxTheme =async ()=>{
      setStartProgress(true);
      const prevTheme = userFiles.filter((item)=> item.theme === themeFunction)
@@ -125,14 +127,6 @@ console.log(fileName);
       }
    } 
 
-  //validation with quota
-  const checkUserSubscription = async () => {
-    if (user.subscription === "free") {
-      router.push(`/pricing`);
-      return;
-    }
-    setModel("gpt-4-turbo");
-  };
 
   useEffect(() => {
   const pdfFiles = userFiles.filter((item) => item.fileType === 'application/pdf' && item.generator === 'aiflavoured')
@@ -159,10 +153,6 @@ console.log(fileName);
  
   },[])
 
-  const handleThemeChnage = (theme : boolean) => {
-    setTheme(theme);
-  };
-
   const closeSubscriptionreq = () => {
     setSubscriptionRequired(false);
   }
@@ -180,6 +170,17 @@ console.log(fileName);
     document.body.removeChild(link);
   }
   }
+  useEffect(() => {
+      if (user.subscription === "free" && model !== 'gpt-3.5-turbo-0125') {
+         setPricing(true);
+         setModel('gpt-3.5-turbo-0125');
+         toast({
+            variant: "destructive",
+            title: "You need to upgrade to Pro to use this model",
+            description: "Please upgrade to Pro to use this model",
+         })
+      }
+  },[model]);
 
   useEffect(() => {
    if(themeFunction === 'facetThemePresentation' || themeFunction === 'darkThemeMoonPresentation' || themeFunction === 'ppPartyThemePresentation'){  
@@ -190,7 +191,6 @@ console.log(fileName);
       setThemes(displayThemes3);
    }
   },[themeFunction])
-
 
   useEffect(() => {
    let interval: NodeJS.Timeout | undefined;
@@ -205,12 +205,6 @@ console.log(fileName);
      }
    };
  }, [startProgress]);
-
-  useEffect(() => {
-    const htmlClassList = document.documentElement.classList;
-    setTheme(htmlClassList.contains("light"));
-  },[]);
-  const applyRef = useRef<HTMLDivElement | null>(null);
 
    useEffect(() => {
        function handleClickOutside(event : MouseEvent) {
@@ -228,7 +222,8 @@ console.log(fileName);
    }, []);
   return (
     <>
-      <Toaster />
+   <Toaster />
+   {pricing && <Pricing setPricing={setPricing} />}
     <main className="w-full flex-col flex h-full">
      {subscriptionRequired && <BuySubscription closeSubscriptionreq={closeSubscriptionreq}/>}
       <div className="flex p-3 items-center justify-between shadow-md dark:shadow-md dark:shadow-neutral-700">
@@ -254,8 +249,9 @@ console.log(fileName);
            <div title={fileName} className="text-gradient w-96 overflow-ellipsis flex items-center justify-center text-xl font-bold">{fileName}</div>        
          </div>
          <div className="flex flex-wrap items-center justify-end">
+            <ServerUserProfile user={user} />
           <div className="mx-2">
-            <ThemeSwitch  detectTheme={handleThemeChnage}/>
+            <ModeToggle />
           </div>
           <div className=" flex items-center ml-4 rounded-md">
             <AiModelSelector model={model} subscription={user.subscription} setModel={setModel} />
@@ -282,7 +278,7 @@ console.log(fileName);
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={25}>
                   <div className="converstaion flex rounded-sm h-[calc(100vh-3.5rem)]">
-                    <Conversation isLightMode={theme} chatSession={params} user={user} aiModel={model} userFiles={userFiles} api={'presentationchat'} />                  
+                    <Conversation chatSession={params} user={user} aiModel={model} userFiles={userFiles} api={'presentationchat'} chatModelQuota={quota} />                  
                   </div>
                 </ResizablePanel>
               </ResizablePanelGroup>

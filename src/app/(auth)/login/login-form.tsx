@@ -18,11 +18,15 @@ import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { useState, useTransition } from "react";
 import { Login } from "@/actions/login";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  const plan = searchParams.get("plan");
+  const router = useRouter();
+  
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with another login method"
@@ -51,12 +55,17 @@ export const LoginForm = () => {
           if (data.success) {
             form.reset();
             setSuccess(data.success);
+            router.push(callbackUrl ?  plan ? `${callbackUrl}?plan=${plan}` : callbackUrl : callbackUrl || "/");
           }
           if (data.twoFA) {
             setTwoFA(true);
-            setSuccess("Authentication code is sent in your mail");
+            setSuccess("Authentication code is sent to your email");
           }
         })
+        .catch((e: any) => {
+          console.log("Unexpected error:", e);
+          setError("An unexpected error occurred");
+        });
     });
   };
   return (

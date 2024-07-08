@@ -41,8 +41,8 @@ export const Links = ({ type }) => {
    
   const userData = CurrentUser();    // very important here to assign null if userData is empty!!
   const links = [
-    { href: "/products", text: "Products" },
-    { href: "/howtouse", text: "How to" },
+    { href: "/flavours", text: "Flavours" },
+    { href: "/image", text: "AI Images" },
     { href: "/about", text: "About" },
     { href: "/pricing", text: "Pricing" },
   ];
@@ -55,16 +55,16 @@ export const Links = ({ type }) => {
       <>
       
         <Link
-          href="/products"
+          href="/flavours"
           className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
         >
-          Products
+          Flavours
         </Link>
         <Link
-          href="/howtouse"
+          href="/image"
           className={cn("border-b-0 ml-6 mr-6 p-1", Styles.link)}
         >
-          How To
+          AI Images
         </Link>
         <Link
           href="/about"

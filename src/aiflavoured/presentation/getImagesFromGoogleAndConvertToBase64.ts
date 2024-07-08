@@ -191,6 +191,8 @@ export const varientsToBase64 = async (template : Template[]) : Promise<Base64Im
       }
       return base64Template;
 }
+
+
 export const localVarientsToBase64 = async (template : VarientTemplate[]) : Promise<Localbase64Image[]> =>{
       let base64Template : Localbase64Image[] = [] 
       try{

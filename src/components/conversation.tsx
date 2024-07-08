@@ -7,13 +7,14 @@ import {UserIcon} from "@/components/userIcon";
 import { PulseLoader } from "react-spinners";
 import {storeMessage, getMessages, formatMessages} from '@/actions/chat/messages';
 import DOMPurify from 'dompurify';
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
+import { Quota } from "@/app/(x)/chat/[slug]/page";
+import { updateGpt3_5QuestionQuota, updateGpt4QuestionQuota, updateGpt4oQuestionQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
 
-// type Message = {
-//   message: string;
-//   role: string;
+import { Toaster } from "./ui/toaster";
+import { Pricing } from "./pricing";
+import { useToast } from "./ui/use-toast";
 
-// }
 
 type Message ={
   title? : string | null;
@@ -46,7 +47,14 @@ const extractQuestions = (message : string) => {
 };
 
 
-export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiModel, api} : { isLightMode : boolean ,chatSession : { slug: string }, user : any, userFiles : any, aiModel : string, api : string}) => {
+export const Conversation = ({ chatSession, user, userFiles, aiModel, api, chatModelQuota} : { chatSession : { slug: string }, user : any, userFiles : any, aiModel : string, api : string, chatModelQuota : Quota}) => {
+  
+  const [remainingQuotaForGPT3, setRemainingQuotaForGPT3] = useState<number>(chatModelQuota.gpt3_5Question);
+  const [remainingQuotaForGPT4, setRemainingQuotaForGPT4] = useState<number>(chatModelQuota.gpt4Question);
+  const [remainingQuotaForGPT4o, setRemainingQuotaForGPT4o] = useState<number>(chatModelQuota.gpt4oQuestion);
+  
+  const {toast} = useToast(); 
+  const [pricing , setPricing] = useState(false)
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [disable, setDisable] = useState(false);
@@ -80,9 +88,35 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
           setIsThinking(false);
 
           //Todo handle the error if not saved somehow which is rare but can happen due to network error!
-          await storeMessage({ title: `Summary of ${file.fileName}`, session: chatSession.slug, message: summary, role: 'aiflavoured', timestamp: new Date().toISOString(),});
+          switch (aiModel) {
+            case 'gpt-3.5-turbo-0125':
+               const newRemainingQuotaForGPT3 = remainingQuotaForGPT3 - 1;
+               if(newRemainingQuotaForGPT3 < 0){setPricing(true); throw new Error('Quota exceeded')};
+               setRemainingQuotaForGPT3(newRemainingQuotaForGPT3);
+               await updateGpt3_5QuestionQuota(user.id, newRemainingQuotaForGPT3);
+               break;
+            case 'gpt-4':
+               const newRemainingQuotaForGPT4 = remainingQuotaForGPT4 - 1;
+               if(newRemainingQuotaForGPT4 < 0) {setPricing(true); throw new Error('Quota exceeded')};
+               setRemainingQuotaForGPT4(newRemainingQuotaForGPT4);
+               await updateGpt4QuestionQuota(user.id, newRemainingQuotaForGPT4); 
+               break;
+          case 'gpt-4o':
+               const newRemainingQuotaForGPT4o = remainingQuotaForGPT4o - 1;  
+               if(newRemainingQuotaForGPT4o < 0){setPricing(true); throw new Error('Quota exceeded')};
+               setRemainingQuotaForGPT4o(newRemainingQuotaForGPT4o);
+               await updateGpt4oQuestionQuota(user.id, newRemainingQuotaForGPT4o);
+               break;
+          }
+          
+          await storeMessage({ title: `Summary of ${file.fileName}`, session: chatSession.slug, message: summary, role: 'aiflavoured', timestamp: new Date().toISOString()});
           setMessages(newMessages);
         }catch(e){
+         toast({
+            variant : 'destructive',
+            title : `${(e as Error).message}`,
+            description : 'You have exceeded the quota for this model. Please upgrade your plan to continue using this model.',
+         })
           console.log(e);
         }
       }
@@ -90,19 +124,43 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
       setMessages(fetchedMessages);
     }
   }
+
+
+
   useEffect(() => {
     setApiCaller(api);
     fetchMessages();
-  }, []);
+  }, [api, fetchMessages]);
 
   
   
   const fetchResponse = async (question?: string) => {
+   try{
+      switch (aiModel) {
+        case 'gpt-3.5-turbo-0125':
+           const newRemainingQuotaForGPT3 = remainingQuotaForGPT3 - 1;
+           if(newRemainingQuotaForGPT3 < 0){setPricing(true); throw new Error('Quota exceeded')};
+           setRemainingQuotaForGPT3(newRemainingQuotaForGPT3);
+           await updateGpt3_5QuestionQuota(user.id, newRemainingQuotaForGPT3);
+           break;
+        case 'gpt-4':
+           const newRemainingQuotaForGPT4 = remainingQuotaForGPT4 - 1;
+           if(newRemainingQuotaForGPT4 < 0) {setPricing(true); throw new Error('Quota exceeded')};
+           setRemainingQuotaForGPT4(newRemainingQuotaForGPT4);
+           await updateGpt4QuestionQuota(user.id, newRemainingQuotaForGPT4); 
+           break;
+      case 'gpt-4o':
+           const newRemainingQuotaForGPT4o = remainingQuotaForGPT4o - 1;  
+           if(newRemainingQuotaForGPT4o < 0){setPricing(true); throw new Error('Quota exceeded')};
+           setRemainingQuotaForGPT4o(newRemainingQuotaForGPT4o);
+           await updateGpt4oQuestionQuota(user.id, newRemainingQuotaForGPT4o);
+           break;
+      }
     setIsThinking(true);
     setDisable(true);
 
     const userMessage = question && question !== "" ? question : userInput;
-   
+    
     setMessages((prevMessages: Message[]) => [...prevMessages, {message: userMessage, role: 'human', timestamp: new Date()}]);  
     const res = await storeMessage({session : chatSession.slug, message : userMessage, role : 'human', timestamp: new Date().toISOString()});
     
@@ -140,38 +198,46 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
             setIsThinking(false);
             reader.read().then(processText);
           });
+
+         }catch(e){
+            const error = e as Error;
+            toast({
+               variant : 'destructive',
+               title : "Insufficient Quota!",
+               description : `${error}, Please Upgrade your plan for more!`
+            })
+         }
         };
 
-        const handleUserInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          const userInput = event.target.value;
-          setUserInput(userInput);
-        };
-        const handleQuestionClick = async (e : any, question: string) => {
-          
-          // Handle question click event (e.g., copy to clipboard, trigger search, etc.
-          setUserInput(question);
-          fetchResponse(question);
-        };
-        
-        
-        useEffect(() => {
-          window.scrollTo(0, document.body.scrollHeight);
-          
-        }, []);
-        
-        React.useEffect(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, [messages, firstChunkReceived, systemMessage, isThinking]);
+    const handleUserInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const userInput = event.target.value;
+      setUserInput(userInput);
+    };
 
-        
-        return (
+    const handleQuestionClick = async (e : any, question: string) => {
+      setUserInput(question);
+      await fetchResponse(question);
+    };
+    
+    useEffect(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, []);
+    
+    React.useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages, firstChunkReceived, systemMessage, isThinking])
+    
+    return (
+         <>
+         <Toaster />
+         {pricing && <Pricing setPricing={setPricing}/>}
     <div className="w-full flex flex-col h-full">
       <div className={`flex flex-col space-y-2 overflow-y-scroll h-[calc(100vh-5rem)] ${Styles.chatscroll}`}>
       {messages.map((chat, index) => (
         chat.role === 'human' 
           ? (
           <div className='flex w-full justify-end pt-2' key={index}>
-            <div className={cn(`ml-16 self-end p-2 rounded-md border backdrop-blur-lg relative `, isLightMode ? ' bg-slate-200 border-gray-200' : ' bg-zinc-900 border-gray-600')}> 
+            <div className={cn(`ml-16 self-end p-2 rounded-md border backdrop-blur-lg relative bg-slate-200 border-gray-200 dark:bg-zinc-900 dark:border-gray-600`)}> 
               {chat.message}
             </div>
             <div className='flex items-center mx-2' title={user?.name}>
@@ -183,7 +249,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
             <div className='w-8 mx-2' title="AI Flavoured">
               <LogoText/>
             </div>
-            <div className={cn(`relative overflow-hidden mr-16 self-start backdrop-blur-lg border  p-2 rounded-md`, isLightMode ? ' bg-slate-50 border-gray-200' : ' border-gray-700')}> 
+            <div className={cn(`relative overflow-hidden mr-16 self-start backdrop-blur-lg border  p-2 rounded-md bg-slate-50 border-gray-200 dark:border-gray-700`)}> 
             {/* <div className="absolute rounded-s-none top-8 left-8 h-20 w-20 bg-pink-200 -z-10 blur-2xl" />
             <div className="absolute rounded-s-none top-1/4 left-3/4 h-20 w-20 bg-orange-200 -z-10 blur-2xl" />
             <div className="absolute rounded-s-none top-2/4 left-1/2 h-20 w-20 bg-violet-200 -z-10 blur-2xl" /> */}
@@ -198,7 +264,7 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
                         <li 
                         key={i}  
                         onClick={(e) =>{ handleQuestionClick(e, question)}} 
-                        className={cn(`mt-2 rounded-md p-2 cursor-pointer`, isLightMode ? ' bg-slate-200 hover:bg-slate-300' : ' bg-zinc-900 hover:bg-zinc-800')}
+                        className={cn(`mt-2 rounded-md p-2 cursor-pointer bg-slate-200 hover:bg-slate-300 dark:bg-zinc-900 dark:hover:bg-zinc-800`)}
                         >
                           {question}      
                         </li>
@@ -229,12 +295,13 @@ export const Conversation = ({ isLightMode, chatSession, user, userFiles, aiMode
 }}
       placeholder="Ask me anything about the document!" 
       value={userInput} 
-      onChange={handleUserInput} 
+      onChange={(e)=>handleUserInput(e)} 
       onKeyDown={(e) => e.key === 'Enter' && fetchResponse()}
       disabled={isThinking || disable}
       />
-      <button onClick={()=>fetchResponse()} disabled={isThinking || disable} className="p-2"><BsSend  className="text-xl"/></button>
+      <button onClick={()=>fetchResponse()} 
+       disabled={isThinking || disable} className="p-2"><BsSend  className="text-xl"/></button>
       </div>
     </div>
-  );
+    </>);
 };

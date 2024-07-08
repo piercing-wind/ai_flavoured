@@ -4,7 +4,7 @@ import styles from './welcomeContent.module.css'; // Import your CSS module
 
 function AnimationText({classNames}) {
 
-      const texts = useMemo(() => ['PDF-Reader', 'Presentation', 'ImageChat', 'Chat', 'Doc Manager', 'Text to Audio'], []); // Define your texts in an array  
+      const texts = useMemo(() => ['PDF Summarizer', 'AI Presentation', 'Chat with Doc', 'Text to Speech', "AI Images", 'DALL-E 3', 'SDXL'], []); // Define your texts in an array  
       //const texts = ['PDF-Reader', 'Presentation', 'ImageChat', 'Chat', 'Doc Manager', 'Text to Audio']; // Define your texts in an array
       const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -24,7 +24,8 @@ function AnimationText({classNames}) {
         style={{ display: index === currentIndex ? 'inline' : 'none' }}
         
         >
-      {text}</span>
+      {text}
+      </span>
       ))}
     </>
   );

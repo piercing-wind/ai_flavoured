@@ -8,10 +8,10 @@ export const WelcomeContent = () => {
       const classNames2 = cn("text-2xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-5xl font-bold p-6", Styles.gradiantForText)
       return (
             <>            
-            <div className="flex flex-col items-center text-center p-6 lg:p-8 z-10 mt-10 relative" style={{height:'515px'}}>
+            <div className=" flex flex-col items-center text-center p-6 lg:p-8 z-10 relative overflow-hidden">
             <div className='-z-10 absolute'><Animation /></div>
                   {/* <h1 className={cn("text-5xl sm:text-5xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-bold p-6 mt-8", Styles.gradiantForText)} >Welcome to <span className={Styles.glowFont}>Ai Flavoured &nbsp; </span></h1> */}
-                 <div className="object-contain absolute" >
+                 <div className="object-contain" >
                   <h4 className={cn(classNames2,"sm:mt-10 xl:mt-10")}>Discover the Best AI</h4>
                     <div className={`${Styles.animationContainer},'h md:h-16 w-full flex justify-center items-center text-center'`}> 
                       <h4 className={Styles.colorForAnimatedText}>

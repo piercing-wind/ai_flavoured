@@ -3,11 +3,10 @@
 import React, { RefObject, createRef, useEffect, useRef, useState } from "react";
 import { MdFolderZip } from "react-icons/md";
 import { LogoText } from "./logo";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
-import { AiModelSelector } from "@/components/aiModelSelector";
+import { ModeToggle } from "@/components/themeModeChange";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
 import UpscaleButton from "@/components/social.module.css"
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoIosHeart } from "react-icons/io";
@@ -18,9 +17,7 @@ import { BiShareAlt } from "react-icons/bi";
 
 import { UserIcon } from "./userIcon";
 import Share from "./share";
-import Head from "next/head";
 import { Data, uploadImageToS3 } from "@/actions/userPromptImage/uploadImageToS3";
-import { imageGenerator } from "@/actions/huggingface/huggingFace";
 import {  insertUserPromptImage, updateLike } from "@/actions/userPromptImage/userPromptImage";
 import { PulseLoader } from "react-spinners";
 import { v4 as uuidv4 } from 'uuid';
@@ -43,15 +40,12 @@ import {
    TooltipProvider,
    TooltipTrigger,
  } from "@/components/ui/tooltip"
- import {
-   Select,
-   SelectContent,
-   SelectItem,
-   SelectTrigger,
-   SelectValue,
- } from "@/components/ui/select"
+
 import { upscaleImage } from "@/actions/stabilityai/upscaleImage";
 import { RightBar } from "./configRightBarImageSession";
+import { updateImageQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
+import { Pricing } from "./pricing";
+import { ServerUserProfile } from "./header/links/serverUserProfile";
 
 type DataType = {
    id: string;
@@ -76,15 +70,16 @@ export const ImageSessionBar = ({
   params,
   prevUserPromptImages,
   chatName,
+  imageQuota,
 }: {
   user: any;
   params: { slug: string };
   prevUserPromptImages: DataType;
   chatName: string;
+   imageQuota: number;
 }) => {
-  const [theme, setTheme] = useState<boolean>(true); // for backgorund colors
-
-  const [model, setModel] = useState("stable_diffusion");
+  const [remainingImageQuota, setRemaingImageQuota] = useState<number>(imageQuota);
+  const [error, setError] = useState<boolean>(false);
   const [textInputValue, setTextInputValue] = useState("");
   const [isOpen, setIsOpen] = useState('');
   const [like, setLike] = useState(()=>{
@@ -119,6 +114,19 @@ export const ImageSessionBar = ({
   const [clipGuidancePreset, setClipGuidancePreset] = useState<string>("NONE");
   const [stylePreset, setStylePreset] = useState<string>("photographic");
 
+  const [selectedRatio , setSelectedRatio] = useState<{tip : string , width: number, height : number}>({tip : '1024 X 1024', width : 1024, height: 1024});
+  //loader animation
+  const [loading, setLoading] = useState(false);
+  const [upscaling, setUpscaling] = useState(false);
+  const [positions, setPositions] = useState(Array(10).fill({top: '0%', left: '0%'}));
+  
+  const [clickedImageId, setClickedImageId] = useState<string | null>(null);
+  const imageRefs = useRef<Record<string, React.RefObject<HTMLImageElement>>>({});
+  const endRef = useRef<HTMLDivElement>(null);
+
+  const colors = ['bg-pink-600', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-indigo-500', 'bg-orange-500'];
+  const router = useRouter();
+
   useEffect(() => {
   if(upscaleWidth  * upscaleHeight < 262144 || upscaleWidth * upscaleHeight > 4194304){
      console.log("wrrong")
@@ -127,43 +135,44 @@ export const ImageSessionBar = ({
   setErrorUpscale(false)
   }
   
-  },[upscaleWidth, upscaleHeight])
-
-
-  const [selectedRatio , setSelectedRatio] = useState<{tip : string , width: number, height : number}>({tip : '1024 X 1024', width : 1024, height: 1024});
-  //loader animation
-  const [loading, setLoading] = useState(false);
-  const [upscaling, setUpscaling] = useState(false);
-  const [positions, setPositions] = useState(Array(10).fill({top: '0%', left: '0%'}));
-
+  },[upscaleWidth, upscaleHeight])  
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setPositions(positions.map(() => ({top: `${Math.random()*100}%`, left: `${Math.random()*100}%`})));
     }, 1000); // Change positions every 1 second
 
     return () => clearInterval(interval); // Clean up on component unmount
-  }, []);
-
-  const colors = ['bg-pink-600', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-indigo-500', 'bg-orange-500'];
-
-  const router = useRouter();
+  }, [positions]);
  
-  const handleShare = (id: string, cloudUrl : string,e:  React.MouseEvent ) => {
-     e.stopPropagation();
-
-     setImagePath(cloudUrl);
-     setShare(`${webUrl}/share/${id}`);
-     console.log(share);
-  };  
+ const handleShare = (id: string, cloudUrl : string,e:  React.MouseEvent ) => {
+    e.stopPropagation();
+    setImagePath(cloudUrl);
+    setShare(`${webUrl}/share/${id}`);
+    console.log(share);
+ };  
   
 const handleLike = async (id: string, value: boolean | null) => {
    setLike(prevLikes => ({ ...prevLikes, [id]: value })); 
    await updateLike(id, value);
  };
 
-const hanldeUpscaleImage = async (fileName : string, url: string) => {
+const handleUpscaleImage = async (fileName : string, url: string) => {
    setLoading(true);
    setUpscaling(true)
+  
+   if(remainingImageQuota <= samples){
+      toast({
+         variant: "destructive",
+         title: "Insufficient Image Quota",
+         description: `You have reached your image quota limit. Please upgrade your plan to continue upscaling images.`,
+       });
+         setLoading(false)
+         setUpscaling(false)
+         setError(true)
+         return;
+   }
+   setRemaingImageQuota(remainingImageQuota - 1);
    try{
       let value : number;
       if(userSelectedPixelHorW === 'width'){
@@ -207,6 +216,20 @@ const generateImageAndStoreToS3 = async () => {
    setLoadingTempPrompt(textInputValue);
    setTextInputValue('');
    setLoading(true);
+
+   if(user.subscription !== 'unlimited') {
+   setRemaingImageQuota(remainingImageQuota - samples);
+   if(remainingImageQuota <= 0){
+      toast({
+         variant: "destructive",
+         title: "Insufficient Image Quota",
+         description: `You have reached your image quota limit. Please upgrade your plan to continue generating images.`,
+       });
+         setLoading(false)
+         setTextInputValue('')
+         setError(true)
+         return;
+   }}
    try{
     const text2imgData = {
       prompt : textInputValue, 
@@ -256,6 +279,7 @@ const generateImageAndStoreToS3 = async () => {
  };
  const saveToDatabase = async (data: Database , images : Data[]) => {
    try{
+      await updateImageQuota(user.id, remainingImageQuota);
       await insertUserPromptImage(data, images);
    }catch(e){
       const error = e as Error;
@@ -266,10 +290,11 @@ const generateImageAndStoreToS3 = async () => {
        });
    }
  };
+
  const handleDownload = (url : string , fileName : string) => {
    const link = document.createElement('a');
    link.href = url;
-   link.download = fileName ; // Optional: Set the name of the downloaded file
+   link.download = fileName ; 
    document.body.appendChild(link);
    link.click();
    document.body.removeChild(link);
@@ -282,40 +307,30 @@ const generateImageAndStoreToS3 = async () => {
  useEffect(() => {
    function handleClickOutside(event: MouseEvent) {
      if (shareButtonRef.current && shareButtonRef.current.contains(event.target as Node)) {
-       // This is a click inside the share button, ignore it
-       console.log(share)
        return;
      }
      if (shareRef.current && !shareRef.current.contains(event.target as Node)) {
-       // This is a click outside the share component, close it
-       console.log("outside")
        setShare("");
      }
    }
  
-   // Bind the event listener
    document.addEventListener("mousedown", handleClickOutside);
    return () => {
-     // Unbind the event listener on clean up
      document.removeEventListener("mousedown", handleClickOutside);
    };
  }, [shareRef, shareButtonRef]);
 
-const [clickedImageId, setClickedImageId] = useState<string | null>(null);
-const imageRefs = useRef<Record<string, React.RefObject<HTMLImageElement>>>({});
 
-//   console.log(imageRefs)
-//   console.log(clickedImageIndex)
-  useEffect(() => {
-   prevUserData.forEach((data) => {
-     data.images.forEach((image) => {
-       if (!imageRefs.current[image.id]) {
-         imageRefs.current[image.id] = React.createRef();
-       }
-     });
-   });
- }, [prevUserData]);
- 
+useEffect(() => {
+  prevUserData.forEach((data) => {
+    data.images.forEach((image) => {
+      if (!imageRefs.current[image.id]) {
+        imageRefs.current[image.id] = React.createRef();
+      }
+    });
+  });
+}, [prevUserData]);
+
  useEffect(() => {
    if (isOpen && clickedImageId !== null && imageRefs.current[clickedImageId]?.current) {
      const imageElement = imageRefs.current[clickedImageId].current as HTMLImageElement;
@@ -328,10 +343,7 @@ const imageRefs = useRef<Record<string, React.RefObject<HTMLImageElement>>>({});
  }, [isOpen, clickedImageId]);
 
  
-  const handleThemeChnage = (theme: boolean) => {
-    setTheme(theme);
-  };
-const endRef = useRef<HTMLDivElement>(null);
+
 useEffect(() => {
    const end = endRef.current;
    if (end) {
@@ -339,14 +351,7 @@ useEffect(() => {
    }
 }, [prevUserData, loading]); 
 
-  useEffect(() => {
-    const htmlClassList = document.documentElement.classList;
-    setTheme(htmlClassList.contains("light"));
-    if (typeof window !== 'undefined') {
-      const { protocol, host } = window.location;
-      setWebUrl(`${protocol}//${host}`);
-    }
-  }, []);
+
   useEffect(() => {
    const handleKeyDown = (event: KeyboardEvent) => {
        if (event.key === 'Escape') {
@@ -361,10 +366,11 @@ useEffect(() => {
        window.removeEventListener('keydown', handleKeyDown);
    };
 }, []);
-const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-83dc-03d5a28a5495'
+
   return (
     <>
     <Toaster />
+    {error && <Pricing setPricing={setError}/>}
     {isOpen !== "" && (
       <div 
       className="z-50 backdrop-blur-md"
@@ -379,29 +385,22 @@ const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-
         justifyContent: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
       }} onClick={() => setIsOpen("")}>
-        <img  src={isOpen} alt="a cat" style={{maxWidth: '100%', maxHeight: '100%'}}  onContextMenu={(e) => e.preventDefault()}/>
+        <img  src={isOpen} alt="a image" style={{maxWidth: '100%', maxHeight: '100%'}}  onContextMenu={(e) => e.preventDefault()}/>
       </div>
     )}
       <main className="relative w-full flex-col flex h-full flex-grow">
         <div className="relative flex flex-wrap p-3 items-center justify-between shadow-md">
           <div className="rounded-r-sm flex items-center text-nowrap">
-             <b>{model === "stable_diffusion" ? <p className="flex space-x-2">Stable Diffusion &nbsp; &nbsp; <FaHatWizard /></p> : "DALLE-3"} </b> &nbsp;
+             <b><p className="flex space-x-2">Stable Diffusion &nbsp; &nbsp; <FaHatWizard /></p> </b> &nbsp;
           </div>
           <div className="flex flex-wrap items-center justify-center">
 
-            <div className="mx-2">
-              <ThemeSwitch detectTheme={handleThemeChnage} />
-            </div>
             <div className=" flex items-center ml-4 rounded-md">
-            <Select onValueChange={(v)=>{setModel(v)}}>
-              <SelectTrigger className="w-[180px] h-7 ring-0 focus:outline-none focus:ring-0 focus:border-none dark:bg-inherit" >
-                <SelectValue placeholder={'Stable Diffusion'} />
-              </SelectTrigger>
-              <SelectContent className="dark:bg-inherit backdrop-blur-sm">
-                <SelectItem value="stable_diffusion">Stable Diffusion</SelectItem>
-                <SelectItem value="dalle-3">DALLE-3</SelectItem>
-              </SelectContent>
-            </Select>
+            <ServerUserProfile user={user} />
+           
+            </div>
+            <div className="mx-2">
+              <ModeToggle />
             </div>
         </div>
       </div>
@@ -420,7 +419,7 @@ const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-
                   {promptAndImage.prompt && 
                   <div className="flex space-x-4 p-2">
                      <UserIcon userImage={user?.image}/>
-                     <div className=" p-2 flex items-center justify-center rounded-md dark:border-neutral-700 shadow-sm shadow-neutral-700">
+                     <div className={`p-2 w-[70%] rounded-md break-words dark:border-neutral-700 shadow-sm shadow-neutral-700 `}>
                         {promptAndImage.prompt}
                      </div>
                   </div>
@@ -449,8 +448,8 @@ const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-
                            {showUpscale === image.id && image.upscaled !== true &&
                            <div className="absolute top-2 left-4">
                               <Popover>
-                                <PopoverTrigger>
-                                 <button className={ ` text-center ${UpscaleButton.upscaleButton} transition duration-500 ease-in-out ${showUpscale ? ' opacity-100' : ' opacity-0'}`} > Upscale</button>
+                                <PopoverTrigger className={ ` text-center ${UpscaleButton.upscaleButton} transition duration-500 ease-in-out ${showUpscale ? ' opacity-100' : ' opacity-0'}`} >
+                                    Upscale
                                 </PopoverTrigger>
                                 <PopoverContent>
                                 <div className="grid gap-4">
@@ -511,7 +510,7 @@ const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-
                                    </div>
                                    </RadioGroup>
                                  <div className="grid grid-cols-3 my-4 w-full relative">
-                                    <Button onClick={()=>hanldeUpscaleImage(image.fileName, image.url)} disabled={loading} variant={"outline"} className="absolute right-2 h-6 hover:scale-105">Upscale</Button>
+                                    <Button onClick={()=>handleUpscaleImage(image.fileName, image.url)} disabled={loading} variant={"outline"} className="absolute right-2 h-6 hover:scale-105">Upscale</Button>
                                  </div>
                                  </div>
                                </div>
@@ -540,7 +539,7 @@ const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-
                   {upscaling && 
                   <div className="flex space-x-4 p-2">
                      <UserIcon userImage={user?.image}/>
-                     <div className=" p-2 flex items-center justify-center rounded-md dark:border-neutral-700 shadow-sm shadow-neutral-700">
+                     <div className={`p-2 w-[70%] rounded-md break-words dark:border-neutral-700 shadow-sm shadow-neutral-700 `}>
                         {loadingTempPrompt}
                      </div>
                   </div>
@@ -583,13 +582,14 @@ const temp ='https://ddjqb6h6sx7rcybkocmcuf3slu.srv.us/share/f95634ab-a391-43ad-
               setStylePreset={setStylePreset} 
             />
           </div>
-           <div className=" w-[90%] rounded-md shadow-sm shadow-neutral-700 p-2 flex bottom-0 mb-4 mt-1 mx-4">
+           <div className=" w-[90%]  max-h-48 max-w-[90%] rounded-md shadow-sm shadow-neutral-700 p-2 flex bottom-0 mb-4 mt-1 mx-4">
             <textarea 
               className=" h-8 w-full bg-transparent rounded-md focus:ring-0 focus:outline-none overflow-y-auto"
               placeholder="A strong, descriptive prompt that clearly defines elements, colors, and subjects will lead to better results"
               value={textInputValue}
               style={{
                  // writingMode: "horizontal-tb",
+                 maxWidth : '90%',
                  direction: "ltr",
               }}
               onChange={(e) => setTextInputValue(e.target.value)}

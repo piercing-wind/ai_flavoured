@@ -1,0 +1,37 @@
+@keyframes glow {
+   0% {
+     box-shadow: 0 0 2px #ff1493, 0 0 4px #ff1493;
+   }
+   100% {
+     box-shadow: 0 0 3px #ff1493, 0 0 5px #ff1493;
+   }
+ }
+ 
+ .glow_pink {
+   animation: glow 2s ease-in-out infinite alternate;
+ }
+
+ .slash_glow_pink {
+   box-shadow: 0 0 5px #ff1493, 0 0 10px #ff1493;
+ }
+
+ .gradient_heading {
+   background: linear-gradient(to right, #ff5858 ,#c500d3);
+   text-shadow: 1px 1px 2px#f857a6;
+   border: 1px solid white;
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+}
+
+.whiteGlow {
+   position: relative;
+   font-family: 'Montserrat', Arial, sans-serif;
+   font-weight: 600;
+   color: #fff;
+   letter-spacing: 0.02em;
+   text-transform: uppercase;
+   text-shadow: 0 0 0.15em #f857a6;
+   user-select: none;
+   filter: blur(0.007em);
+}

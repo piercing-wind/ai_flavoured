@@ -325,3 +325,14 @@ Dont include any prefix or suffix like "json" etc. only return the array.
 You do not need to add any other extra words like "'''json ''''", output must simply start with [ and end with ] containing its objects data as it is do not modify futher if keys containing arrays leave it as it is.
 remove unnecessary keys which are not listed in the interface. 
 `   
+
+export const promptForTextToPresentation = `
+You will be given a topic. from which you have to generate detailed explanation of the topic.
+you must include every important informations. You explanation should be detailed and informative in a way that a presentation pptx can ceated.
+{audience} is the audience for which you have to create the data.
+this is the type of wording you use you can ignore it.
+{wording}.
+here is the topic you have to explain:
+{userPrompt}
+you output length should be between 10000 to 12000 words.
+`

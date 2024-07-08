@@ -11,97 +11,98 @@ export type Theme = {
   }
 export type DisplayTheme = Theme[];
 
+const cloudFrontUrl = process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_URL;
 export const displayThemes : DisplayTheme = [
-    {
-      name : "Scientific Findings",
-      function : 'scientificBluePresentationTheme',
-      pathSvg : "/displayThemes/scientific_findings_presentation.svg",
-      pathPdf : "/displayThemes/scientific_findings_presentation.pdf"
-    },
-    {
-      name : 'Powerpoint party',
-      function : 'ppPartyThemePresentation',
-      pathSvg : "/displayThemes/ppPartyTheme.svg",
-      pathPdf : "/displayThemes/ppPartyTheme.pdf"
-    },
-    {
-      name : 'Minimalist Sale Pitch',
-      function : 'minimalistSalePitchThemePresentation',
-      pathSvg : "/displayThemes/minimalistSalePitchTheme.svg",
-      pathPdf : "/displayThemes/minimalistSalePitchTheme.pdf"
-    },
-    {
-      name : "Biome Theme",
-      function : 'biomePresentationTheme',
-      pathSvg : "/displayThemes/biomePresentationTheme.svg",
-      pathPdf : "/displayThemes/biomePresentationTheme.pdf"
-    },
-    {
-      name : "Dark Theme Moon",
-      function : 'darkThemeMoonPresentation',
-      pathSvg : "/displayThemes/darkThemeMoonPresentation.svg",
-      pathPdf : '/displayThemes/darkThemeMoonPeresentation.pdf'
-    },
-    {
-      name: 'Facet Theme',
-      function : 'facetThemePresentation',
-      pathSvg : '/displayThemes/facetThemePresentation.svg',
-      pathPdf : '/displayThemes/facetThemePresentation.pdf',
-      variant : {
-        green : '/facetTheme/facetGreen.svg',
-        blue : '/facetTheme/facetBlue.svg',
-        pink : '/facetTheme/facetPink.svg'
-      }
-    },
+   {
+     name : "Scientific Findings",
+     function : 'scientificBluePresentationTheme',
+     pathSvg : cloudFrontUrl + "/public/displayThemes/scientific_findings_presentation.svg",
+     pathPdf : cloudFrontUrl + "/public/displayThemes/scientific_findings_presentation.pdf"
+   },
+   {
+     name : 'Powerpoint party',
+     function : 'ppPartyThemePresentation',
+     pathSvg : cloudFrontUrl + "/public/displayThemes/ppPartyTheme.svg",
+     pathPdf : cloudFrontUrl + "/public/displayThemes/ppPartyTheme.pdf"
+   },
+   {
+     name : 'Minimalist Sale Pitch',
+     function : 'minimalistSalePitchThemePresentation',
+     pathSvg : cloudFrontUrl + "/public/displayThemes/minimalistSalePitchTheme.svg",
+     pathPdf : cloudFrontUrl + "/public/displayThemes/minimalistSalePitchTheme.pdf"
+   },
+   {
+     name : "Biome Theme",
+     function : 'biomePresentationTheme',
+     pathSvg : cloudFrontUrl + "/public/displayThemes/biomePresentationTheme.svg",
+     pathPdf : cloudFrontUrl + "/public/displayThemes/biomePresentationTheme.pdf"
+   },
+   {
+     name : "Dark Theme Moon",
+     function : 'darkThemeMoonPresentation',
+     pathSvg : cloudFrontUrl + "/public/displayThemes/darkThemeMoonPresentation.svg",
+     pathPdf : cloudFrontUrl + "/public/displayThemes/darkThemeMoonPresentation.pdf"
+   },
+   {
+     name: 'Facet Theme',
+     function : 'facetThemePresentation',
+     pathSvg : cloudFrontUrl + "/public/displayThemes/facetThemePresentation.svg",
+     pathPdf : cloudFrontUrl + "/public/displayThemes/facetThemePresentation.pdf",
+     variant : {
+      green : cloudFrontUrl + "/public/facetTheme/facetGreen.svg",
+      blue : cloudFrontUrl + "/public/facetTheme/facetBlue.svg",
+      pink : cloudFrontUrl + "/public/facetTheme/facetPink.svg"
+     }
+   },
   ]
 
-export const displayThemes1 : DisplayTheme=[
+export const displayThemes1: DisplayTheme = [
    {
-      name : "Dark Theme Moon",
-      function : 'darkThemeMoonPresentation',
-      pathSvg : "/displayThemes/darkThemeMoonPresentation.svg",
-      pathPdf : '/displayThemes/darkThemeMoonPresentation.pdf'
-    },
+      name: "Dark Theme Moon",
+      function: 'darkThemeMoonPresentation',
+      pathSvg: cloudFrontUrl + "/public/displayThemes/darkThemeMoonPresentation.svg",
+      pathPdf: cloudFrontUrl + "/public/displayThemes/darkThemeMoonPresentation.pdf"
+   },
    {
-      name : 'Powerpoint party',
-      function : 'ppPartyThemePresentation',
-      pathSvg : "/displayThemes/ppPartyTheme.svg",
-      pathPdf : "/displayThemes/ppPartyTheme.pdf"
-    },
+      name: 'Powerpoint party',
+      function: 'ppPartyThemePresentation',
+      pathSvg: cloudFrontUrl + "/public/displayThemes/ppPartyTheme.svg",
+      pathPdf: cloudFrontUrl + "/public/displayThemes/ppPartyTheme.pdf"
+   },
    {
       name: 'Facet Theme',
-      function : 'facetThemePresentation',
-      pathSvg : '/displayThemes/facetThemePresentation.svg',
-      pathPdf : '/displayThemes/facetThemePresentation.pdf',
-      variant : {
-        green : '/facetTheme/facetGreen.svg',
-        blue : '/facetTheme/facetBlue.svg',
-        pink : '/facetTheme/facetPink.svg'
+      function: 'facetThemePresentation',
+      pathSvg: cloudFrontUrl + "/public/displayThemes/facetThemePresentation.svg",
+      pathPdf: cloudFrontUrl + "/public/displayThemes/facetThemePresentation.pdf",
+      variant: {
+         green: cloudFrontUrl + "/public/facetTheme/facetGreen.svg",
+         blue: cloudFrontUrl + "/public/facetTheme/facetBlue.svg",
+         pink: cloudFrontUrl + "/public/facetTheme/facetPink.svg"
       }
-    },
-]
-export const displayThemes2 : DisplayTheme=[
+   },
+];
+export const displayThemes2: DisplayTheme = [
    {
-      name : 'Minimalist Sale Pitch',
-      function : 'minimalistSalePitchThemePresentation',
-      pathSvg : "/displayThemes/minimalistSalePitchTheme.svg",
-      pathPdf : "/displayThemes/minimalistSalePitchTheme.pdf"
-    },
-]
-export const displayThemes3 : DisplayTheme=[
+      name: 'Minimalist Sale Pitch',
+      function: 'minimalistSalePitchThemePresentation',
+      pathSvg: cloudFrontUrl + "/public/displayThemes/minimalistSalePitchTheme.svg",
+      pathPdf: cloudFrontUrl + "/public/displayThemes/minimalistSalePitchTheme.pdf"
+   },
+];
+export const displayThemes3: DisplayTheme = [
    {
-      name : "Biome Theme",
-      function : 'biomePresentationTheme',
-      pathSvg : "/displayThemes/biomePresentationTheme.svg",
-      pathPdf : "/displayThemes/biomePresentationTheme.pdf"
-    },
-    {
-      name : "Scientific Findings",
-      function : 'scientificBluePresentationTheme',
-      pathSvg : "/displayThemes/scientific_findings_presentation.svg",
-      pathPdf : "/displayThemes/scientific_findings_presentation.pdf"
-    },
-]
+      name: "Biome Theme",
+      function: 'biomePresentationTheme',
+      pathSvg: cloudFrontUrl + "/public/displayThemes/biomePresentationTheme.svg",
+      pathPdf: cloudFrontUrl + "/public/displayThemes/biomePresentationTheme.pdf"
+   },
+   {
+      name: "Scientific Findings",
+      function: 'scientificBluePresentationTheme',
+      pathSvg: cloudFrontUrl + "/public/displayThemes/scientific_findings_presentation.svg",
+      pathPdf: cloudFrontUrl + "/public/displayThemes/scientific_findings_presentation.pdf"
+   },
+];
 
 
 //   const themeFunctionMapping = {

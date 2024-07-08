@@ -9,8 +9,7 @@ import { FileList } from "@/components/fileList";
 import { Conversation } from "@/components/conversation";
 import { useEffect, useState } from "react";
 import { MdFolderZip } from "react-icons/md";
-import { LogoText } from "./logo";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
+import { ModeToggle } from "@/components/themeModeChange";
 import { Button } from "@/components/button";
 import { AiModelSelector } from "@/components/aiModelSelector";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,12 @@ import { DrawerForPPTXConfiguration } from "./drawerForPPTXConfiguration";
 import { generatePresentaionAndStore } from "@/aiflavoured/presentation/generatePresentaionAndStore";
 import { presentationSchema } from "@/schemas";
 import * as z from "zod"
-
+import { updateAiPresentationQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
+import { useToast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
+import { Pricing } from "./pricing";
+import { Quota } from "@/app/(x)/chat/[slug]/page";
+import { ServerUserProfile } from "./header/links/serverUserProfile";
 
 export interface FileObject {
   id: number;
@@ -33,35 +37,24 @@ export interface FileObject {
   generator : string;
 }
 
-type UploaData = {
-  awsS3: {
-    url: string;
-    data: {
-        fileKey: string;
-        fileName: string;
-        userId: string;
-        url: string;
-        session: string;
-        fileType: string;
-    };
-};
-}|{
-  failure: string;
-}
 
 export const MainBar = ({
   user,
   params,
   userFiles,
   chatName,
+  quota
 }: {
   user: any;
   params: { slug: string };
   userFiles: FileObject[];
   chatName: string;
+  quota: Quota;
 }) => {
+  const [remainingQuota, setRemainingQuota] = useState<number>(quota.aipresentation);
+  const [pricing, setPricing] = useState<boolean>(false);
+  const {toast} = useToast();
   const [pdf, setPdf] = useState("");
-  const [theme, setTheme] = useState<boolean>(true);
   const [openFileManager, setFileManager] = useState<boolean>(false);
   const [model, setModel] = useState("gpt-3.5-turbo-0125");
   const [openPPTXConfig, setOpenPPTXConfig] = useState<boolean>(false);
@@ -71,19 +64,20 @@ export const MainBar = ({
  
 
   useEffect(() => {
-    
-  //todo create a quota database to by bass this condition
-    if (user.subscription === "free" && model !== 'gpt-3.5-turbo-0125') {
-      router.push(`/pricing`);
-    }
-  }, [model]);
+   if (user.subscription === "free" && model !== 'gpt-3.5-turbo-0125') {
+      setPricing(true);
+      setModel('gpt-3.5-turbo-0125');
+      toast({
+         variant: "destructive",
+         title: "You need to upgrade to Premium to use this model",
+         description: "Please upgrade to Premium to use this model",
+      })
+   }
+  }, [model, user.subscription, toast]);
 
 
   const handleSelectChange = (selectedUrl: string) => {
     setPdf(selectedUrl);
-  };
-  const handleThemeChnage = (theme: boolean) => {
-    setTheme(theme);
   };
   const setWarningOn = () => {
     if(userFiles.length === 1){
@@ -115,6 +109,7 @@ export const MainBar = ({
     themeFunction : string,
     textInputValue :  string
   ) => {
+   try{
     const waterMark = user.subscription === "free" ? true : false;
     const data : z.infer<typeof presentationSchema> = {
       selectedFiles,
@@ -130,18 +125,31 @@ export const MainBar = ({
       themeFunction: themeFunction
 
     }
-    console.log(data);
+    if(remainingQuota <= 0){setPricing(true); throw new Error("Presentation Can't be created")}
+    if(slides > 15 && user.subscription === 'free' ) {setPricing(true); throw new Error("Slides can't be more than 15 on free plan.");}
+    if(imageSearch !== "Google Search" && user.subscription === 'free') {setPricing(true); throw new Error("Only Google Search is available in free plan");}
+
     const presentationUrl = await generatePresentaionAndStore(data);  
     if(presentationUrl){
-      // router.push(presentationUrl);
-    }
+      const newQuota = remainingQuota - 1;
+      setRemainingQuota(newQuota);
+      await updateAiPresentationQuota(user.id, newQuota);
+      router.push(presentationUrl);
+    } 
+   }catch(e){ 
+      const error = e as Error;
+      toast({
+         variant: "destructive",
+         title: "You have reached your Quota limit :(",
+         description: `${error.message}, Upgrade your plan to create more presentations`,
+      }) 
+   }
   }
-  useEffect(() => {
-    const htmlClassList = document.documentElement.classList;
-    setTheme(htmlClassList.contains("light"));
-  }, []);
+
   return (
     <>
+    <Toaster />
+    {pricing && <Pricing setPricing={setPricing} />}
       <main className="relative w-full flex-col flex h-full ">
         {openFileManager && (
           <MultipleFilesPPTXwarn
@@ -167,13 +175,15 @@ export const MainBar = ({
                 Create Presentation
               </Button>
             </div>
+            <ServerUserProfile user={user} />
             <div className="mx-2">
-              <ThemeSwitch detectTheme={handleThemeChnage} />
+              <ModeToggle />
             </div>
             <div className=" flex items-center ml-4 rounded-md">
               <AiModelSelector
                 model={model}
                 setModel={setModel}
+                subscription={user.subscription}
                 />
             </div>
         </div>
@@ -199,12 +209,12 @@ export const MainBar = ({
             <ResizablePanel className="flex-1 px-2 " defaultSize={1}>
               <div className="converstaion flex rounded-sm h-[calc(100vh-4.5rem)]">
                 <Conversation
-                  isLightMode={theme}
                   chatSession={params}
                   user={user}
                   aiModel={model}
                   userFiles={userFiles}
                   api = "chat"
+                  chatModelQuota={quota}
                 />
               </div>
             </ResizablePanel>

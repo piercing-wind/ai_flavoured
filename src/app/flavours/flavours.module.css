@@ -1,0 +1,17 @@
+.neonDark {
+   color: #ffffff;
+   text-shadow:
+     0 0 5px #fff,
+     0 0 10px #fff,
+     0 0 20px #ff008c;
+ }
+
+.text {
+   background: linear-gradient(to right, #ffffff, #000000);
+   -webkit-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+ }
+ .custom_shadow {
+   box-shadow: 0 0 10px #3f3d3d;
+ }

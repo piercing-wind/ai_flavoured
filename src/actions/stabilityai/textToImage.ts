@@ -96,13 +96,12 @@ export const textToimage = async (data :{
       }
 
  
-    console.log("Writing image to disk ...")
     const responseJSON = data as GenerationResponse
 
     const imageData : Data[] = await Promise.all(responseJSON.artifacts.map(async(image, index) => {
-      const imageName = `${prompt.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, "_")}.png`  
+      const imageName = `${prompt.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, "_")}${index}.png`  
       const buffer = Buffer.from(image.base64, 'base64')
-      const uploadUrl = await uploadImageToS3(imageName, 'image/png', buffer.byteLength,userId);
+      const uploadUrl = await uploadImageToS3(imageName, 'image/png', buffer.byteLength,userId, 'sdxl');
       const res = await fetch(uploadUrl.awsS3.url,{
          method: 'PUT',
          body: buffer,
@@ -122,7 +121,8 @@ export const textToimage = async (data :{
          fileType : uploadUrl.awsS3.data.fileType,
          generator : uploadUrl.awsS3.data.generator,
          like : uploadUrl.awsS3.data.like,
-         upscaled : uploadUrl.awsS3.data.upscaled
+         upscaled : uploadUrl.awsS3.data.upscaled,
+         imageModel : uploadUrl.awsS3.data.imageModel
       };
       return cloudData;
     }))

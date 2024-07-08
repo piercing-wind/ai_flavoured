@@ -4,7 +4,7 @@ import { getUserById } from "./db/users";
 import { db } from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getTwoFAConfirmationByUserId } from "./data/twoFAConfirmation";
-import { getSubscriptionQuota } from "./actions/subscriptionQuota";
+import { getSubscriptionQuota } from "./actions/subscriptionQuota/subscriptionQuota";
 
 export const {
   handlers: { GET, POST },
@@ -28,7 +28,7 @@ export const {
    ...PrismaAdapter(db),
    async createUser(profile) {
      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-     return db.user.create({
+     const newUser = await db.user.create({
        data: {
          email: profile.email,
          name: profile.name,
@@ -36,6 +36,15 @@ export const {
          timeZone: timeZone,  // Storing the timezone
        },
      });
+     const subscriptionQuota = await getSubscriptionQuota(newUser.id);
+     if(subscriptionQuota.error){
+     await db.subscriptionQuota.create({
+       data: {
+         userId: newUser.id,
+       },
+     });
+    }
+    return newUser;
    },
  },
   callbacks: {
@@ -64,10 +73,14 @@ export const {
           return Error(e.message);  
         }
       }
-
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user ,trigger, session }) {
+
+      if(trigger === "update"){
+         token.name = session.name;
+      }
+
       // console.log("User : ", user);
       // console.log("Token : ", token);
       if (!token.sub) return token; // if no user, return empty token
@@ -75,15 +88,6 @@ export const {
 
       //initializing the Base Quota for the new user
       if(user){
-        const subscriptionQuota = await getSubscriptionQuota(user.id);
-        if(subscriptionQuota.error){
-        await db.subscriptionQuota.create({
-          data: {
-            userId: user.id,
-          },
-        });
-      }
-      
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       token.timeZone = timeZone;
       }
@@ -96,7 +100,8 @@ export const {
       // console.log("JWT : ", token);
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, trigger }) {
+
       if (session?.user) {
         session.user.role = token.role;
         session.user.subscription = token.subscription;

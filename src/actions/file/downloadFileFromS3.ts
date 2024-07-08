@@ -1,28 +1,15 @@
-import { awsS3Config } from "@/aws/awsS3config";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { Readable } from "stream";
-
-
 export const downloadFileFromS3 = async (fileKey: string) => {
   try {
-    const client = await awsS3Config();
+    const url = `${process.env.AWS_CLOUDFRONT_URL}/${fileKey}`;
 
-    const command = new GetObjectCommand({
-      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
-      Key: fileKey,
-    });
-
-    const response = await client.send(command);
-    if (!response || !response.Body) {
+    const response = await fetch(url);
+    if (!response.ok) {
       throw new Error("File not found");
-    } 
-    const chunks = [];
-    for await (const chunk of response.Body as Readable) {
-      chunks.push(chunk);
     }
-    const buffer = Buffer.concat(chunks);
-  
-    return buffer;
+
+    const buffer = await response.arrayBuffer();
+
+    return Buffer.from(buffer);
   } catch (error) {
     console.error("Error downloading file:", error);
     throw error;

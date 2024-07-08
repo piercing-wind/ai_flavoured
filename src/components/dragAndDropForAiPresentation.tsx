@@ -7,7 +7,6 @@ import { BarLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 
 import { createChatSession } from "@/actions/chat/chatSession";
-import { Session } from "@/actions/userSession";  
 import { FileSelectorWarning } from "@/components/fileSelectorWarning";
 import { Button } from "./ui/button";
 import { HiOutlineDocumentText } from "react-icons/hi2";
@@ -23,11 +22,14 @@ import { generatePresentaionAndStore } from "@/aiflavoured/presentation/generate
 import { presentationSchema } from "@/schemas";
 import * as z from "zod"
 import { UserFile } from "@/actions/file/awsS3";
-import { getAiPresentationQuota } from "@/actions/subscriptionQuota";
+import { getAiPresentationQuota, updateAiPresentationQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
+import { useToast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
 import { Pricing } from "./pricing";
 
-export const DragAndDropForAiPresentation = () => {
+export const DragAndDropForAiPresentation = ({presentationQuota, userSession, isSubscribed}:{presentationQuota:number, userSession : any,isSubscribed : string}) => {
   const [fileLengthError, setFileLengthError] = useState(false);
+  const [remainingQuota, setRemainingQuota] = useState(presentationQuota);
   const [isDisabled, setDisabled] = useState(false);
   const router = useRouter();
   const [error, setError] = useState("");
@@ -35,13 +37,12 @@ export const DragAndDropForAiPresentation = () => {
   const [loader, setloader] = useState(false);
   const [openFileManager, setOpenFileManager] = useState(true);
   const [inputFiles, setInputFiles] = useState<File[]>([]);
-  const [userSession, setUserSession] = useState<any>(null);
-  const [isSubscribed, setSubscribed] = useState("free");
   const fileInput = useRef<HTMLInputElement>(null);
   const [validating, setValidating] = useState(false);
   const [chatDisable, setChatDisable] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [model, setModel] = useState("gpt-4o");
+  const { toast } = useToast();
   
   
   const [textInputValue, setTextInputValue] = useState('');
@@ -51,12 +52,20 @@ export const DragAndDropForAiPresentation = () => {
   const [imageSearch, setImageSearch] = useState('Google Search');
   const [themeFunction, setThemeFunction] = useState('ppPartyThemePresentation');
   const [variant , setVariant] = useState('green')
-  const [pricing , setPricing ] = useState(false)
+  const [pricing , setPricing ] = useState<boolean>(false)
 
-  //todo create a quota database to by bass this condition
-  if(model === "gpt-4" && isSubscribed === "free") {
-    router.push('/pricing')
-  }
+  //todo create  to by bass this condition
+  useEffect(() => {
+   if (isSubscribed === "free" && model !== 'gpt-4o') {
+      setPricing(true);
+      setModel('gpt-4o');
+      toast({
+         variant: "destructive",
+         title: "You need to upgrade to Premium to use this model",
+         description: "Please upgrade to Premium to use this model",
+      })
+   }
+  }, [model, isSubscribed]);
 
   function removeExtraFiles() {
     setInputFiles((prevFiles) => prevFiles.slice(0, 2));
@@ -99,20 +108,6 @@ export const DragAndDropForAiPresentation = () => {
   };
   
   useEffect(() => {
-    const fetchSession = async () => {
-      const data = await Session();
-      if ('session' in data) {
-        const user : any = data.session;
-        setUserSession(user);
-        setSubscribed(user.subscription);
-        // const model = await getUserModel(user.id);
-      }
-    };
-  
-    fetchSession();
-  }, []);
-
-  useEffect(() => {
     const updateFileLength = () => {
       if (userSession?.subscription === "free" && inputFiles.length >= 2) {
         setDisabled(true);
@@ -129,10 +124,18 @@ export const DragAndDropForAiPresentation = () => {
     if (userSession && userSession?.subscription !== null) {
       updateFileLength();
     }
-  }, [inputFiles]);
+  }, [inputFiles, userSession]);
   
 
   const handleFile = async (e : any, fromDrop = false) => {
+   if(userSession === null){
+      router.push("/login?callbackUrl=/aipresentation");
+      return;
+   }
+   if(remainingQuota <= 0 ){
+      throw { message :"You have reached the limit of presentation generation" }
+    }
+   try{
     e.preventDefault();
     if (fromDrop) {
       e.stopPropagation();
@@ -140,21 +143,22 @@ export const DragAndDropForAiPresentation = () => {
   
     if (userSession === null) {
       console.log("No user found");
-      return;
+      throw { message: "No user found" };
     }
 
     const file = (fromDrop ? e.dataTransfer : e.target).files[0];
     if (!file) {
-      console.log("No file selected");
-      return;
+      throw { message: "No file selected" };
     }
   
-  
+    //have to make sure that the user can only upload 1 files at once
+    //we will update this in the future to allow multiple files
+
     setInputFiles([file]);
 
     if (fileLengthError) {
       setError(`You can only upload one file at once`);
-      return;
+      throw { message: "You can only upload one file at once" };
     }
     setOpenFileManager(true);
     setDisabled(true);
@@ -162,7 +166,7 @@ export const DragAndDropForAiPresentation = () => {
     setChatDisable(true);
     const fileValidation = await filesPageLengthCheck([file]);
   
-    if (fileValidation[0].pages > 30 && isSubscribed === "free") {
+    if (fileValidation[0].pages > 100 && isSubscribed === "free") {
       setError(
         `The ${fileValidation[0].fileName} have ${fileValidation[0].pages} pages, You can only upload files with less than 50 pages. Please buy a plan for more!`
       );
@@ -171,7 +175,7 @@ export const DragAndDropForAiPresentation = () => {
       }
       setDisabled(true);
       setChatDisable(true);
-      return;
+      throw {message : `The ${fileValidation[0].fileName} have ${fileValidation[0].pages} pages, You can only upload files with less than 50 pages. Please buy a plan for more!`};
     }
   
     setChatDisable(false);
@@ -179,6 +183,14 @@ export const DragAndDropForAiPresentation = () => {
     if (!fromDrop) {
       e.target.value = null;
     }
+   }catch(e){
+      const error = e as { message: string };
+      toast({
+         variant: "destructive",
+         title: "File Upload Error",
+         description: `${error.message} : Please try again`,
+       });
+   }
   };
 
   const handleDeleteFile = async (index : number) => {
@@ -196,21 +208,20 @@ export const DragAndDropForAiPresentation = () => {
     }
     setValidating(false);
   };
-
-
   const processFiles = async (singleFiles : any) => {
-    try{
-      const presenationQuota = await getAiPresentationQuota(userSession.id);
-      if(presenationQuota <= 0){
-        console.log("You have reached the limit of presentation generation")
-        return
+   console.log(userSession)
+   if(userSession === null){
+      router.push("/login?callbackUrl=/aipresentation");
+      return;
+   }
+     if(remainingQuota <= 0 ){
+        throw { message :"You have reached the limit of presentation generation" }
       }
-    }catch(e){console.log(e)}
-
-    setloader(true);
-    setError("");
-    setSuccess("");
-
+      if(slides > 15 && isSubscribed === 'free' ){setPricing(true); return;}
+      if(imageSearch !== "Google Search" && isSubscribed === "free"){ setPricing(true); return;}
+      setloader(true);
+      setError("");
+      setSuccess("");
     const files = inputFiles.length > 0 ? inputFiles : singleFiles;
     const uploadedFiles : UserFile[] = [];
     const fileName = files.length > 1 ? "new folder 1" : files[0].name;
@@ -261,7 +272,7 @@ export const DragAndDropForAiPresentation = () => {
         selectedFiles : uploadedFiles, 
         textInputValue, 
         slides, 
-        wordsAmount, 
+        wordsAmount,  
         audience, 
         imageSearch, 
         themeFunction, 
@@ -272,34 +283,51 @@ export const DragAndDropForAiPresentation = () => {
 
       const response = await generatePresentaionAndStore(data, presentationId);  
        setloader(false);
+       const newQuota = presentationQuota - 1;
+       setRemainingQuota(newQuota);
        setRedirect(true);
        setSuccess("File upload successfull");
+       await updateAiPresentationQuota(user.id, newQuota);
        router.push(response!);
   
     } catch (e) {
-      console.log(e);
+      const error = e as any;
+      setloader(false);
+      setError("Failed to upload file");  
+      toast({
+         variant: "destructive",
+         title: "File Upload Error",
+         description: `Failed to upload file ${error.message}`,
+         });
     }
   };
   const handleClickFromButton = () => {
+   if(userSession === null){
+      router.push("/login?callbackUrl=/aipresentation");
+      return;
+   }
     if(fileInput.current){
       fileInput.current.click();
     }
   };
   return (
+   <>
+   <Toaster />
     <div className=" text-center w-full flex items-center justify-center flex-col">
-      {/* <Pricing  setPricing={setPricing}/> */}
+      {pricing && <Pricing  setPricing={setPricing}/>}
       {fileLengthError && (
         <FileSelectorWarning
           file={inputFiles.length}
           selectAgain={emptyFiles}
+          setPricing={setPricing}
           uploadFirstTwo={removeExtraFiles}
           setFileLengthError={setFileLengthError}
         />
       )}
       {redirect && <Redirecting />}
 
-      <div className="p-2 h-auto flex">
-        <div className=" w-full h-auto flex flex-col justify-center border border-gray-400 rounded-md">
+      <div className="p-2 h-auto flex dark:text-neutral-200">
+        <div className=" w-full h-auto flex flex-col justify-center rounded-md">
           <input
             multiple
             ref={fileInput}
@@ -307,16 +335,26 @@ export const DragAndDropForAiPresentation = () => {
             name="file"
             accept=".pdf,.doc,.docx,image/*"
             style={{ display: "none" }}
-            onChange={(e) => {
-              handleFile(e);
-              resetFileInput();
+            onChange={async (e) => {
+               try{
+                  await handleFile(e);
+                  resetFileInput();
+                }catch(e){
+                 const error = e as { message: string };
+                 setPricing(true)
+                 toast({
+                    variant: "destructive",
+                    title: "Insufficient Presentation Credits",
+                    description: `${error.message } : Please upgrade your plan to generate more presentations `,
+                  });
+                }        
             }}
           />
           <div className={`w-full justify-center p-2 rounded-md bg-neutral-100 dark:bg-neutral-900 ${loader || validating ? ' bg-slate-200' : ''}` }
           onClick={(e) => {if(loader || validating){e.stopPropagation()}}}
           >
             <div className="flex justify-between items-center">
-             <div className="border my-2 h-8 border-gray-400 left-1 top-1 rounded-md w-44" onClick={(e )=> e.stopPropagation()}>
+             <div className="my-2 h-8  left-1 top-1 rounded-md w-44" onClick={(e )=> e.stopPropagation()}>
                 <AiModelSelector  model={model} setModel={setModel} presentation={true} subscription={isSubscribed}/>
              </div>
 
@@ -340,7 +378,7 @@ export const DragAndDropForAiPresentation = () => {
             <hr className=" border-t border-neutral-400 my-1"/>
           
                 <div
-                  className={cn(`w-full flex flex-col border border-gray-500 pb-16  hover:mouse p-3 rounded-md` , loader ? 'opacity-65' : '')}
+                  className={cn(`w-full flex flex-col pb-16  hover:mouse p-3 rounded-md` , loader ? 'opacity-65' : '')}
                 >
                   <div className=" border-b border-b-neutral-500 my-2 flex flex-col-reverse">
                     <textarea 
@@ -417,12 +455,12 @@ export const DragAndDropForAiPresentation = () => {
                   </div>
                   }
                 <div className="relative flex items-center w-full ">
-                  <div className="flex relative group items-center w-48 justify-center border cursor-pointer bg-slate-100 rounded-md p-1 hover:bg-slate-200"
+                  <div className="flex relative group items-center w-48 justify-center border cursor-pointer dark:text-black bg-slate-100 rounded-md p-1 hover:bg-slate-200"
                      onClick={(e) => {
                       if (loader  || validating) {
                         e.stopPropagation();
-                      }else{
-                        e.stopPropagation();
+                     }else{
+                         e.stopPropagation();
                         handleClickFromButton();
                       }
                     }}
@@ -443,7 +481,18 @@ export const DragAndDropForAiPresentation = () => {
                   </div>
                    <div className="absolute right-0 bottom-0 flex items-center">
                       <Button
-                        onClick={processFiles}
+                        onClick={async ()=>{
+                           try{
+                             await processFiles(inputFiles)
+                           }catch(e){
+                             const error = e as { message: string };
+                             setPricing(true)
+                             toast({
+                                variant: "destructive",
+                                title: "Insufficient Presentation Credits",
+                                description: `${error.message } : Please upgrade your plan to generate more presentations `,
+                              });
+                          }}}
                         variant="outline"
                         className="border h-9 rounded-lg font-medium bg-neutral-900 text-white hover:bg-neutral-700 dark:text-black dark:bg-neutral-100 dark:hover:bg-neutral-300"
                         disabled={!(textInputValue !== "" || inputFiles.length > 0) || chatDisable || loader || validating ? true : false}
@@ -479,4 +528,5 @@ export const DragAndDropForAiPresentation = () => {
         <FormError message={error} clearMessage={setError} />
       )}
     </div>
+    </>
   )};

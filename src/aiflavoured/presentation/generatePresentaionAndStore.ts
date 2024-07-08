@@ -132,7 +132,7 @@ try{
       
       if(pptxRes.ok && message?.success && responseFromApi.ok ){
         //  console.log("succes");
-        return `/x/aipresentation/${param}`;
+        return `/aipresentation/${param}`;
       }
     }
   }catch(e){

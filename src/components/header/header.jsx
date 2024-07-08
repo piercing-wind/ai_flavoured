@@ -23,7 +23,7 @@ export const Logo = () => {
 
 export const Header = async () => {
   return (
-    <AuthProvider>
+   <AuthProvider>
       <div
         className={[
           "top-0 inset-x-0 h-16 sm:h-20 flex items-center justify-between xl:px-20 border-b relative",
@@ -43,9 +43,11 @@ export const Header = async () => {
         </div>
 
         <div className="hidden xl:flex">
+         <Link href="/chat">
           <TryForFreeButton />
+         </Link>
         </div>
       </div>
-    </AuthProvider>
+   </AuthProvider>
   );
 };

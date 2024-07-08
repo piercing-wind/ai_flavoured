@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
 import { documentToText } from "@/aiflavoured/documentsToText";
 import { pptxDocGenerator } from "@/aiflavoured/presentation/pptxDocGenerator";
-import { aiSlidesForPresentation } from "@/aiflavoured/presentation/aiSlidesForPresentation";
 import { aiSlidesForFacetThemePresentation } from "@/aiflavoured/presentation/aiSlidesForFacetThemePresentation";
 import { aiSlidesForMinimalistSalePitchThemePresentation } from "@/aiflavoured/presentation/aiSlidesForMinimalistSalePitchThemePresentation";
 import { aiSlidesForBiomePresentationTheme } from "@/aiflavoured/presentation/aiSlidesForBiomePresentationTheme";
+import { textToPresentationContent } from "@/aiflavoured/presentation/generatePresentationFromText";
 
 interface FileObject {
       id?: number;
@@ -32,19 +32,26 @@ export async function POST(req: NextRequest){
       const textInputValue : string = body.textInputValue;
       const themeFunction :  string = body.themeFunction
      
+
       let fullDocument: string[] = [];
-      
-      const resultDoc = await Promise.all(
-          files.map(async (file: FileObject) => {                     //userid  
-            const textFromDocument = await documentToText(file.fileKey, id, file.fileType);
-            return textFromDocument.map((doc: { pageContent: string }) => doc.pageContent);
-          })
-        );
-      
-      fullDocument = resultDoc.flat();
-    
+      let pptxDocSummary : string = "";
       const title = files[0].fileName;
-      const pptxDocSummary : string = await pptxDocGenerator(model, fullDocument);
+      
+      if(files.length > 0){
+         const resultDoc = await Promise.all(
+            files.map(async (file: FileObject) => {                                      //userid  
+               const textFromDocument = await documentToText(file.fileKey, file.fileType, id);
+               return textFromDocument.map((doc: { pageContent: string }) => doc.pageContent);
+            })
+            );
+            
+            fullDocument = resultDoc.flat();      
+            pptxDocSummary  = await pptxDocGenerator(model, fullDocument);
+      }else{
+         pptxDocSummary = await  textToPresentationContent(model, audience,  wordAmount, textInputValue);   ;
+      }
+
+
       let pptxData : string = ""
       // presentation -> aiSlidesForPresentation
 

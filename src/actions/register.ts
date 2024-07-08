@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 import { generateVerficationToken } from "@/lib/token";
 import { sendVerificationEmail } from "@/lib/mail";
 
-export const Register = async (values: z.infer<typeof RegisterUserSchema>) => {
+export const Register = async (values: z.infer<typeof RegisterUserSchema>,callbackUrl : string, plan: string) => {
   const validate = RegisterUserSchema.safeParse(values);
   if (!validate.success) {
     return { error: "Something went wrong!" };
@@ -30,7 +30,7 @@ export const Register = async (values: z.infer<typeof RegisterUserSchema>) => {
     ])) as any;
 
     if (!result.email) {
-      await db.user.create({
+     const newUser = await db.user.create({
         data: {
           name,
           email,
@@ -39,12 +39,19 @@ export const Register = async (values: z.infer<typeof RegisterUserSchema>) => {
           timeZone : Intl.DateTimeFormat().resolvedOptions().timeZone,  
         },
       });
+      await db.subscriptionQuota.create({
+         data: {
+           userId: newUser.id,
+         },
+       });
       const verification = await generateVerficationToken(email);
       if (verification) {
         await sendVerificationEmail(
           name,
           verification.email,
-          verification.token
+          verification.token,
+          callbackUrl,
+          plan
         );
         console.log("Confirmation mail sent on your email");
       }

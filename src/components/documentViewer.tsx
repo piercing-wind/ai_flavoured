@@ -7,7 +7,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 import { ClipLoader, HashLoader, MoonLoader } from "react-spinners";
 import { FormError } from "@/components/auth/form-error";
 import { useResizeDetector } from "react-resize-detector";
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
 import { Button } from "./ui/button";
 import { IoChevronDown } from "react-icons/io5";
 import { IoIosArrowUp } from "react-icons/io";

@@ -1,0 +1,19 @@
+@keyframes slide-up {
+   0% {
+     transform: translateY(20%);
+   }
+   100% {
+     transform: translateY(0);
+   }
+ }
+ 
+ .slide{
+   animation: slide-up 0.5s ease-in-out forwards;
+ }
+ .neonDark {
+   color: #ffffff;
+   text-shadow:
+     0 0 5px #fff,
+     0 0 10px #fff,
+     0 0 20px #ff008c;
+ }

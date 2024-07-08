@@ -13,7 +13,7 @@ export async function POST(req: NextRequest){
       const aiModel = body.aiModel;
       
 
-      const textFromDocument = await documentToText(fileKey, id, fileType);
+      const textFromDocument = await documentToText(fileKey,fileType , id);
       const summary = await summarize(textFromDocument, aiModel);
 
       return Response.json({summary});          

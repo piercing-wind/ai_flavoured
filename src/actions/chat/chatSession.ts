@@ -39,6 +39,22 @@ export const getAllPreviousSessions = async (userId : string) => {
    // console.log(chatSessions);
   return chatSessions;
 }
+export const getAllPreviousSessionsWithOtherData = async (userId : string) => {
+   // console.log("hellloooooooooo"); 
+   const chatSessions = await db.session.findMany({
+      where: { userId: userId },
+      include: { 
+         userFiles: true,
+         userPromptImages :{
+            include : {
+               images : true
+            }
+         },
+         userPromptAudios : true,
+      },
+   });
+  return chatSessions;
+}
 
 //update the chatName
 export const updateChatName = async (session : string, newChatName: string) => {
@@ -74,29 +90,52 @@ export async function getDocUrls(slug : string){
 
 
 
-export async function deleteChatSession(session: string) {
+export async function deleteChatSession(session: string, sessionType: string) {
   // Start a transaction
   // Delete related AIMemory entries
- const res =  dbq(`DELETE FROM "AIMemory" WHERE "metadata"->>'session' = '${session}'`,[]);
-  await db.$transaction([
-    // Delete related messageHistory entries
-    db.messageHistory.deleteMany({
-      where: {
-        session: session,
-      },
-    }),
-    // Delete related UserFile entries
-    db.userFile.deleteMany({
-      where: {
-        session: session,
-      },
-    }),
-    // Finally, delete the session
-    db.session.delete({
-      where: {
-        session: session,
-      },
-    }),
-  ]);
-  console.log("Chat session deleted successfully")
+ switch(sessionType){
+   case 'presentation' :
+   case 'chatwithdoc' : 
+      const res =  dbq(`DELETE FROM "AIMemory" WHERE "metadata"->>'session' = '${session}'`,[]);
+      await db.$transaction([
+        // Delete related messageHistory entries
+        db.messageHistory.deleteMany({
+          where: {
+            session: session,
+          },
+        }),
+       // Delete related UserFile entries
+        db.userFile.deleteMany({
+          where: {
+            session: session,
+          },
+        }),
+        // Finally, delete the session
+        db.session.delete({
+          where: {
+            session: session,
+          },
+        }),
+      ]);
+      break;
+   case 'image/sdxl':
+   case 'image/dall-e':
+      await db.$executeRawUnsafe(`
+      DELETE FROM "aiImages" WHERE "userPromptImageId" IN (
+        SELECT "id" FROM "userPromptImage" WHERE "session" = '${session}'
+      );
+      DELETE FROM "userPromptImage" WHERE "session" = '${session}';
+    `);
+       break;
+
+   case 'audio':
+      await db.userPromptAudio.deleteMany({
+         where:{
+            session : session
+         }
+      })
+
+ }
+
 }
+

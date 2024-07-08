@@ -56,10 +56,4 @@ export const summarize = async (docs: any, aiModel : string) => {
   const summary = await summarizeChain.invoke({ input_documents: docSummary });
   console.log('summary generated')
   return summary.output_text;
-// for await (const chunk of await summarizeChain.stream({ input_documents: docSummary })) {
-//   summary.push(chunk.output_text);
-// } 
-// console.log()
-//   console.log('summary generated', summary)
-//  return summary.join(" ");
 };

@@ -28,7 +28,12 @@ export default auth((request) => {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/login", nextUrl));
+    if(nextUrl.searchParams.get("plan")){
+      const url = `/login?callbackUrl=${nextUrl.pathname}&plan=${nextUrl.searchParams.get("plan")}`
+      return  Response.redirect(new URL(url, nextUrl));
+    }
+    const url = `/login?callbackUrl=${nextUrl.pathname}&plan=${"free"}`
+    return Response.redirect(new URL(url, nextUrl));
   }
   return null;
 });

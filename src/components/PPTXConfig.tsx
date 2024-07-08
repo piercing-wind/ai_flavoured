@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,7 +45,7 @@ variant
 }) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentTheme, setCurrentTheme] = useState<string>('/displayThemes/ppPartyTheme.svg');
+  const [currentTheme, setCurrentTheme] = useState<string>('https://di6ccwru5n10a.cloudfront.net/public/displayThemes/ppPartyTheme.svg');
   const [seeMoreTheme, setSeeMoreTheme] = useState<boolean>(false);
   const [preview, setPreview] = useState(new Array(displayThemes.length).fill(false));
   const [currentPdf, setCurrentPdf] = useState('');
@@ -90,6 +90,7 @@ variant
                 <div className=" flex items-center flex-col justify-between border-b border-gray-400">
                   <div className=" h-24 w-44 rounded-md border border-black " onClick={(e)=>{
                     e.stopPropagation();
+                    console.log(theme.pathPdf)
                     setCurrentPdf(theme.pathPdf);
                     setIsOpen(true)
                   }}

@@ -5,15 +5,10 @@ import { Error } from "@/components/error";
 import { Success } from "@/components/success";
 import { uploadToS3 } from "@/actions/file/awsS3";
 
-import { documentToText } from "@/aiflavoured/documentsToText";
-import { imgToText } from "@/aiflavoured/imgs/imgToText";
-import { set } from "zod";
 import { BarLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 
-import { containsImages } from "@/aiflavoured/imgs/containsImages";
 import { createChatSession } from "@/actions/chat/chatSession";
-import { Session } from "@/actions/userSession";  
 import { FileSelectorWarning } from "@/components/fileSelectorWarning";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -26,25 +21,33 @@ import { FormError } from "@/components/auth/form-error";
 import { Redirecting } from "@/components/redirecting";
 import {AiModelSelector} from "@/components/aiModelSelector";
 import {cn} from "@/lib/utils"
-import { revalidate } from "@/actions/revalidate";
+import { Toaster } from "./ui/toaster";
+import { useToast } from "./ui/use-toast";
+import { Pricing } from "./pricing";
+import { updateChatWithDocQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
 
-export const DragAndDrop = () => {
-  const [fileLengthError, setFileLengthError] = useState(false);
-  const [isDisabled, setDisabled] = useState(false);
+export const DragAndDrop = ({userSession, quota}) => {
+
+  const isSubscribed = userSession ? userSession.subscription :  "free";
   const router = useRouter();
+
+  const [remainingQuota, setRemainingQuota] = useState(quota);
+  console.log(remainingQuota);
+  const [fileLengthError, setFileLengthError] = useState(false);
+  const [pricing, setPricing] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [dragging, setDragging] = useState(false);
   const [loader, setloader] = useState(false);
   const [openFileManager, setOpenFileManager] = useState(false);
   const [inputFiles, setInputFiles] = useState([]);
-  const [userSession, setUserSession] = useState(null);
-  const [isSubscribed, setSubscribed] = useState("free");
   const fileInput = useRef(null);
   const [validating, setValidating] = useState(false);
   const [chatDisable, setChatDisable] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [model, setModel] = useState("gpt-3.5-turbo-0125");
+  const { toast } = useToast();
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -54,16 +57,18 @@ export const DragAndDrop = () => {
     setDragging(false);
   }
 
-  const checkUserSubscription = async () => {
-    if (isSubscribed === "free" || userSession.subscription === "free") {
-      router.push(`/pricing`);
-      return;
-    }
-    setModel("gpt-4-turbo");
-  };
-  const updateModel = () => {
-    setModel("gpt-3.5-turbo-0125");
-  }
+  useEffect(() => {
+   if (isSubscribed === "free" && model !== 'gpt-3.5-turbo-0125') {
+      setPricing(true);
+      setModel('gpt-3.5-turbo-0125');
+      toast({
+         variant: "destructive",
+         title: "You need to upgrade to Premium to use this model",
+         description: "Please upgrade to Premium to use this model",
+      })
+   }
+  }, [model, isSubscribed]);
+
   function removeExtraFiles() {
     setInputFiles((prevFiles) => prevFiles.slice(0, 2));
   }
@@ -107,18 +112,6 @@ export const DragAndDrop = () => {
   };
   
   useEffect(() => {
-    const fetchSession = async () => {
-      const data = await Session();
-      const user = data.session;
-      setUserSession(user);
-      setSubscribed(user.subscription);
-      // const model = await getUserModel(user.id);
-    };
-
-    fetchSession();
-  }, []);
-
-  useEffect(() => {
     const updateFileLength = () => {
       if (userSession.subscription === "free" && inputFiles.length >= 2) {
         setDisabled(true);
@@ -135,10 +128,26 @@ export const DragAndDrop = () => {
     if (userSession && userSession.subscription !== null) {
       updateFileLength();
     }
-  }, [inputFiles]);
+  }, [inputFiles, userSession]);
   
 
   const handleFile = async (e, fromDrop = false) => {
+   //check User Authentication
+   if(userSession === null){
+      router.push("/login?callbackUrl=/chat");
+      return;
+   }
+   if(remainingQuota <= 0){
+      toast({
+         variant: "destructive",
+         title: "Insufficient Quota",
+         description: `You have exhausted your chat with doc quota for the month. Please buy a plan for more!`,
+       });
+       setPricing(true);
+       return;
+   }
+   console.log("hello")
+   try{
     e.preventDefault();
 
     if (fromDrop) {
@@ -167,20 +176,41 @@ export const DragAndDrop = () => {
     const fileValidation = await filesPageLengthCheck(newInputFiles);
     
     for (const result of fileValidation) {
-      if (result.pages > 30 && isSubscribed === "free") {
+      if (result.pages > 50 && isSubscribed === "free" ) {
         setError(
           `The ${result.fileName} have ${result.pages} pages, You can only upload files with less than 50 pages. Please buy a plan for more!`
           );
+          toast({
+              variant: "destructive",
+             title : "File Upload Error",
+             description : `The ${result.fileName} have ${result.pages} pages, You can only upload files with less than 50 pages. Please buy a plan for more!`
+          })
           if (openFileManager === false && files.length === 1) {
             setInputFiles([]);
           }
         setDisabled(true);
         setChatDisable(true);
         return;
+      }else if(result.pages > 2000 && isSubscribed === "premium"){
+         setError(
+            `The ${result.fileName} have ${result.pages} pages, You can only upload files with less than 2000 pages. Please buy a plan for more!`
+         );
+         toast({
+             variant: "destructive",
+            title : "File Upload Error",
+            description : `The ${result.fileName} have ${result.pages} pages, You can only upload files with less than 2000 pages. Please buy a plan for more!`
+         })
+
+         if (openFileManager === false && files.length === 1) {
+            setInputFiles([]);
+         }
+         setDisabled(true);
+         setChatDisable(true);
+         return;
       }
     }
     setChatDisable(false);
-
+    
     if ((files.length === 0 || files.length === 1) && inputFiles.length === 0) {
       processFiles(files);
 
@@ -193,6 +223,13 @@ export const DragAndDrop = () => {
     if (!fromDrop) {
       e.target.value = null;
     }
+   }catch(error){
+      toast({
+         variant: "destructive",
+         title: "File Upload Error",
+         description: `We couldn't Upload your File :${error.message}`,
+       });
+   }
   };
 
   const handleDeleteFile = async (index) => {
@@ -211,6 +248,19 @@ export const DragAndDrop = () => {
   };
 
   const processFiles = async (singleFiles) => {
+   if(userSession === null){
+      router.push("/login?callbackUrl=/chat");
+      return;
+   }
+   if(remainingQuota <= 0){
+      toast({
+         variant: "destructive",
+         title: "Insufficient Quota",
+         description: `You have exhausted your chat with doc quota for the month. Please buy a plan for more!`,
+       });
+       setPricing(true);
+       return;
+   }
     setloader(true);
     setError("");
     setSuccess("");
@@ -219,7 +269,6 @@ export const DragAndDrop = () => {
     const fileName = files.length > 1 ? "new folder 1" : files[0].name;
     const user = userSession;
     const session = await createChatSession(user.id, fileName, "chatwithdoc");
-
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
@@ -255,11 +304,21 @@ export const DragAndDrop = () => {
           }
           
           uploadedFiles.push({ data: data.awsS3.userFile });
-        } catch (e) {
-          console.log(e);
+         } catch (e) {
+           console.log(e);
+          toast({
+            variant: "destructive",
+            title: "File Upload Error",
+            description: `We couldn't Upload your File :${e.message}`,
+          });
         }
       } catch (e) {
         console.log(e);
+        toast({
+         variant: "destructive",
+         title: "File Upload Error",
+         description: `We couldn't Upload your File :${e.message}`,
+       });
       }
     }
     //aws s3 bucket upload ends here
@@ -272,37 +331,57 @@ export const DragAndDrop = () => {
       });
       if (!responseFromApi.ok) {
         setError("Failed to Upload in database, Try Again!");
-      } else {
-        setloader(false);
-        setRedirect(true);
-        setSuccess("File upload successfull");
-        router.push(`/x/chat/${session}`);
-      }
+        return;
+      } 
+      setloader(false);
+      setRedirect(true);
+      setSuccess("File upload successfull");
+      const newQuota =  remainingQuota - 1;
+      setRemainingQuota(newQuota);
+      await updateChatWithDocQuota(userSession.id, newQuota);
+      router.push(`/chat/${session}`);
+      
     } catch (e) {
       console.log(e);
+      toast({
+         variant: "destructive",
+         title: "File Upload Error",
+         description: `We couldn't Upload your File :${e.message}`,
+      });
     }
   };
 
   const handleClickFromDropArea = () => {
+      if(!userSession){
+         router.push("/login?callbackUrl=/chat");
+         return;
+      }
     fileInput.current.click();
   };
   const handleClickFromButton = () => {
+   if(!userSession){
+      router.push("/login?callbackUrl=/chat");
+      return;
+   }
     fileInput.current.click();
   };
 
-  return (
+  return (<>
+  <Toaster />
+  {pricing && <Pricing setPricing={setPricing} />}
     <div className="relative text-center w-full flex justify-center">
       {fileLengthError && (
         <FileSelectorWarning
           file={inputFiles.length}
           selectAgain={emptyFiles}
+          setPricing={setPricing}
           uploadFirstTwo={removeExtraFiles}
           setFileLengthError={setFileLengthError}
         />
       )}
       {redirect && <Redirecting />}
 
-      <div className="p-2 w-2/3 h-auto">
+      <div className="p-2 md:w-2/3 h-auto">
         <div className=" w-full h-auto flex justify-center border border-gray-400 rounded-md">
           <input
             multiple
@@ -395,16 +474,20 @@ export const DragAndDrop = () => {
           ) : (
             <>
               <div className="relative w-full justify-center p-2">
-              <div className="absolute border border-gray-400 left-5 top-7 rounded-md">
-              <AiModelSelector  model={model} checkUserSubscription={checkUserSubscription} updateModel={updateModel}/>
-              </div>
+               <div className="absolute border border-gray-400 left-5 top-7 rounded-md">
+               <AiModelSelector
+                 model={model}
+                 setModel={setModel}
+                 subscription={isSubscribed}
+                 />
+               </div>
                 <div
                   className={cn(`w-full border border-dashed border-gray-500 pb-16 block items-center justify-center hover:mouse p-3 rounded-md` , loader ? 'opacity-65' : '')}
                   onDragOver={(e) => {!loader && !validating &&  handleDragOver(e)}}
                   onDrop={(e) =>{!loader && !validating  &&  handleFile(e, true)}}
                   onDragLeave={(e) => {!loader && !validating  && handleDragLeave(e)}}
                   style={{
-                    backgroundColor: dragging ? "#012" : "",
+                    backgroundColor: dragging && "#fbb6cf",
                     cursor: "pointer",
                   }}
                   onClick={(e) => {!loader && !validating  && handleClickFromDropArea(e)}}
@@ -418,7 +501,7 @@ export const DragAndDrop = () => {
                     {isSubscribed === "free" ? (
                       <p className=" text-sm">
                         You can upload two files at once.
-                        <Link href="/pricing">Upgrade for More</Link>
+                        <Link onClick={(e)=>e.stopPropagation()} href="/pricing">Upgrade for More</Link>
                       </p>
                     ) : (
                       <p className=" text-sm">Drag your file here</p>
@@ -481,5 +564,5 @@ export const DragAndDrop = () => {
         )}
       </div>
     </div>
-  );
+   </>);
 };

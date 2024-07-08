@@ -15,8 +15,7 @@ export const LoginUserSchema = z.object({
   code : z.optional(z.string())
 });
 
-export const RegisterUserSchema = z
-  .object({
+export const RegisterUserSchema = z.object({
     name: z.string().min(1, "Name is Required"),
     // userName: z.string().max(30, "Maximum 30 charcters allowed").min(1, "Username is Required"),
     email: z.string().email(),

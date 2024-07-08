@@ -8,9 +8,10 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
 import { GoInfo } from "react-icons/go";
 import { Input } from "./ui/input";
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
 import {Howl, Howler} from 'howler';
 import WaveSurfer from 'wavesurfer.js';
+import { Switch } from "@/components/ui/switch"
 
 import {
    Select,
@@ -34,23 +35,48 @@ interface RightBarProps {
    responseFormat: string;
    setVoiceModel: (model: string) => void;
    voiceModel: string;
-   setSpeed: (speed: number) => void;
-   speed: number;
+   setSpeed: (speed: string) => void;
+   speed: string;
+   setHd : (hd: boolean) => void;
+   hd : boolean;
  }
-export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseFormat, setVoiceModel, voiceModel, setSpeed, speed }) => {
+ export const audioFiles = [
+    {
+      name: 'Echo',
+      value: 'echo',
+      path: 'https://di6ccwru5n10a.cloudfront.net/public/audio/echo.mp3'
+    },
+    {
+      name: 'Fable',
+      value: 'fable',
+      path: 'https://di6ccwru5n10a.cloudfront.net/public/audio/fable.mp3'
+    },
+  {
+    name: 'Alloy',
+    value: 'alloy',
+    path: 'https://di6ccwru5n10a.cloudfront.net/public/audio/alloy.mp3'
+  },
+  {
+    name: 'Onyx',
+    value: 'onyx',
+    path: 'https://di6ccwru5n10a.cloudfront.net/public/audio/onyx.mp3'
+  },
+  {
+    name: 'Nova',
+    value: 'nova',
+    path: 'https://di6ccwru5n10a.cloudfront.net/public/audio/nova.mp3'
+  },
+  {
+    name: 'Shimmer',
+    value: 'shimmer',
+    path: 'https://di6ccwru5n10a.cloudfront.net/public/audio/shimmer.mp3'
+  },
+];
+export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseFormat, setVoiceModel, voiceModel, setSpeed, speed , setHd, hd}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const toggleCollapse = () => {
      setIsCollapsed(!isCollapsed);
   };
-  const audioFiles = [{
-  name : 'Alloy',
-  value : 'alloy',
-  path: '/audio/audio.mp3'
-},{
-   name : 'Omnix',
-   value : 'omnix',
-   path : "/audio/audio1.mp3"
-}]
    
   const wavesurferRefs = useRef<any[]>([])  
   const [isPlaying, setIsPlaying] = useState<boolean[]>(new Array(audioFiles.length).fill(false));
@@ -64,7 +90,7 @@ export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseF
    }
    if (!wavesurferRefs.current[index]) {
      wavesurferRefs.current[index] = WaveSurfer.create({
-       height: 50,
+       height: 40,
        container: `#waveform${index}`,
        waveColor: '#ff0783',
        progressColor: '#383351',
@@ -72,6 +98,14 @@ export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseF
      wavesurferRefs.current[index].load(audioFiles[index].path);
      setCurrentWave(wavesurferRefs.current[index]);
    }
+
+   wavesurferRefs.current[index].on('finish', () => {
+      setIsPlaying(prevState => {
+        prevState[index] = false;
+        return [...prevState];
+      });
+    });
+
    if (wavesurferRefs.current[index].isPlaying()) {
       wavesurferRefs.current[index].pause();
       setIsPlaying(prevState => {
@@ -92,7 +126,7 @@ export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseF
    audioFiles.forEach((_, index) => {
      if (!wavesurferRefs.current[index]) {
        wavesurferRefs.current[index] = WaveSurfer.create({
-         height: 50,
+         height: 40,
          container: `#preLoadwaveform1${index}`,
          waveColor: '#ff0783',
          progressColor: '#383351',
@@ -118,9 +152,9 @@ export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseF
       <Divider className="w-full" />
       <div className={`${isCollapsed ? 'hidden ': ""} w-full flex space-x-2 items-baseline my-2`}>
          <div className="flex-grow-0">
-         <Select>
+         <Select defaultValue={responseFormat} onValueChange={(v=>setResponseFormat(v))}>
            <SelectTrigger className="h-8 dark:bg-inherit shadow-sm dark:shadow-neutral-700 focus:outline-none focus:ring-0 focus:border-none">
-             <SelectValue className="text-xs" placeholder={`Output Format .${responseFormat}`} />
+           Output Format . <SelectValue className="text-xs" placeholder={`${responseFormat}`} />
            </SelectTrigger>
            <SelectContent>
              <SelectItem value="mp3">Mp3</SelectItem>
@@ -132,9 +166,9 @@ export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseF
          </Select>
       </div>
       <div className="flex-grow">
-         <Select>
+         <Select defaultValue={speed.toString()} onValueChange={(v)=>setSpeed(v.toString())}>
            <SelectTrigger className="h-8 dark:bg-inherit shadow-sm dark:shadow-neutral-700 focus:outline-none focus:ring-0 focus:border-none">
-             <SelectValue className="text-xs" placeholder={`Speed \u00A0 \u00A0 \u00A0\ ${" "} ${" "} ${speed} x`} />
+             Speed &nbsp;<SelectValue className="text-xs" placeholder={`${speed} x`} />
            </SelectTrigger>
            <SelectContent>
            {speeds.map((speed, index) => (
@@ -144,19 +178,41 @@ export const RightBar: React.FC<RightBarProps> = ({ setResponseFormat, responseF
          </Select>
        </div>
       </div>
-      
+      <div className={`${isCollapsed && "hidden"} relative flex items-center space-x-3 my-4`}>
+          <div className="relative">
+           <GoInfo
+             className="cursor-pointer mx-2 text-lg"
+             data-tooltip-id="hd"
+           />
+           <Tooltip id="hd" className="z-10">
+             <p className="text-sm w-72">
+               Choose &#39;HD&#39; for high-definition audio, optimized for quality. <br /> <b>If this option is on deducts 2 credits per character.</b> <br />
+               <br />
+               Off HD for standard-definition audio, optimized for speed. <br/> <b>This option deducts 1 credit per character.</b>
+             </p>
+           </Tooltip>
+         </div>
+      <Switch
+        id="hd"
+        checked={hd}
+        onCheckedChange={(v)=>{setHd(v)}}
+      />
+      <Label htmlFor="hd">HD Audio</Label>
+      </div>
        <div className={`${isCollapsed ? 'hidden ': ""}w-full my-5`}>
          <h6 className="w-full mb-2 text-center opacity-90">The current voices are optimized for English.</h6>
-          <RadioGroup defaultValue="alloy" onValueChange={(v)=>{}}>
+          <RadioGroup defaultValue="echo" onValueChange={(v)=>{setVoiceModel(v)}}>
             {audioFiles.map((audio, index) => (   
-            <div className="flex items-center my-2 space-x-1" key={index}>
+            <div className="items-center space-x-1" key={index}>
+             <span className=" w-14 flex items-center text-sm font-bold">{audio.name}</span> 
+            <div className="w-full flex items-center space-x-2">
              <RadioGroupItem value={audio.value} id={audio.value}/>
-             <span className="h-10 w-14 flex items-center justify-center">{audio.name}</span> 
                 <button onClick={()=>handleAudio(index)}>{isPlaying[index] ? <PauseIcon size={20} color="#ff0783" />  : <PlayIcon size={20} color="#ff0783" /> }</button>
-              <div  className="flex h-10 relative rounded-md items-center flex-grow ">
-                <div id={`waveform${index}`} className="w-full left-0 top-0 absolute cursor-pointer"/>
-                <div id={`preLoadwaveform1${index}`} className="w-full left-0 top-0 absolute cursor-pointer"/>
+              <div  className="flex relative h-10 rounded-md items-center flex-grow ">
+                <div id={`waveform${index}`} className="w-full left-0 absolute top-0 cursor-pointer"/>
+                <div id={`preLoadwaveform1${index}`} className="w-full absolute left-0 top-0 cursor-pointer"/>
              </div>
+            </div>
             </div>
             ))}
           </RadioGroup>

@@ -1,5 +1,5 @@
 'use client'
-import Styles from "@/app/x/chat/chat.module.css";
+import Styles from "@/app/(x)/chat/chat.module.css";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,9 @@ import { displayThemes, DisplayTheme } from "@/aiflavoured/presentation/displayT
 import FullScreenPresentationViewer from "./fullScreenPresentationViewer";
 import { FaRegEye } from "react-icons/fa6";
 import { AiModelSelector } from "./aiModelSelector";
+import { useToast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
+import { Pricing } from "./pricing";
 
 export const DrawerForPPTXConfiguration = ({
   setOpenPPTXConfigOff,
@@ -43,11 +46,13 @@ export const DrawerForPPTXConfiguration = ({
 }) => {
   const [slides, setSlides] = useState(15);
   const [wordsAmount, setWordsAmount] = useState<string>('Regular');
+  const {toast} = useToast();
+  const [pricing, setPricing] = useState<boolean>(false);
   const [audience, setAudience] = useState<string>('General');
   const [imageSearch, setImageSearch] = useState<string>('Google Search');
   const [model, setModel] = useState<string>('gpt-4o');
   const audienceData = ['General', 'Students', 'Professionals', 'Experts', 'Bussiness', 'Teacher', 'Employee', 'Colleague']
-  const [currentTheme, setCurrentTheme] = useState<string>('/displayThemes/ppPartyTheme.svg');
+  const [currentTheme, setCurrentTheme] = useState<string>('https://di6ccwru5n10a.cloudfront.net/public/displayThemes/ppPartyTheme.svg');
   const [seeMoreTheme, setSeeMoreTheme] = useState<boolean>(false);
   const [themeFunction, setThemeFunction] = useState('ppPartyThemePresentation');
   const [variant , setVariant] = useState('green')
@@ -55,21 +60,14 @@ export const DrawerForPPTXConfiguration = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPdf, setCurrentPdf] = useState('');
   const [textInputValue, setTextInputValue] = useState('');
+  
 
   const router = useRouter();
   const handleClose = () => {
     setOpenPPTXConfigOff();
   };
 
-  //todo create a quota database to by bass this condition
-  if(model === "gpt-4" && user.subscription === "free") {
-    router.push('/pricing')
-  }
   const handleSlides = (slide: number) => {
-    if(user.subscription === 'free' && slide > 15){
-      router.push(`/pricing`);
-      return;
-    }
     setSlides(slide);
   };
   const handleWordAmount = (word: string) => {
@@ -80,18 +78,28 @@ export const DrawerForPPTXConfiguration = ({
       setAudience(audiences);
   };
   const handleImageSearch = (imageSearchs: string) => {
-    if(user.subscription === 'free' && imageSearchs !== 'Google Search'){
-      router.push(`/pricing`);
-      return;
-    }
       setImageSearch(imageSearchs);
   };
   const handleGenerate=async ()=>{
    generatePPTX(slides, wordsAmount, audience, imageSearch , model, variant, themeFunction, textInputValue);
-  console.log('Generate PPTX');
+   console.log('Generate PPTX');
   }
+  useEffect(() => {
+   if (user.subscription === "free" && model !== 'gpt-4o') {
+      setPricing(true);
+      setModel('gpt-4o');
+      toast({
+         variant: "destructive",
+         title: "You need to upgrade to Premium to use this model",
+         description: "Please upgrade to Premium to use this model",
+      })
+   }
+  }, [model, user.subscription, toast]);
 
   return (
+   <>
+   <Toaster/>
+   {pricing && <Pricing  setPricing={setPricing}/>}
     <div
       className={`relative backdrop-blur-xl p-6 text-gray-800 dark:text-gray-200 justify-center w-full flex flex-col items-center z-20 transition-transform duration-500 ease-out transform ${
         openPptxConfig ? "translate-y-0" : "translate-y-full"
@@ -261,7 +269,7 @@ export const DrawerForPPTXConfiguration = ({
            </div>
 
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="backdrop-blur-3xl bg-neutral-100 dark:bg-neutral-900 rounded">
+          <DropdownMenuContent className="backdrop-blur-3xl cursor-pointer bg-neutral-100 dark:bg-neutral-900 rounded">
             <DropdownMenuItem onClick={() => handleSlides(7)}>
             <div className=" flex items-center justify-between m-2 border-b border-gray-400 w-28 px-2 h-8">
               <p>7</p>
@@ -438,5 +446,5 @@ export const DrawerForPPTXConfiguration = ({
       </div>  
      
     </div>
-  );
+    </>);
 };

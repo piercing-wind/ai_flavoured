@@ -1,18 +1,27 @@
 "use server"
 import {auth} from "@/auth"
 
-export const Session = async () => {
+export type UserSession ={
+   name: string,
+   email: string,
+   image: string,
+   role: string,
+   subscription: "free" | "premium" | "unlimited",
+   id: string,
+   timeZone: string
+ } | null;
+
+export const getUserSession = async () : Promise<UserSession> => {
       try {
             const session = await auth();
 
             if (!session || !session.user?.id) {
-                  return { failure: "User not authenticated" };
+               return null;
             }
-            const userId = session?.user?.id ?? '';
-            return Promise.resolve({ session: session?.user });
+            return Promise.resolve(session.user as UserSession);
       } catch (e) {
             console.log(e);
-            return { failure: "User not authenticated" };
+           throw new Error("User not authenticated");
       }
 }
 

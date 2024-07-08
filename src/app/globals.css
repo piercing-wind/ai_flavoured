@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Caramel');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,14 +6,19 @@
   /* display: none; */
 }
 
+@font-face {
+   font-family: 'Caramel';
+   src: url('/caramelFont/Caramel/Caramel-Regular.ttf') format('truetype');
+ }
 /* Hide scrollbar for IE, Edge and Firefox */
 html {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+  letter-spacing: 0.05em;
 }
 
 w{
-  color:#b6effb
+  color:#fbb6cf
 }
 
 :root {
@@ -24,6 +28,7 @@ color:rgba(155,117, 156)
 body {
   font-family: Helvetica, Arial, sans-serif;
   height: 100%;
+
   /* Add other global styles as needed */
 
 }
@@ -62,7 +67,7 @@ body {
   }
 
   .dark {
-    --background: rgb(23, 22, 22);
+    --background: rgb(5, 5, 5);
     --foreground: 210 60% 100%;
 
     --card: 222.2 84% 4.9%;
@@ -101,6 +106,10 @@ body {
   color: #ff0783;
   animation: glow 1s ease-in-out infinite alternate;
 }
+.aiflavoured {
+   font-family: 'Caramel', sans-serif; /* Use the imported Google Font here */
+   color: #ff0783;
+ }
 
 @keyframes glow {
   from {
@@ -153,3 +162,12 @@ body {
    background-clip: text;
    -webkit-text-fill-color: transparent;
  }
+
+ /* Enable it in Production */
+ nextjs-portal {
+   display: none;
+ }
+ nextjs-toast-errors-parent {
+   display: none;
+ }
+ 
