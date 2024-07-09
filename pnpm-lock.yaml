@@ -137,13 +137,6 @@ dependencies:
   clsx:
     specifier: ^2.1.1
     version: 2.1.1
-  community:
-    specifier: |-
-      link:@langchain/community
-      pnpm add @langchain/community
-    version: |-
-      link:@langchain/community
-      pnpm add @langchain/community
   cosine:
     specifier: ^0.0.1
     version: 0.0.1
@@ -156,9 +149,6 @@ dependencies:
   embla-carousel-react:
     specifier: ^8.1.6
     version: 8.1.6(react@18.3.1)
-  epub:
-    specifier: link:@langchain/community/document_loaders/fs/epub
-    version: link:@langchain/community/document_loaders/fs/epub
   epub2:
     specifier: ^3.0.2
     version: 3.0.2(ts-toolbelt@9.6.0)
@@ -246,9 +236,6 @@ dependencies:
   pg:
     specifier: ^8.12.0
     version: 8.12.0
-  pgvector:
-    specifier: link:@langchain/community/vectorstores/pgvector
-    version: link:@langchain/community/vectorstores/pgvector
   pptxgenjs:
     specifier: ^3.12.0
     version: 3.12.0
@@ -309,9 +296,6 @@ dependencies:
   tsparticles:
     specifier: ^3.5.0
     version: 3.5.0
-  vectorstores:
-    specifier: link:@langchain/community/vectorstores
-    version: link:@langchain/community/vectorstores
   wavesurfer.js:
     specifier: ^7.8.1
     version: 7.8.1
