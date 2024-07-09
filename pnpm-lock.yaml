@@ -54,8 +54,8 @@ dependencies:
     specifier: ^0.0.26
     version: 0.0.26(langchain@0.2.8)
   '@nanostores/react':
-    specifier: github:ai/react
-    version: git@github.com+ai/react/0539a51e1e94cdd101fdd3d3960f26442b979d12(nanostores@0.10.3)(react@18.3.1)
+    specifier: ^0.7.2
+    version: 0.7.2(nanostores@0.10.3)(react@18.3.1)
   '@paypal/react-paypal-js':
     specifier: ^8.5.0
     version: 8.5.0(react-dom@18.3.1)(react@18.3.1)
@@ -4198,6 +4198,17 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    dev: false
+
+  /@nanostores/react@0.7.2(nanostores@0.10.3)(react@18.3.1):
+    resolution: {integrity: sha512-e3OhHJFv3NMSFYDgREdlAQqkyBTHJM91s31kOZ4OvZwJKdFk5BLk0MLbh51EOGUz9QGX2aCHfy1RvweSi7fgwA==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      nanostores: ^0.9.0 || ^0.10.0
+      react: '>=18.0.0'
+    dependencies:
+      nanostores: 0.10.3
+      react: 18.3.1
     dev: false
 
   /@next/env@14.1.0:
@@ -15623,19 +15634,5 @@ packages:
       react:
         optional: true
     dependencies:
-      react: 18.3.1
-    dev: false
-
-  git@github.com+ai/react/0539a51e1e94cdd101fdd3d3960f26442b979d12(nanostores@0.10.3)(react@18.3.1):
-    resolution: {commit: 0539a51e1e94cdd101fdd3d3960f26442b979d12, repo: git@github.com:ai/react.git, type: git}
-    id: git@github.com+ai/react/0539a51e1e94cdd101fdd3d3960f26442b979d12
-    name: '@nanostores/react'
-    version: 0.7.2
-    engines: {node: ^18.0.0 || >=20.0.0}
-    peerDependencies:
-      nanostores: ^0.9.0 || ^0.10.0
-      react: '>=18.0.0'
-    dependencies:
-      nanostores: 0.10.3
       react: 18.3.1
     dev: false
