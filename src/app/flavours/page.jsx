@@ -66,7 +66,7 @@ const Page = async () => {
       <div className="w-full flex flex-wrap gap-8 justify-center items-center">
          <div className={`h-[12rem] w-[20rem] ${CSS.custom_shadow} rounded-xl overflow-hidden  relative`}>
             <h1 className={`absolute top-4 left-4 ${CSS.neonDark} text-4xl font-bold`}>AI Presentation</h1>
-            <video src="/flavoursPage/3130284-uhd_3840_2160_30fps.mp4" className="inset-0 w-full h-full object-cover" autoPlay muted loop controlsList="nodownload"/>
+            <video src="https://di6ccwru5n10a.cloudfront.net/public/flavoursPage/3130284-uhd_3840_2160_30fps.mp4" className="inset-0 w-full h-full object-cover" autoPlay muted loop controlsList="nodownload"/>
             <Link href={userSession !== null ? '/aipresentation' : '/login?callbackUrl=/aipresentation'} 
                className="absolute bottom-2 rounded-lg py-1 px-2 right-2 text-white transition-all duration-500 text-xl hover:scale-[1.05] font-bold bg-gradient-to-br from-purple-400 hover:from-transparent  hover:to-aiflavoured">
                Create Now
@@ -76,7 +76,7 @@ const Page = async () => {
             <h1 className={`absolute top-4 left-4 ${CSS.neonDark} text-4xl font-bold backdrop-blur-sm rounded-lg`}>Chat with Doc</h1>
             <p className="absolute top-16 left-4 text-lg backdrop-blur-sm text-white font-bold">Best summarization ai</p>
             <Image
-               src={'/flavoursPage/chatwithdoc.png'}
+               src={'https://di6ccwru5n10a.cloudfront.net/public/flavoursPage/chatwithdoc.png'}
                alt="chat with doc"
                fill
                className="-z-10"
@@ -112,7 +112,7 @@ const Page = async () => {
          <div className={`h-[12rem] w-[20rem] ${CSS.custom_shadow} pt-2 p-5 bg-black rounded-xl overflow-hidden  relative`}>
             <h1 className={` ${CSS.neonDark} pb-3 text-3xl font-bold backdrop-blur-sm rounded-lg`}>Make AI Audio</h1>
               <Image
-               src={'/flavoursPage/audio.png'}
+               src={'https://di6ccwru5n10a.cloudfront.net/public/flavoursPage/audio.png'}
                alt="chat with doc"
                height={40}
                width={500}
