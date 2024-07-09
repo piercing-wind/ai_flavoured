@@ -18,12 +18,4 @@ frontend:
     files:
       - '**/*'
   cache:
-    paths:
-      - .next/cache/**/*
-      - node_modules/**/*
-
-backend:
-  phases:
-    build:
-      commands:
-        - amplifyPush --simple
+    paths: []
