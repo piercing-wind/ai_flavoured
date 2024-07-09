@@ -1,6 +1,6 @@
 'use client';
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import {LogoText} from "@/components/logo";
 import {UserIcon} from "@/components/userIcon";
@@ -63,9 +63,13 @@ export const Conversation = ({ chatSession, user, userFiles, aiModel, api, chatM
   const messagesEndRef = React.useRef<HTMLDivElement | null>(null);
   const [firstChunkReceived, setFirstChunkReceived] = React.useState(false);
   const [apiCaller, setApiCaller] = useState("chat");
+  const fetchSummaryFromFetchMessages = useRef(false)
+  const fetchResponseMssage = useRef(false)
   // const [isLightMode, setIsLightMode] = useState(false);
   const fetchMessages = async () => {
-    
+    if(fetchSummaryFromFetchMessages.current) return;
+    fetchSummaryFromFetchMessages.current = true;
+
     const fetchedMessages = await getMessages(chatSession.slug);
     if (fetchedMessages.length === 0) {
       const newMessages = [];
@@ -125,16 +129,16 @@ export const Conversation = ({ chatSession, user, userFiles, aiModel, api, chatM
     }
   }
 
-
-
   useEffect(() => {
     setApiCaller(api);
     fetchMessages();
-  }, [api, fetchMessages]);
+  }, []);
 
   
   
   const fetchResponse = async (question?: string) => {
+   if(fetchResponseMssage.current) return;
+   fetchResponseMssage.current = true;
    try{
       switch (aiModel) {
         case 'gpt-3.5-turbo-0125':
@@ -189,7 +193,7 @@ export const Conversation = ({ chatSession, user, userFiles, aiModel, api, chatM
         setDisable(false);
         setMessages((prevMessages: Message[])=>[...prevMessages,{message :  accumulatedChunks, role :  'aiflavoured', timestamp: new Date()}]);
         const  res = storeMessage({session : chatSession.slug, message : accumulatedChunks, role : 'aiflavoured', timestamp: new Date().toISOString()});
-        console.log( "done");
+       fetchResponseMssage.current = false;
         return;
             }      
             const chunks = new TextDecoder("utf-8").decode(value);
@@ -215,6 +219,8 @@ export const Conversation = ({ chatSession, user, userFiles, aiModel, api, chatM
     };
 
     const handleQuestionClick = async (e : any, question: string) => {
+      e.stopPropagation();
+      e.preventDefault();
       setUserInput(question);
       await fetchResponse(question);
     };
@@ -249,7 +255,7 @@ export const Conversation = ({ chatSession, user, userFiles, aiModel, api, chatM
             <div className='w-8 mx-2' title="AI Flavoured">
               <LogoText/>
             </div>
-            <div className={cn(`relative overflow-hidden mr-16 self-start backdrop-blur-lg border  p-2 rounded-md bg-slate-50 border-gray-200 dark:border-gray-700`)}> 
+            <div className={cn(`relative overflow-hidden mr-16 self-start backdrop-blur-lg border  p-2 rounded-md bg-slate-50 dark:bg-transparent border-gray-200 dark:border-gray-700`)}> 
             {/* <div className="absolute rounded-s-none top-8 left-8 h-20 w-20 bg-pink-200 -z-10 blur-2xl" />
             <div className="absolute rounded-s-none top-1/4 left-3/4 h-20 w-20 bg-orange-200 -z-10 blur-2xl" />
             <div className="absolute rounded-s-none top-2/4 left-1/2 h-20 w-20 bg-violet-200 -z-10 blur-2xl" /> */}

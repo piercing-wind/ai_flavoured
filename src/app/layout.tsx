@@ -44,7 +44,9 @@ export const metadata: Metadata = {
      follow: true,
    },
    alternates: { canonical: "/" },
-   manifest: "/manifest.json",
+   twitter:{
+      card : 'summary_large_image'
+   }
  };
 
 export default function RootLayout({

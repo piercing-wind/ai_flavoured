@@ -3,6 +3,49 @@ import { Header } from "@/components/header/header"
 import CSS from "./about.module.css"
 import Image from "next/image"
 import { Images } from "./client"
+import { Metadata } from "next"
+export const metadata: Metadata = {
+   title: "AI Flavoured - About Us",
+   metadataBase: new URL(`${process.env.WEBSITE_URL}/about`),
+   description: "AI Chat- Chatbot Discover AI Flavoured: your ultimate platform for creating engaging social content effortlessly. Whether you're a student or a professional, our AI-powered tools, including AI Image, ChatGPT, DALL-E, and Stable Diffusion XL, simplify the creation of standout presentations, images, audio, and more. Join us in making content creation accessible, efficient, and enjoyable for everyone.",
+   applicationName: "AI Flavoured",
+   authors: [
+     {
+       name: "Sourabh",
+       url: "https://www.linkedin.com/in/sourabh-sharma-8987451a2/",
+     },
+   ],
+   generator: "AI Flavoured",
+   keywords: [
+     "AI",
+     "AI Flavoured",
+     "AI Image",
+     "ChatGPT",
+     "DALL-E",
+     "Stable Diffusion XL",
+     "AI Audio",
+     "PDF summarization",
+     "GPT",
+     "chat",
+     "AI presentation",
+     "PPT AI",
+     "PowerPoint AI",
+     "AI presentation maker",
+     "SDXL base",
+     "SDXL",
+     "dalle",
+     "AI Chat - ChatBot Assistant"
+   ],
+   referrer: "origin",
+   creator: "Sourabh",
+   publisher: "AI Flavoured",
+   robots: {
+     index: true,
+     follow: true,
+   },
+   alternates: { canonical: "/about" },
+ };
+
 
 const Page=()=>{
    return (

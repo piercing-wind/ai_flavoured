@@ -1,10 +1,10 @@
 "use server";
-import { WebPDFLoader } from "langchain/document_loaders/web/pdf";
+import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { downloadFileFromS3 } from "@/actions/file/downloadFileFromS3";
-import { PPTXLoader } from "langchain/document_loaders/fs/pptx";
+import { PPTXLoader } from "@langchain/community/document_loaders/fs/pptx";
 import { imgToText } from "./imgs/imgToText";
 import { TextLoader } from "langchain/document_loaders/fs/text";
-import { DocxLoader } from "langchain/document_loaders/fs/docx";
+import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
 
 
 export const documentToText = async (fileKey: string, fileType: string, userId: string = ""): Promise<any> => {

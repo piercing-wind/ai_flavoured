@@ -1,0 +1,21 @@
+{
+   "name": "Ai Flavoured",
+   "short_name": "AI Flavoured",
+   "description": "Ai chatbot assistant Effortlessly upload and summarize multiple file types using advanced GPT-3 and GPT-4 models. Seamlessly create AI-powered presentation slides, generate stunning AI images with Stable Diffusion and DALL-E models, and convert text to audio with ease using state-of-the-art technology.",
+   "start_url": "/",
+   "display": "standalone",
+   "background_color": "#ffffff",
+   "theme_color": "#000000",
+   "icons": [
+     {
+       "src": "https://di6ccwru5n10a.cloudfront.net/public/logo/af.png",
+       "sizes": "192x192",
+       "type": "image/png"
+     },
+     {
+       "src": "https://di6ccwru5n10a.cloudfront.net/public/logo/afdark.ico",
+       "sizes": "256x256",
+       "type": "image/x-icon"
+     }
+   ]
+ }

@@ -8,21 +8,21 @@ import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
    metadataBase: new URL(`${process.env.WEBSITE_URL}/chat`),
-   title: 'AI PDF Summarizer and Chat with Documents | Powered by ChatGPT',
+   title: 'AI Chat-chatbot Assistant AI PDF Summarizer | Powered by ChatGPT openai',
    description: 'Summarize PDF documents with AI and ask questions with our ChatGPT-powered software. Get instant, accurate summaries and answers using advanced GPT-4 technology.',
    applicationName: 'Chat PDF Software',
    authors: [{ name: 'Sourabh', url: 'https://www.linkedin.com/in/sourabh-sharma-8987451a2/' }],
    generator: 'AI Flavoured',
-   keywords: ['AI', 'Chat', 'GPT-3','chatpdf', 'chatgpt', "summary", 'pdf summarizer','document summarizer', 'GPT-4', 'Documents', 'ChatGPT', 'ChatGPT-Software', 'cahtgpt', 'caht', 'cahtgot', 'chatgot', 'chatgpt 4o', 'Chat with Documents', 'AI Flavoured', 'pdf', 'chat', 'ai', 'pdf ia' ],
+   keywords: ['AI', 'Chat', 'GPT-3','chatpdf', 'chatgpt', "summary", 'pdf summarizer','document summarizer', 'GPT-4', 'Documents', 'ChatGPT', 'ChatGPT-Software', 'cahtgpt', 'caht', 'cahtgot', 'chatgot', 'chatgpt 4o', 'Chat with Documents', 'AI Flavoured', 'pdf', 'chat', 'ai', 'pdf ia', "ai chatbot", 'chatbot', 'ai chat-chatbot Assistant' ],
    referrer: 'origin',
    creator: 'Sourabh',
    publisher: 'AI Flavoured',
+   
    robots: {
       index: true,
       follow: true,
     },
    alternates: { canonical: '/chat' },
-   manifest: '/manifest.json',
    category: 'Artificial Intelligence',
    classification: 'Chat Software',
  };
@@ -92,7 +92,7 @@ const Page=async ()=>{
                   </div>
                </div>
             </div>
-            <Footer/>
+            <Footer fixedBgWhite/>
          </div>
       )
 }

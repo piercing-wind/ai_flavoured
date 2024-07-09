@@ -65,7 +65,6 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: { canonical: "/image" },
-  manifest: "/manifest.json",
 };
 
 export default async function Page() {

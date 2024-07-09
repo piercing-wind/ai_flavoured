@@ -14,6 +14,11 @@ export const publicRoutes = [
       '/flavours',
       '/pricing',
       '/about',
+      '/opengraph-image*',
+      '/robots.ts',
+      '/manifest.webmanifest',
+      '/sitemap.ts',
+      '/twitter-image*',
 ];
 
 /*

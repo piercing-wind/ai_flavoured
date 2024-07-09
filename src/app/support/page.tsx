@@ -45,7 +45,6 @@ export const metadata: Metadata = {
       follow: true,
     },
     alternates: { canonical: "/" },
-    manifest: "/manifest.json",
   };
 
 const Page = async() => {

@@ -50,7 +50,6 @@ export const metadata: Metadata = {
       follow: true,
     },
     alternates: { canonical: "/pricing" },
-    manifest: "/manifest.json",
   };
 
 
