@@ -56,8 +56,11 @@ export const metadata: Metadata = {
 const Page = async () => {
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
-   const currencyRateValue = getCurrentRate[currency.currencyCode as keyof typeof getCurrentRate || "USD"] ? getCurrentRate[ currency.currencyCode as keyof typeof getCurrentRate || "USD"] : 1;
-
+   let currencyRateValue = 1; // default value
+      if (currency && currency.currencyCode) {
+        const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
+        currencyRateValue = getCurrentRate[currencyCode] || 1;
+      }
    const subscription = {
       flavour : '/flavours',
       monthlyPremium : '/checkout?plan=1-month-premium',

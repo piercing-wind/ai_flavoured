@@ -12,8 +12,14 @@ export const MonthPricing = () => {
 
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
-   const currencyRateValue = getCurrentRate[currency.currencyCode as keyof typeof getCurrentRate || "USD"] ? getCurrentRate[ currency.currencyCode as keyof typeof getCurrentRate || "USD"] : 1;
+   let currencyRateValue = 1; // default value
+
+   if (currency && currency.currencyCode) {
+     const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
+     currencyRateValue = getCurrentRate[currencyCode] || 1;
+   }
    const symbol = !currencyRateValue ? "$" : currency?.currencySymbol || "$";
+   
    return (
       <div className="xl:w-[80%] flex flex-wrap top-full gap-5">
       {/* Free */}
@@ -198,7 +204,12 @@ export const AnnualPricing = () => {
 
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
-   const currencyRateValue = getCurrentRate[currency.currencyCode as keyof typeof getCurrentRate || "USD"] ? getCurrentRate[ currency.currencyCode as keyof typeof getCurrentRate || "USD"] : 1;
+   let currencyRateValue = 1; // default value
+
+   if (currency && currency.currencyCode) {
+     const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
+     currencyRateValue = getCurrentRate[currencyCode] || 1;
+   }
    const symbol = !currencyRateValue ? "$" : currency?.currencySymbol || "$";
    return (
       <div className="xl:w-[80%] flex flex-wrap top-full gap-5">
