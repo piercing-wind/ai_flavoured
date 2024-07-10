@@ -6,7 +6,7 @@ frontend:
         - mkdir -p ~/.ssh
         - ssh-keyscan github.com >> ~/.ssh/known_hosts
         - npm install -g pnpm
-        - pnpm ci
+        - pnpm install --frozen-lockfile
     build:
       commands:
         - pnpm run build
