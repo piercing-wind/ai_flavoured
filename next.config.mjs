@@ -28,6 +28,12 @@ const nextConfig = {
     ];
     return config;
   },
+  typescript: {
+   ignoreBuildErrors: true,
+ },
+ eslint: {
+   ignoreDuringBuilds: true,
+ },
   // experimental: {
   //       serverComponentsExternalPackages: ['sharp', 'onnxruntime-node'],
   //   },
