@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   };
 
 
-const Page = async () => {
+const Page = () => {
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
    let currencyRateValue = 1; // default value
@@ -61,6 +61,8 @@ const Page = async () => {
         const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
         currencyRateValue = getCurrentRate[currencyCode] || 1;
       }
+   const symbol = currency && currency.currencySymbol ?  currency.currencySymbol : "₹";
+   
    const subscription = {
       flavour : '/flavours',
       monthlyPremium : '/checkout?plan=1-month-premium',
@@ -68,6 +70,7 @@ const Page = async () => {
       annualPremium : '/checkout?plan=annual-premium',
       annualUnlimited : '/checkout?plan=annual-unlimited', 
    }
+
   return (
   <div className="bg-white text-black">
    <Header/>
@@ -90,7 +93,7 @@ const Page = async () => {
          <div className="h-[22rem] flex flex-col items-center w-full bg-neutral-200 rounded-xl">
                <h1 className="text-2xl font-medium brightness-75 pl-10 pt-8 w-full">Free</h1>
                <div className="w-full flex items-baseline justify-center my-10">
-                  <span className="font-bold text-7xl"><span className="text-5xl">{currency.currencySymbol}</span>0 </span>
+                  <span className="font-bold text-7xl"><span className="text-5xl">{symbol}</span>0 </span>
                   <p className="text-xl"> / For beignners</p>
                </div>
                   <Divider className="opacity-100 w-[50%]"/>
@@ -118,7 +121,7 @@ const Page = async () => {
          <div className="h-[22rem] flex flex-col items-center w-full bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 rounded-xl">
                <h1 className={`text-2xl font-bold pl-10 pt-8 w-full brightness-125 ${CSS.animate_charcter} bg-transparent`}>Premium</h1>
                <div className="w-full flex items-baseline justify-center my-10 text-neutral-900">
-                  <span className="font-bold text-7xl"><span className="text-5xl">{currency.currencySymbol}</span>{(price["1-month-premium"]*currencyRateValue).toFixed(1)}</span>
+                  <span className="font-bold text-7xl"><span className="text-5xl">{symbol}</span>{(price["1-month-premium"]*currencyRateValue).toFixed(1)}</span>
                   <p className="text-xl"> / Per Month</p>
                </div>
                   <Divider className="opacity-100 w-[50%]"/>
@@ -146,7 +149,7 @@ const Page = async () => {
          <div className="h-[22rem] text-white flex flex-col items-center w-full bg-gradient-to-bl from-neutral-900 via-slate-900 to-neutral-700 rounded-xl">
                <h1 className={`text-2xl brightness-125 font-extrabold p-8 w-full ${CSS.bgUnlimitedText}`}>Unlimited</h1>
                <div className="w-full flex items-baseline justify-center my-10 text-white">
-                  <span className="font-bold text-7xl"><span className="text-5xl">{currency.currencySymbol}</span>{(price["1-month-unlimited"]*currencyRateValue).toFixed(1)}</span>
+                  <span className="font-bold text-7xl"><span className="text-5xl">{symbol}</span>{(price["1-month-unlimited"]*currencyRateValue).toFixed(1)}</span>
                   <p className="text-xl"> / Per Month</p>
                </div>
                   <Divider className="opacity-100 w-[50%]"/>
@@ -178,7 +181,7 @@ const Page = async () => {
          <div className="h-[22rem] flex flex-col items-center w-full bg-neutral-200 rounded-xl">
                <h1 className="text-2xl font-medium brightness-75 pl-10 pt-8 w-full">Free</h1>
                <div className="w-full flex items-baseline justify-center my-10">
-                  <span className="font-bold text-7xl"><span className="text-5xl">{currency.currencySymbol}</span>0 </span>
+                  <span className="font-bold text-7xl"><span className="text-5xl">{symbol}</span>0 </span>
                   <p className="text-xl"> / For beignners</p>
                </div>
                   <Divider className="opacity-100 w-[50%]"/>
@@ -209,7 +212,7 @@ const Page = async () => {
                   <h1 className="w-24 text-nowrap rounded-2xl bg-white text-aiflavoured text-center">-15% Off</h1>
                </div>
                <div className="w-full flex items-baseline justify-center my-10 text-neutral-900">
-                  <span className="font-bold text-7xl"><span className="text-5xl">{currency.currencySymbol}</span>{(price["annual-premium"]*currencyRateValue).toFixed(1)}</span>
+                  <span className="font-bold text-7xl"><span className="text-5xl">{symbol}</span>{(price["annual-premium"]*currencyRateValue).toFixed(1)}</span>
                   <p className="text-xl"> / Per Month</p>
                </div>
                   <Divider className="opacity-100 w-[50%]"/>
@@ -237,7 +240,7 @@ const Page = async () => {
          <div className="h-[22rem] text-white flex flex-col items-center w-full bg-gradient-to-bl from-neutral-900 via-slate-900 to-neutral-700 rounded-xl">
                <h1 className={`text-2xl brightness-125 font-extrabold p-8 w-full ${CSS.bgUnlimitedText}`}>Unlimited Annual</h1>
                <div className="w-full flex items-baseline justify-center my-10 text-white">
-                  <span className="font-bold text-7xl"><span className="text-5xl">{currency.currencySymbol}</span>{(price["annual-unlimited"]*currencyRateValue).toFixed(1)}</span>
+                  <span className="font-bold text-7xl"><span className="text-5xl">{symbol}</span>{(price["annual-unlimited"]*currencyRateValue).toFixed(1)}</span>
                   <p className="text-xl"> / Per Month</p>
                </div>
                   <Divider className="opacity-100 w-[50%]"/>

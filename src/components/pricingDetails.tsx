@@ -18,7 +18,7 @@ export const MonthPricing = () => {
      const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
      currencyRateValue = getCurrentRate[currencyCode] || 1;
    }
-   const symbol = !currencyRateValue ? "$" : currency?.currencySymbol || "$";
+   const symbol = currency && currency.currencySymbol ?  currency.currencySymbol : "₹";
    
    return (
       <div className="xl:w-[80%] flex flex-wrap top-full gap-5">
@@ -210,7 +210,7 @@ export const AnnualPricing = () => {
      const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
      currencyRateValue = getCurrentRate[currencyCode] || 1;
    }
-   const symbol = !currencyRateValue ? "$" : currency?.currencySymbol || "$";
+   const symbol = currency && currency.currencySymbol ?  currency.currencySymbol : "₹";
    return (
       <div className="xl:w-[80%] flex flex-wrap top-full gap-5">
       {/* Free */}
