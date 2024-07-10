@@ -8,11 +8,9 @@ frontend:
         - npm install -g pnpm
     build:
       commands:
-        - npm install -g pnpm 
-        - pnpm install --frozen-lockfile
+        - pnpm install --frozen-lockfile --prod
         - pnpm run build
         - npx prisma generate
-        - rm -rf node_modules/.pnpm
   artifacts:
     baseDirectory: .next
     files:

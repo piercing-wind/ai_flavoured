@@ -1,6 +1,6 @@
 export const downloadFileFromS3 = async (fileKey: string) => {
   try {
-    const url = `${process.env.AWS_CLOUDFRONT_URL}/${fileKey}`;
+    const url = `${process.env.CLOUUDFRONT_URL_AWS}/${fileKey}`;
 
     const response = await fetch(url);
     if (!response.ok) {

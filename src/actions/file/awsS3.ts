@@ -20,7 +20,7 @@ export type UserFile = {
 };
 //for public access
 export const generatePublicFileAccessURL = async (fileKey: string): Promise<string> => {
-   const url = process.env.AWS_CLOUDFRONT_URL + '/' + fileKey;
+   const url = process.env.CLOUUDFRONT_URL_AWS + '/' + fileKey;
   return url;
 };
 

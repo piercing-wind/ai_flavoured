@@ -11,7 +11,7 @@ export type Theme = {
   }
 export type DisplayTheme = Theme[];
 
-const cloudFrontUrl = process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_URL;
+const cloudFrontUrl = process.env.NEXT_PUBLIC_CLOUUDFRONT_URL_AWS;
 export const displayThemes : DisplayTheme = [
    {
      name : "Scientific Findings",
