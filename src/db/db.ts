@@ -28,11 +28,11 @@ export const pool = new pg.Pool({
   }
 });
 // export const pool = new pg.Pool({
-//    host: process.env.AWS_RDS_DATABASE_HOST,
-//    database: process.env.AWS_PG_DATABASE_NAME,
-//    user: process.env.AWS_PG_USER,
-//    password: process.env.AWS_PG_PASSWORD,
-//    port: 5432 || process.env.AWS_PG_PORT,
+//    host: process.env.RDS_DATABASE_HOST_AWS,
+//    database: process.env.PG_DATABASE_NAME_AWS,
+//    user: process.env.PG_USER_AWS,
+//    password: process.env.PG_PASSWORD_AWS,
+//    port: 5432 || process.env.PG_PORT_AWS,
 //    idleTimeoutMillis: 30000,
 //  });
 

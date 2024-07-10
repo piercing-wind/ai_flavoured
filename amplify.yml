@@ -11,6 +11,7 @@ frontend:
         - npm install -g pnpm 
         - pnpm install --frozen-lockfile
         - pnpm run build
+        - npx generate prisma
   artifacts:
     baseDirectory: .next
     files:
