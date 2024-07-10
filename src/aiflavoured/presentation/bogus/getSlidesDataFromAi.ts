@@ -11,6 +11,7 @@ import {
   RefinePromptTemplate,
   questionPromptTemplate,
 } from "../promptsForPresentation";
+import { BaseLanguageModel, BaseLanguageModelCallOptions, BaseLanguageModelInterface } from "@langchain/core/language_models/base";
 
 export const getSlidesDataFromAi = async (docs?: any, aiModel?: string) => {
   console.log("received text from docs and generating summary");
@@ -29,7 +30,7 @@ export const getSlidesDataFromAi = async (docs?: any, aiModel?: string) => {
   // Split the documents into chunks
   const docText = await splitter.createDocuments([combineDocs]);
   // llm model
-  const llmSummary = new OpenAI({
+  const llmSummary :BaseLanguageModel = new OpenAI<BaseLanguageModelCallOptions>({
     openAIApiKey: process.env.OPENAI_API_KEY,
     modelName: 'gpt-3.5-turbo',
     temperature: 0.1,

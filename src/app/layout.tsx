@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {cn} from "../lib/utils";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeSwitch";
+import path from "path";
 
 export const metadata: Metadata = {
   title: "Ai Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization",
@@ -46,9 +47,18 @@ export const metadata: Metadata = {
    alternates: { canonical: "/" },
    twitter:{
       card : 'summary_large_image'
+   },
+   openGraph:{
+         images:[
+            {
+               url : "/opengraph-image.jpg",
+               height : 630,
+               width : 1200,
+               alt : "Welcome to Ai Flavoured"
+            }
+         ]
    }
  };
-
 export default function RootLayout({
   children,
 }: Readonly<{

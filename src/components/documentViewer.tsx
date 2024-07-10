@@ -24,17 +24,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Rotate } from "hamburger-react";
 import DocFullScreenViewer from "./docFullScreenViewer";
-import { RxHamburgerMenu } from "react-icons/rx";
 import _ from 'lodash';
 
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 
 export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
-  const { width, ref } = useResizeDetector();
+   const { width, ref } = useResizeDetector();
   const [pageNum, setPageNum] = useState<number>();
   const [page, setPage] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -43,7 +41,7 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
   const [scale, setScale] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
   const [debouncedWidth, setDebouncedWidth] = useState(0);
- 
+
   useEffect(() => {
     const debouncedResizeHandler = _.debounce((newWidth) => {
       setDebouncedWidth(newWidth);
@@ -206,8 +204,8 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
               </div>
             }
             onLoadError={(error) => {
-              <div className=" flex items-center justify-center h-screen">
-                <FormError message={"unable to load file"} />
+              return <div className=" flex items-center justify-center h-screen">
+                <FormError message={(error as Error).message} />
                 <p className="text-red">Fail to load document!</p>
               </div>;
             }}
@@ -220,7 +218,7 @@ export const DocumentViewer = ({ docUrl }: { docUrl: string }) => {
           >
             {new Array(pageNum).fill(0).map((_, i) => (
               <div
-                ref={(ref) => (pageRefs.current[i] = ref)}
+                ref={(ref) => {pageRefs.current[i] = ref;}}
                 key={i}
                 className="relative rounded"
               >

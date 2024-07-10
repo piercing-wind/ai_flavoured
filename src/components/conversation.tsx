@@ -27,7 +27,7 @@ const formatMessage = (message : string) : { __html: string }=> {
   const sanitizedMessage = DOMPurify.sanitize(message);
 
   // Remove example questions from the message
-  const messageWithoutQuestions = sanitizedMessage.replace(/\n*Example Questions:.*$/s, '');
+  const messageWithoutQuestions = sanitizedMessage.replace(/\n*Example Questions:[\s\S]*$/, '');
 
   // Replace line breaks with <br> tags
   const formattedMessage = messageWithoutQuestions.replace(/\n/g, '<br>');
