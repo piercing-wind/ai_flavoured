@@ -1,4 +1,0 @@
-Danger : Social login emails from google also receving password reset mail
-
-Fix the Products page in Production / Build.
-
