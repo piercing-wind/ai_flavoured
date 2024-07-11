@@ -12,11 +12,11 @@ export const MonthPricing = () => {
 
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
-   let currencyRateValue = 1; // default value
+   let currencyRateValue = getCurrentRate['INR']; // default value
 
    if (currency && currency.currencyCode) {
      const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
-     currencyRateValue = getCurrentRate[currencyCode] || 1;
+     currencyRateValue = getCurrentRate[currencyCode] || getCurrentRate['INR'];
    }
    const symbol = currency && currency.currencySymbol ?  currency.currencySymbol : "₹";
    
@@ -204,11 +204,11 @@ export const AnnualPricing = () => {
 
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
-   let currencyRateValue = 1; // default value
+   let currencyRateValue = getCurrentRate['INR']; // default value
 
    if (currency && currency.currencyCode) {
      const currencyCode = currency.currencyCode as keyof typeof getCurrentRate;
-     currencyRateValue = getCurrentRate[currencyCode] || 1;
+     currencyRateValue = getCurrentRate[currencyCode] || getCurrentRate['INR'];
    }
    const symbol = currency && currency.currencySymbol ?  currency.currencySymbol : "₹";
    return (

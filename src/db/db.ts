@@ -4,7 +4,7 @@ import pg from "pg";
 //   host: process.env.HOST,
 //   user: process.env.USER_NAME,
 //   password: process.env.PASSWORD,
-//   port: 5432 || process.env.PORT,
+//   port: 5432 || process.env.LOCAL_PORT,
 //   database: process.env.DATABASE_NAME,
 //   idleTimeoutMillis: 30000,
 // });

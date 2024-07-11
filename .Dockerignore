@@ -1,0 +1,4 @@
+node_modules
+.next
+upload-env-variables.sh
+envVariablesInjsonformatForAmplify.sh
