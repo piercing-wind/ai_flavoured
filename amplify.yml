@@ -15,6 +15,3 @@ frontend:
     baseDirectory: .next
     files:
       - '**/*'
-  cache:
-    paths: 
-      - .next/cache/**/*

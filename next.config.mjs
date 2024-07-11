@@ -14,11 +14,11 @@ const nextConfig = {
       },
       {
          protocol: "https",
-         hostname: "https://main.dldpgq47ggwnl.amplifyapp.com",
+         hostname: "main.dldpgq47ggwnl.amplifyapp.com",
       },
       {
          protocol: "https",
-         hostname: "https://aiflavoured.com",
+         hostname: "aiflavoured.com",
       }
     ],
   },
