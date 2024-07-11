@@ -36,6 +36,7 @@ export default function Error({
 
       <div className='w-[30rem] h-[25rem] relative rounded-md shadow-sm my-5'>
          <Image
+            unoptimized
             src="/error/monkey.webp"
             alt="Doggyphy"
             fill

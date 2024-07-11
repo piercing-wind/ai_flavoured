@@ -34,6 +34,7 @@ export const Images = () => {
           AI Presenation
         </h1>
         <Image
+          unoptimized
           src="/about/aipresentation.png"
           alt="AI flavoured presentation"
           height={200}

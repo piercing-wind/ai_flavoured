@@ -23,7 +23,7 @@ const Page = () => {
                '/frontPageimages/sdxl1.png'
                ]
 
-  return (<>
+  return (<>   
       <Header/>
       <WelcomeContent />
     <div className="w-full mb-20 space-y-8 sm:space-y-14 xl:space-y-36 md:mt-24 xl:mt-40 flex flex-col items-center justify-center">
@@ -75,6 +75,7 @@ const Page = () => {
       <div className='w-full lg:h-[19rem] px-5 xl:px-20 space-y-16 lg:space-y-0 flex lg:flex-row items-center flex-col justify-center lg:justify-between'>
          <div className='relative max-h-[14rem] sm:max-h-[18rem] max-w-[22rem] sm:max-w-[29rem] rounded-xl overflow-hidden w-full' style={{ height: '18rem' , width : '29rem' }}>
             <Image
+                unoptimized  
                 src='/frontPageimages/audio.png'
                 alt="audio"
                 fill

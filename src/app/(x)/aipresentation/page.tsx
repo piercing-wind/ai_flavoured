@@ -39,6 +39,7 @@ export default async function Page() {
     <div className="flex flex-col items-center flex-grow w-full h-[100vh] overflow-y-auto space-y-12">
       <div className="w-full border-b flex items-center justify-between p-2">
          <Image
+         unoptimized
          className=""
          src="/logo/logo.png"
          alt="Af Logo"

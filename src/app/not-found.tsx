@@ -43,6 +43,7 @@ export default async function NotFound() {
 
         <div className="relative h-[20rem] lg:h-[28rem] w-[28rem] p-4 m-auto cursor-pointer rounded-lg overflow-hidden">
           <Image
+            unoptimized
             src={'/monkeyThrowingLaptop.webp'}
             alt={"404"}
             fill

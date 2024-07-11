@@ -70,6 +70,7 @@ export default async function Page(){
     >
       <div className="w-full border-b flex items-center justify-between p-2">
          <Image
+         unoptimized
          className=""
          src="/logo/logo.png"
          alt="Af Logo"

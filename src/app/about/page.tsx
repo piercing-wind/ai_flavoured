@@ -61,6 +61,7 @@ const Page=()=>{
                style={{boxShadow:"0 0 10px gray"}}
                >
                   <Image
+                    unoptimized  
                     src='/about/aboutpage.png'
                     alt="People working at AI flavoured"
                     fill

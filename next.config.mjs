@@ -11,6 +11,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
         port: "",
+      },
+      {
+         protocol: "https",
+         hostname: "https://main.dldpgq47ggwnl.amplifyapp.com",
+      },
+      {
+         protocol: "https",
+         hostname: "https://aiflavoured.com",
       }
     ],
   },
