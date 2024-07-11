@@ -2,48 +2,50 @@ import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
    const currentDate = new Date().toISOString();
-  return [
+   const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
+   return [
     {
-      url: `${process.env.WEBSITE_URL}/`,
+      url: `${website}/`,
       lastModified: new Date(currentDate),
       priority: 1,
       changeFrequency: "monthly",
     },
     {
-      url: `${process.env.WEBSITE_URL}/chat`,
+      url: `${website}/chat`,
       lastModified: new Date(currentDate),
       priority : 0.9,
     },
     {
-      url: `${process.env.WEBSITE_URL}/aipresentation`,
+      url: `${website}/aipresentation`,
       lastModified: new Date(currentDate),
       priority : 0.9,
     },
     {
-      url: `${process.env.WEBSITE_URL}/image`,
+      url: `${website}/image`,
       lastModified: new Date(currentDate),
       priority : 0.7,
     },
     {
-      url: `${process.env.WEBSITE_URL}/audio`,
+      url: `${website}/audio`,
       lastModified: new Date(currentDate),
       priority : 0.7,
     },
     {
-      url : `${process.env.WEBSITE_URL}/register`,
+      url : `${website}/register`,
       lastModified: new Date(currentDate),
     },
     {
-      url : `${process.env.WEBSITE_URL}/login`,
+      url : `${website}/login`,
       lastModified: new Date(currentDate),
     }
     ,{
-      url : `${process.env.WEBSITE_URL}/flavours`,
+      url : `${website}/flavours`,
       lastModified: new Date(currentDate),
       priority : 0.5,
     }
     ,{
-      url : `${process.env.WEBSITE_URL}/about`,
+      url : `${website}/about`,
       lastModified: new Date(currentDate),
       priority : 0.5,
     }

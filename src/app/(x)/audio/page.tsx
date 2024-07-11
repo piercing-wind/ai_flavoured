@@ -9,8 +9,10 @@ import { AudioSessionButton } from "@/components/uiClients/audioButton";
 import { Metadata } from "next";
 import { ServerUserProfile } from "@/components/header/links/serverUserProfile";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
-   metadataBase: new URL(`${process.env.WEBSITE_URL}/audio`),
+   metadataBase: new URL(`${website}/audio`),
    title: "AI Voice Generator: Realistic Text to Speech and AI Voiceover. | AI Flavoured",
    description:"AI Flavoured Create the most realistic speech with our AI audio platform.reate the perfect AI voiceover. Go instantly from text to voice with ease.",
    applicationName: "AI Voice Generator",

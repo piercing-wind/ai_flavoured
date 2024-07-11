@@ -10,9 +10,11 @@ import { Metadata } from "next";
 import CSS from "./pricing.module.css";
 import { SeeMore } from "@/components/pricingPageSeeMore";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
    title: "Ai Flavoured | Pricing Best AI Tools",
-    metadataBase: new URL(`${process.env.WEBSITE_URL}/pricing`),
+    metadataBase: new URL(`${website}/pricing`),
     description:"Best Value AI Services Pricing for AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization,Free Ai Images, Free Ai Audio, Free and Premium Plans available.",
     applicationName: "AI Flavoured", 
     authors: [

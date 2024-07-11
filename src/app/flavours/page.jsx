@@ -7,10 +7,11 @@ import Link from "next/link";
 import { ChatGPTIconGlow, StableDiffusionIcon } from "@/components/logo";
 import { getUserSession } from "@/actions/userSession";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
 
 export const metadata = {
    title: "Ai Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization AI Chat with doc",
-    metadataBase: new URL(`${process.env.WEBSITE_URL}`),
+    metadataBase: new URL(`${website}/flavours`),
     description:"Experience the best in AI with our comprehensive solutions. with chatgpt-4,chatgpt-4o, Generate stunning images with DALL-E and SDXL, create professional presentations from any document, transform text into high-quality audio, and quickly summarize PDFs. Enhance your productivity with our advanced AI tools.",
     applicationName: "AI Flavoured", 
     authors: [

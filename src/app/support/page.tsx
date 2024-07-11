@@ -4,9 +4,11 @@ import { SupportForm } from "./support-form";
 import { getUserSession } from "@/actions/userSession";
 import { Metadata } from "next";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
    title: "Ai Flavoured | Support",
-    metadataBase: new URL(`${process.env.WEBSITE_URL}`),
+    metadataBase: new URL(`${website}/support`),
     description:"AI Flavoured Support, get in touch with us for any queries or support. We are here to help you.",
     applicationName: "AI Flavoured", 
     authors: [

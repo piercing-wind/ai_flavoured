@@ -12,8 +12,10 @@ import { DALLE3, Login, StableDiffusionXL } from "@/components/uiClients/buttonF
 import { ChatGPTIconGlow } from "@/components/logo";
 import { ServerUserProfile } from "@/components/header/links/serverUserProfile";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(`${process.env.WEBSITE_URL}/image`),
+  metadataBase: new URL(`${website}/image`),
   title: "Generate AI Images Online with DALL-E 3 and SDXL | AI Image Generatorr",
   description:"Generate stunning AI images with our powerful and popular AI Image Generator using SDXL and DALL-E 3. Explore stable diffusion online and OpenAI's generative AI tools. Create now!",
   applicationName: "AI Image Generator",

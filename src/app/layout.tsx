@@ -4,9 +4,10 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeSwitch";
 import path from "path";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
 export const metadata: Metadata = {
-  title: "Ai Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization",
-   metadataBase: new URL(`${process.env.WEBSITE_URL}`),
+   title: "Ai Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization",
+   metadataBase: new URL(website),
    description:"Experience the best in AI with our comprehensive solutions. Generate stunning images with DALL-E and SDXL, create professional presentations from any document, transform text into high-quality audio, and quickly summarize PDFs. Enhance your productivity with our advanced AI tools.",
    applicationName: "AI Flavoured", 
    authors: [

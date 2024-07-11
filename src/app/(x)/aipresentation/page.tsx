@@ -10,8 +10,10 @@ import Image from "next/image";
 import { Login } from "@/components/uiClients/buttonForImagePage";
 import { ServerUserProfile } from "@/components/header/links/serverUserProfile";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
-   metadataBase: new URL(`${process.env.WEBSITE_URL}/aipresentation`),
+   metadataBase: new URL(`${website}/aipresentation`),
    title: 'AI Presentation Maker | PDF to PPTX | GPT-4 Document Summarizer',
    description: 'Make ai presentations with our AI-powered tools. Utilize GPT-4o and GPT-4 models to effortlessly convert PDFs to PPTX and PPT formats. Create stunning AI presentations with our AI PPT and AI PPTX makers. Experience the power of cutting-edge AI presentation technology for unparalleled creativity and efficiency.',
    applicationName: 'AI Presentation',

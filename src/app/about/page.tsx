@@ -4,9 +4,11 @@ import CSS from "./about.module.css"
 import Image from "next/image"
 import { Images } from "./client"
 import { Metadata } from "next"
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
    title: "AI Flavoured - About Us",
-   metadataBase: new URL(`${process.env.WEBSITE_URL}/about`),
+   metadataBase: new URL(`${website}/about`),
    description: "AI Chat- Chatbot Discover AI Flavoured: your ultimate platform for creating engaging social content effortlessly. Whether you're a student or a professional, our AI-powered tools, including AI Image, ChatGPT, DALL-E, and Stable Diffusion XL, simplify the creation of standout presentations, images, audio, and more. Join us in making content creation accessible, efficient, and enjoyable for everyone.",
    applicationName: "AI Flavoured",
    authors: [

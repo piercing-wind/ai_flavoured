@@ -4,21 +4,16 @@ An Array of routes which are accessible to the public and
 @type {string[]}
 */
 export const publicRoutes = [
-      '/',
-      '/new-verification',
-      '/share',
-      '/chat',
-      '/aipresentation',
-      '/image',
-      '/audio',
-      '/flavours',
-      '/pricing',
-      '/about',
-      '/opengraph-image*',
-      '/robots.ts',
-      '/manifest.webmanifest',
-      '/sitemap.ts',
-      '/twitter-image*',
+   '/',
+   '/new-verification',
+   '/share',
+   '/chat',
+   '/aipresentation',
+   '/image',
+   '/audio',
+   '/flavours',
+   '/pricing',
+   '/about',
 ];
 
 /*
@@ -28,11 +23,11 @@ these routes will redirect users to home page after login or register.
 */
 
 export const authRoutes = [ 
-      '/login',
-      '/register', 
-      '/error',
-      '/reset-password',
-      '/new-password',
+   '/login',
+   '/register', 
+   '/error',
+   '/reset-password',
+   '/new-password',
 ];
 
 /*

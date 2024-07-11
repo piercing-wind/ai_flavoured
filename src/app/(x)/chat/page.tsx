@@ -6,8 +6,10 @@ import { getUserSession } from "@/actions/userSession";
 import { getChatWithDocQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
 import { Footer } from "@/components/footer";
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export const metadata: Metadata = {
-   metadataBase: new URL(`${process.env.WEBSITE_URL}/chat`),
+   metadataBase: new URL(`${website}/chat`),
    title: 'AI Chat-chatbot Assistant AI PDF Summarizer | Powered by ChatGPT openai',
    description: 'Summarize PDF documents with AI and ask questions with our ChatGPT-powered software. Get instant, accurate summaries and answers using advanced GPT-4 technology.',
    applicationName: 'Chat PDF Software',

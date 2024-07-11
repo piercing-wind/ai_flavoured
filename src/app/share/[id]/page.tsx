@@ -2,10 +2,12 @@ import { fetchShareUrl } from '@/actions/userPromptImage/userPromptImage';
 import { Metadata } from 'next';
 import Image from 'next/image';
 
+const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
+
 export async function generateMetadata({ params }: { params: { id: string } }) :Promise<Metadata> {
    const image = await fetchShareUrl(params.id);
    return {
-    metadataBase : new URL(process.env.WEBSITE_URL!),
+    metadataBase : new URL(`${website}/share/${params.id}`),
     title: "Check out this amazing AI image I created with AI Flavoured! 😃",
     description: "Look at this awesome image I just made using AI Flavoured! The possibilities are endless with AI creativity. You should try it and share your own creations! #AIFlavoured #AICreativity #AIArt",
     openGraph: {
