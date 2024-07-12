@@ -74,6 +74,6 @@ export const uploadAudioToS3 = async (
 export const generatePublicFileAccessURL = async (
   fileKey: string
 ): Promise<string> => {
-  const url = process.env.CLOUUDFRONT_URL_AWS + "/" + fileKey;
+  const url = process.env.CLOUDFRONT_URL_AWS + "/" + fileKey;
   return url;
 };
