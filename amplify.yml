@@ -11,6 +11,7 @@ frontend:
         - ssh-keyscan github.com >> ~/.ssh/known_hosts
         - npm install -g pnpm
         - pnpm install --frozen-lockfile
+        - npx prisma migrate deploy
         - npx prisma generate
     build:
       commands:
