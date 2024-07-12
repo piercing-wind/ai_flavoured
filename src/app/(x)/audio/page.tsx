@@ -72,7 +72,7 @@ export default async function Page(){
          <Image
          unoptimized
          className=""
-         src="/logo/logo.png"
+         src="https://di6ccwru5n10a.cloudfront.net/public/logo/logo.png"
          alt="Af Logo"
          height={60}
          width={60}

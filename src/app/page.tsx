@@ -12,15 +12,14 @@ import { Divider } from '@/components/divider';
 import { BlubIcon, ProfessionalIcon, ResearchIcon, StudentIcon } from '@/components/socialIcons';
 import { Footer } from '@/components/footer';
 
-// import { UserProfile } from '@/components/header/links/userProfile';
 
 const Page = () => {
-   const dalleImages = ['/frontPageimages/6529cc8a4611e9ca1e6b6dbe_fantastic_world_dall_e_3.webp','/frontPageimages/AnimeGirlSInging.webp','/frontPageimages/riversMountains.jpg','/frontPageimages/dalle3.jpg']
-   const sdxl = ['/frontPageimages/Create-realistic-AI-art-models-using-Stable-Diffusion-and-Absolute-Reality.webp',
-               '/frontPageimages/list-of-stable-diffusion-models-in-sd2-version-1.webp',
-               '/frontPageimages/prompthero-prompt-e57966a9ee7.webp',
-               '/frontPageimages/stablediffusion-1-5-v0-9jz8otm1in4a1.webp',
-               '/frontPageimages/sdxl1.png'
+   const dalleImages = ['https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/6529cc8a4611e9ca1e6b6dbe_fantastic_world_dall_e_3.webp','https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/AnimeGirlSInging.webp','https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/riversMountains.jpg','https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/dalle3.jpg']
+   const sdxl = ['https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/Create-realistic-AI-art-models-using-Stable-Diffusion-and-Absolute-Reality.webp',
+               'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/list-of-stable-diffusion-models-in-sd2-version-1.webp',
+               'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/prompthero-prompt-e57966a9ee7.webp',
+               'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/stablediffusion-1-5-v0-9jz8otm1in4a1.webp',
+               'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/sdxl1.png'
                ]
 
   return (<>   
@@ -76,7 +75,7 @@ const Page = () => {
          <div className='relative max-h-[14rem] sm:max-h-[18rem] max-w-[22rem] sm:max-w-[29rem] rounded-xl overflow-hidden w-full' style={{ height: '18rem' , width : '29rem' }}>
             <Image
                 unoptimized  
-                src='/frontPageimages/audio.png'
+                src='https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/audio.png'
                 alt="audio"
                 fill
                 style={{ objectFit: 'cover', borderRadius: '2rem'}} // match the rounded-xl class (which is 1rem by default)

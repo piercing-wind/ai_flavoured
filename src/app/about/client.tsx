@@ -35,7 +35,7 @@ export const Images = () => {
         </h1>
         <Image
           unoptimized
-          src="/about/aipresentation.png"
+          src="https://di6ccwru5n10a.cloudfront.net/public/about/aipresentation.png"
           alt="AI flavoured presentation"
           height={200}
           width={400}
@@ -46,7 +46,7 @@ export const Images = () => {
       <div className="mx-auto -rotate-6 w-auto">
         <h1 className="rotate-6 text-2xl mx-auto mb-20 font-bold">AI Voices</h1>
         <Image
-          src="/about/aivoice.webp"
+          src="https://di6ccwru5n10a.cloudfront.net/public/about/aivoice.webp"
           alt="AI flavoured presentation"
           height={200}
           width={300}
@@ -60,7 +60,7 @@ export const Images = () => {
         </h1>
 
         <Image
-          src="/about/cat.webp"
+          src="https://di6ccwru5n10a.cloudfront.net/public/about/cat.webp"
           alt="AI flavoured presentation"
           height={200}
           width={300}
@@ -73,7 +73,7 @@ export const Images = () => {
           AI Summarizations
         </h1>
         <Image
-          src="/about/summarizer.webp"
+          src="https://di6ccwru5n10a.cloudfront.net/public/about/summarizer.webp"
           alt="AI flavoured presentation"
           height={500}
           width={300}

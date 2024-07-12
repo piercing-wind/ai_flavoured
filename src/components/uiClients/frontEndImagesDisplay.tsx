@@ -34,7 +34,7 @@ export const DisplayPowerpointImages= ()=>{
          style={{boxShadow : '-1px -1px 5px #fff4f4' }}
        >
           <Image
-             src={'/frontPageimages/presentationDisplay.png'}
+             src={'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/presentationDisplay.png'}
              alt="Picture of AI Presentation"
              fill
              style={{
@@ -47,7 +47,7 @@ export const DisplayPowerpointImages= ()=>{
           style={{boxShadow : '-1px -1px 5px #ff0786'  }}
           >
              <Image
-                src={minimalistSalePitchThemePresentation ? minimalistSalePitchThemePresentation : '/frontPageimages/presentationDisplay.png'}
+                src={minimalistSalePitchThemePresentation ? minimalistSalePitchThemePresentation : 'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/presentationDisplay.png'}
                 alt="Picture of AI Presentation"
                 fill
                 style={{

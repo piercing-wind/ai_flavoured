@@ -62,7 +62,7 @@ const Page=()=>{
                >
                   <Image
                     unoptimized  
-                    src='/about/aboutpage.png'
+                    src='https://di6ccwru5n10a.cloudfront.net/public/about/aboutpage.png'
                     alt="People working at AI flavoured"
                     fill
                     style={{
