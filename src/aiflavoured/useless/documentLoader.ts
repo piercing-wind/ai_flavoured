@@ -1,7 +1,7 @@
 "use server"
-import { S3Loader } from "langchain/document_loaders/web/s3";
+import { S3Loader } from "@langchain/community/document_loaders/web/s3";
 import { awsS3Config } from "@/aws/awsS3config";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 
 export const loadDocument = async (fileKey: string) => {
 //   console.log(fileKey);

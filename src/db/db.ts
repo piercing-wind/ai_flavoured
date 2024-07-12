@@ -16,12 +16,23 @@ import pg from "pg";
 //   database: process.env.SUPABASE_DB_NAME,
 //   idleTimeoutMillis: 30000,
 // });
+// export const pool = new pg.Pool({
+//   host: process.env.NEON_HOST,
+//   user: process.env.NEON_USER,
+//   password: process.env.NEON_PASSWORD,
+//   port: 5432 || process.env.NEON_PORT,
+//   database: process.env.NEON_DB_NAME,
+//   idleTimeoutMillis: 30000,
+//   ssl: {
+//    rejectUnauthorized: false
+//   }
+// });
 export const pool = new pg.Pool({
-  host: process.env.NEON_HOST,
-  user: process.env.NEON_USER,
-  password: process.env.NEON_PASSWORD,
-  port: 5432 || process.env.NEON_PORT,
-  database: process.env.NEON_DB_NAME,
+  host: process.env.AZURE_PGHOST,
+  user: process.env.AZURE_PGUSER,
+  password: process.env.AZURE_PGPASSWORD,
+  port: 5432 || process.env.AZURE_PGPORT,
+  database: process.env.AZURE_PGDATABASE,
   idleTimeoutMillis: 30000,
   ssl: {
    rejectUnauthorized: false

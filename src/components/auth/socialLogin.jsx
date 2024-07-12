@@ -6,6 +6,7 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 
 export const SocialLogin = ({label, callbackUrl, plan}) => {
+   console.log(callbackUrl)
   return (
     <div className="sm:flex gap-4 w-full mt-4">
       {/* <SocialButton icon={<FcGoogle className="h-5 w-5"/>} type="Google" styles={styles}/>

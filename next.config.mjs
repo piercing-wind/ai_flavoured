@@ -4,7 +4,7 @@ const nextConfig = {
    remotePatterns: [
       {
         protocol: "https",
-        hostname: "di6ccwru5n10a.cloudfront.net",
+        hostname: "di6ccwru5n10a.cloudfront.net", //CDN
         port: "",
       },
       {
@@ -14,11 +14,11 @@ const nextConfig = {
       },
       {
          protocol: "https",
-         hostname: "main.dldpgq47ggwnl.amplifyapp.com",
+         hostname: "aiflavoured.com",
       },
       {
          protocol: "https",
-         hostname: "aiflavoured.com",
+         hostname: "avatars.githubusercontent.com",
       }
     ],
   },
