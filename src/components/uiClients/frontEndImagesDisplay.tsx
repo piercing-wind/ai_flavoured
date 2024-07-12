@@ -118,7 +118,7 @@ export const ChatWithDocumentImage =()=>{
       <div className='relative h-[25rem] sm:h-[32rem] md:h-[40rem] lg:h-[52rem] w-full'>
              <Image
                 unoptimized
-                src={'/frontPageimages/frontPage.png'}
+                src={'https://di6ccwru5n10a.cloudfront.net/public/frontPageimages/frontPage.png'}
                 alt="Picture of AI Presentation"
                 fill
                 style={{
