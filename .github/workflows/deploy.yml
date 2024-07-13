@@ -60,8 +60,8 @@ jobs:
           AZURE_VM_USERNAME: ${{ secrets.AZURE_VM_USERNAME }}
           AZURE_VM_KEY: ${{ secrets.AZURE_VM_KEY }}
         run: |
-          scp -o StrictHostKeyChecking=no -i $AZURE_VM_KEY build-artifacts.tar.gz $AZURE_VM_USERNAME@$AZURE_VM_IP:/aiflavoured &&
-          ssh -o StrictHostKeyChecking=no -i $AZURE_VM_KEY $AZURE_VM_USERNAME@$AZURE_VM_IP "
+          scp -o StrictHostKeyChecking=no -i "$AZURE_VM_KEY" build-artifacts.tar.gz "$AZURE_VM_USERNAME@$AZURE_VM_IP:/aiflavoured"
+          ssh -o StrictHostKeyChecking=no -i "$AZURE_VM_KEY" "$AZURE_VM_USERNAME@$AZURE_VM_IP" "
           cd /aiflavoured &&
           tar -xzf build-artifacts.tar.gz &&
           pm2 restart aiflavoured || pm2 start 'pnpm run start' --name 'aiflavoured'"
