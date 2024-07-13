@@ -59,8 +59,6 @@ jobs:
           echo "Azure VM IP: ${{secrets.AZURE_VM_IP}}"
           echo "Azure VM Username: ${{secrets.AZURE_VM_USERNAME}}"
           echo "Azure VM key: ${{secrets.AZURE_VM_KEY}}"
-          echo "Azure VM Key length: ${#AZURE_VM_KEY}"
-          ls -l "$AZURE_VM_KEY"  
 
       - name: Deploy to Azure VM
         env:
