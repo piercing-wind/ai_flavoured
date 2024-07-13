@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 
-export const SocialLogin = ({ label, callbackUrl = "/", plan }) => {
+export const SocialLogin = ({ label, callbackUrl, plan }) => {
   const handleSignIn = async (formData) => {
     "use server";
     const provider = formData.get("provider");
@@ -13,11 +13,7 @@ export const SocialLogin = ({ label, callbackUrl = "/", plan }) => {
 
     try {
       await signIn(provider, {
-        redirectTo: callbackUrl
-          ? plan
-            ? `${callbackUrl}?plan=${plan}`
-            : callbackUrl
-          : process.env.REDIRECT_URL,
+        redirectTo: callbackUrl ? plan  ? `${callbackUrl}?plan=${plan}` : callbackUrl : '/',
       });
     } catch (err) {
       if (err instanceof AuthError) {

@@ -24,14 +24,12 @@ const Login = ({searchParams} : {searchParams :{ [key : string] : string}}) => {
         </div>
         <div className="text-center mt-4 align-middle">* OR *</div>
         <SocialLogin label="Continue with" callbackUrl={searchParams.callbackUrl} plan={searchParams.plan} />
-        <div
-          className={cn("mx-auto w-1/3 border-t mt-5", Styles.borderColor)}
-        ></div>
+        <div className={cn("mx-auto w-1/3 border-t mt-5", Styles.borderColor)}/>
         <BackButtonLink
           link={`/register?callbackUrl=${searchParams.callbackUrl || "/"}`}
           text="Dont have an account?"
           label="Create here"
-        />
+        />  
       </div>
       </Suspense>
     </>

@@ -1,0 +1,67 @@
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches:
+      - azureProd
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Package build artifacts
+        run: |
+          tar -czf build-artifacts.tar.gz .next public node_modules
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: build-artifacts.tar.gz
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: .
+
+      - name: Deploy to Azure VM
+        env:
+          AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
+          AZURE_VM_USERNAME: ${{ secrets.AZURE_VM_USERNAME }}
+          AZURE_VM_KEY: ${{ secrets.AZURE_VM_KEY }}
+        run: |
+          scp -o StrictHostKeyChecking=no -i $AZURE_VM_KEY build-artifacts.tar.gz $AZURE_VM_USERNAME@$AZURE_VM_IP:/aiflavoured &&
+          ssh -o StrictHostKeyChecking=no -i $AZURE_VM_KEY $AZURE_VM_USERNAME@$AZURE_VM_IP "
+          cd /aiflavoured &&
+          tar -xzf build-artifacts.tar.gz &&
+          pm2 restart aiflavoured || pm2 start 'pnpm run start' --name 'aiflavoured'"

@@ -13,7 +13,7 @@ env.json
 #env for apmlify
 upload-env-variables.sh
 envVariablesInjsonformatForAmplify.sh
-
+/logs
 # next.js
 /.next/
 /out/
