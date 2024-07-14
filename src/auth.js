@@ -114,5 +114,6 @@ export const {
     },
   },
   session: { strategy: "jwt" },
+  basePath: "/api/auth",
   ...authConfig,
 });

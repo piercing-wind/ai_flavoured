@@ -18,6 +18,7 @@ env-uploader-to-github.sh
 # next.js
 /.next/
 /out/
+.env*
 
 # production
 /build
