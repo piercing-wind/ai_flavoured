@@ -42,6 +42,10 @@ const nextConfig = {
  eslint: {
    ignoreDuringBuilds: true,
  },
+ server :{
+   port: 3000,
+ }
+
   // experimental: {
   //       serverComponentsExternalPackages: ['sharp', 'onnxruntime-node'],
   //   },
