@@ -13,6 +13,7 @@ env.json
 #env for apmlify
 upload-env-variables.sh
 envVariablesInjsonformatForAmplify.sh
+env-uploader-to-github.sh
 /logs
 # next.js
 /.next/
