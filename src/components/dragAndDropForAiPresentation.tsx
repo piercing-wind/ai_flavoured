@@ -19,7 +19,7 @@ import { GrAttachment } from "react-icons/gr";
 import { PPTXConfig } from "./PPTXConfig";
 import { RiPresentationFill } from "react-icons/ri";
 import { generatePresentaionAndStore } from "@/aiflavoured/presentation/generatePresentaionAndStore";
-import { presentationSchema } from "../../tmp/schemas";
+import { presentationSchema } from "../schemas";
 import * as z from "zod"
 import { UserFile } from "@/actions/file/awsS3";
 import { getAiPresentationQuota, updateAiPresentationQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
