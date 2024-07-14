@@ -61,7 +61,7 @@ const Page = async () => {
  const userSession = await getUserSession();
   return (<>
   <Header/>
-    <div className="mx-20 gap-5 space-y-20">
+    <div className="px-4 sm:mx-20 gap-y-5 sm:gap-5 space-y-20">
       <h1 className="text-4xl font bold pt-10">Explore AI&#39;s</h1>
       <div className="w-full flex flex-wrap gap-8 justify-center items-center">
          <div className={`h-[12rem] w-[20rem] ${CSS.custom_shadow} rounded-xl overflow-hidden  relative`}>

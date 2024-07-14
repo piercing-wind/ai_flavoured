@@ -26,7 +26,7 @@ export const SeeMore =()=>{
       <>
       {pricing && <Pricing setPricing={setPricing}/>}
       <Button variant={'default'} className="p-2 text-xl font-semibold" onClick={()=>setPricing(!pricing)}>See Details</Button>
-       <div className="my-10 flex flex-col gap-4">
+       <div className="px-2 my-10 flex flex-col gap-4">
           <h1 className="w-full text-left font-semibold">FAQ</h1>
           <div onClick={()=>setFaq({...faq, cancelSubscription: !faq.cancelSubscription})} className="flex items-center cursor-pointer">
             <p>Can I cancel my subscription?</p>
