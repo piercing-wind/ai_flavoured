@@ -4,7 +4,7 @@ import { PresentationData, presentation } from "./themes/presentation";
 import { uploadToS3 } from "@/actions/file/awsS3";
 import { storeMessage } from "@/actions/chat/messages";
 import * as z from "zod"
-import { presentationSchema } from "@/schemas";
+import { presentationSchema } from "../../../tmp/schemas";
 import { facetThemePresentation } from "./themes/facetThemePresentation";
 import { Presentation, ppPartyThemePresentation } from "./themes/ppPartyThemePresentation";
 import { minimalistSalePitchThemePresentation } from "./themes/minimalistSalePitchThemePresentation";

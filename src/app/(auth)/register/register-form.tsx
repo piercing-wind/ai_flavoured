@@ -12,7 +12,7 @@ import {
   FormField,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RegisterUserSchema } from "@/schemas";
+import { RegisterUserSchema } from "../../../../tmp/schemas";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";

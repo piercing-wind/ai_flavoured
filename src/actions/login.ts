@@ -1,5 +1,5 @@
 "use server";
-import { LoginUserSchema } from "@/schemas";
+import { LoginUserSchema } from "../../tmp/schemas";
 import * as z from "zod";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";

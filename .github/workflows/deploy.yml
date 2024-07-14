@@ -26,3 +26,6 @@ jobs:
         export $(grep -v '^#' .env | xargs)
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build 
+    - name: Change directory
+      run: cd /home/aiflavaoured-sourabh/actions-runner/_work/ai_flavoured/ai_flavoured
+    - run: pm2 restart 0 

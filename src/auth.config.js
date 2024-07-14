@@ -2,7 +2,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { LoginUserSchema } from "./schemas/index";
+import { LoginUserSchema } from "../tmp/schemas/index";
 import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
 

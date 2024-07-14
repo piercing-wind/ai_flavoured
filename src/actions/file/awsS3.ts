@@ -4,7 +4,7 @@ import { DeleteObjectCommand,DeleteObjectsCommand, PutObjectCommand } from "@aws
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { dbq } from "@/db/db"
 import * as z from "zod"
-import { uploadToUserFileTBSchema } from "@/schemas"
+import { uploadToUserFileTBSchema } from "../../../tmp/schemas"
 import { ThemeDefault } from "@tsparticles/engine";
 // import {auth} from "@/auth"
 export type UserFile = {

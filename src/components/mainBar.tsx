@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { MultipleFilesPPTXwarn } from "@/components/multipleFilesPPTXwarn";
 import { DrawerForPPTXConfiguration } from "./drawerForPPTXConfiguration";
 import { generatePresentaionAndStore } from "@/aiflavoured/presentation/generatePresentaionAndStore";
-import { presentationSchema } from "@/schemas";
+import { presentationSchema } from "../../tmp/schemas";
 import * as z from "zod"
 import { updateAiPresentationQuota } from "@/actions/subscriptionQuota/subscriptionQuota";
 import { useToast } from "./ui/use-toast";

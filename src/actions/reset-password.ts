@@ -1,6 +1,6 @@
 "use server";
 import * as z from "zod";
-import { ResetPasswordSchema } from "@/schemas";
+import { ResetPasswordSchema } from "../../tmp/schemas";
 import { getUserByEmail } from "@/data/user";
 import { generateResetPasswordToken } from "@/lib/token";
 import { sendPasswordResetEmail } from "@/lib/mail";
