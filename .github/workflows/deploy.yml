@@ -22,6 +22,7 @@ jobs:
     - name: Create .env file
       run: echo "${{secrets.ENV_VARIABLE}}" > .env
     - name: Load .env varables
-      run: ${cat .env |grep -v ^# | xargs}
+      run: |
+        export ${grep -v '^#' .env | xargs}
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build 
