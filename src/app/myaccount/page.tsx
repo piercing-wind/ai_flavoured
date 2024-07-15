@@ -97,7 +97,6 @@ const Page = async () => {
     const aiImagesProgress = calculateProgress(quota.aiImages, quantity[user.subscription]?.aiImages || 0);
 
     
-   console.log(aiChatWithDocProgress)
   return (
     <AuthProvider>
       <div className="w-full">

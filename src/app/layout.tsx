@@ -53,7 +53,7 @@ export const metadata: Metadata = {
          images:[
             {
                url : "/opengraph-image.jpg",
-               height : 630,
+               height : 630,  
                width : 1200,
                alt : "Welcome to Ai Flavoured"
             }

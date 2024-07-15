@@ -53,7 +53,6 @@ export const Register = async (values: z.infer<typeof RegisterUserSchema>,callba
           callbackUrl,
           plan
         );
-        console.log("Confirmation mail sent on your email");
       }
 
       return { success: "Account created successfully! Please confirm with mail sent in your email" };

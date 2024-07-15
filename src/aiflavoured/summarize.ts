@@ -12,7 +12,6 @@ import {
 
 
 export const summarize = async (docs: any, aiModel : string) => {
-  console.log('received text from docs and generating summary')
   const documents = []; //temprary storage for documents
 
   // Loop through the documents and store the page content in the documents array
@@ -54,6 +53,5 @@ export const summarize = async (docs: any, aiModel : string) => {
   });
 
   const summary = await summarizeChain.invoke({ input_documents: docSummary });
-  console.log('summary generated')
   return summary.output_text;
 };

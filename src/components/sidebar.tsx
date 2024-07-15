@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa6";
 import { TiFolderOpen } from "react-icons/ti";
 import { IoIosCreate } from "react-icons/io";
 import { FaHistory } from "react-icons/fa";
-import { useState , useOptimistic, useEffect} from "react";
+import { useState , useEffect} from "react";
 import { MdChevronLeft, MdChevronRight, MdFolderZip } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -43,7 +43,9 @@ import {
 
 export const Sidebar = ({chatSessions, subscription}:SidebarProps) => {
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(windowWidth < 786 ? false : true);
   const [editingsession, setEditingsession] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [success, setSuccess] = useState(false);
@@ -54,21 +56,23 @@ export const Sidebar = ({chatSessions, subscription}:SidebarProps) => {
   const pathname = usePathname();
   const params = pathname.split("/").pop();
   useEffect(() => {
+   const handleResize = () => {
+     setWindowWidth(window.innerWidth);
+   };
+
+   window.addEventListener('resize', handleResize);
+
+   return () => {
+     window.removeEventListener('resize', handleResize);
+   };
+ }, []);
+
+  useEffect(() => {
     const refreshPage = () => {
       router.refresh();
     };
     refreshPage();
   },[router])
-
-  //todo :  will update this later
-  // const [optimisticChatHistory, updateOptimisticChatHistory ]= useOptimistic(chatSessions, (state, newChatHistory : any) => {
-    
-  //   return [...state, newChatHistory];
-    
-  // });
-
-  // const [chatHistory, setChatHistory] = useState(chatSessions);
-
 
   const handleEdit = async () => {  
     if (editingsession !== null) {
@@ -94,8 +98,7 @@ export const Sidebar = ({chatSessions, subscription}:SidebarProps) => {
          const data = chatSessions.find(chat => chat.session === session)?.userFiles;
          if(data){
           deleteFromS3(data.map(file => file.fileKey));
-          await deleteChatSession(session, sessionType),
-          console.log("deleted")
+          await deleteChatSession(session, sessionType)
          }
          toast({
             title: 'Chat deleted',

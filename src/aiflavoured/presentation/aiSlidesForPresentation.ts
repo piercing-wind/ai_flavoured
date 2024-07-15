@@ -4,7 +4,6 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { slidePrompt, refineOutput } from "./promptsForPresentation";
 export const aiSlidesForPresentation = async (model : string = 'gpt-4o', numOfSlides : string = '10', docsData : string, audience : string, wording : string) :Promise<string> => {
-  console.log("working on it...");
   let slideData : string = "";
   try{
       

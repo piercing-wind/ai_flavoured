@@ -66,7 +66,6 @@ const Share = React.forwardRef<HTMLDivElement, ShareProps>((props, ref) => {
     try {
       setCopied(true);
       await navigator.clipboard.writeText(shareUrl);
-      console.log("Share URL copied to clipboard");
     } catch (err) {
       console.log("Failed to copy: ", err);
     }

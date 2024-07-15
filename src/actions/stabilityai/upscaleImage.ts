@@ -12,7 +12,6 @@ export const upscaleImage = async (fileName : string, url : string,value : numbe
       if(height * width < 262144) throw new Error('Image size is invalid. Please provide valid image size.');
       const engineId = 'esrgan-v1-x2plus'
       const apiHost = process.env.STABILITY_AI_API_HOST ?? 'https://api.stability.ai'
-      console.log('function invoked')
       
       const res = await fetch(url) ;
       const arrayBuffer = await res.arrayBuffer();

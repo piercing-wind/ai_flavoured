@@ -194,13 +194,12 @@ model subscriptionQuota {
   renewal            DateTime?          @default(now())
   subscriptionStatus SubscriptionStatus @default(free)
   aiChatWithDoc      Int                @default(2)
-  aipresentation     Int                @default(1)
-  gpt3_5Question     Int                @default(1000)
+  aipresentation     Int                @default(0)
+  gpt3_5Question     Int                @default(10)
   gpt4Question       Int                @default(0)
-  gpt4oQuestion      Int                @default(0)
-  aiImages           Int                @default(0)
-  aiVoices           Int?               @default(0)
-  textToSpeech       Int                @default(0)
+  gpt4oQuestion      Int                @default(2)
+  aiImages           Int                @default(2)
+  textToSpeech       Int                @default(1)
   user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

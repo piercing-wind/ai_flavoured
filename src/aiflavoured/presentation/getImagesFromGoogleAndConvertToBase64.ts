@@ -56,7 +56,6 @@ export type Localbase64Image = {
       mime : string;
 };
 export const getImagesFromGoogleAsBase64ArrayWithoutHeaders = async ( query : string) =>{
-      console.log('Converting images to base64 without header')
       try {
             let filteredImagesDesgins : Base64Image[] = [];
             let base64Images: Base64Image[] = [];
@@ -70,7 +69,6 @@ export const getImagesFromGoogleAsBase64ArrayWithoutHeaders = async ( query : st
                               const base64Image = await imageToBase64(image);
                               if(base64Image !== 'fetch failed'){
                                     base64Images.push({link : image, base64 : base64Image, mime : mime});
-                                    console.log({link : image, base64 : base64Image.substring(0,100), mime : mime})
                               }
                         }
                   }catch(e){
@@ -78,17 +76,14 @@ export const getImagesFromGoogleAsBase64ArrayWithoutHeaders = async ( query : st
                   }     
             }
             const filterAI = await googleImagesDesignFilterAI('gpt-4o', base64Images) as string[];
-          console.log(filterAI)
            if(filterAI){ 
             for(let i=0; i < filterAI.length; i++){
                   if(filterAI[i].toLocaleLowerCase() === 'yes' || filterAI[i].toLocaleLowerCase() === 'yes.' || filterAI[i].toLocaleLowerCase().includes('yes')){
-                        console.log("Added")
                         filteredImagesDesgins.push(base64Images[i]);
                   }
             }}
             
       }
-      console.log(filteredImagesDesgins) 
       return filteredImagesDesgins;
       } catch (e) {
             console.log("Error from here",e);
@@ -96,7 +91,6 @@ export const getImagesFromGoogleAsBase64ArrayWithoutHeaders = async ( query : st
 
 }
 export const getImagesFromGoogleAsBase64ArrayWithHeaders =async ( query : string) =>{
-      console.log('working on images from google as base64 with headers')
       try {
             let base64Image = ""
             let base64Images: Base64Image[] = [];

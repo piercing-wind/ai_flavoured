@@ -3,7 +3,6 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 
 export const getTheTopicOfPresentaionAI=async (model: string, data: string)=>{
-      console.log('model used for getTheTopicOfPresentaionAI', model)
       const llm = new ChatOpenAI({
             openAIApiKey: process.env.OPENAI_API_KEY,
             temperature: 0.2,
@@ -42,7 +41,6 @@ export const getTheTopicOfPresentaionAI=async (model: string, data: string)=>{
       return title;
 }
 export const getTheTopicOfPresentaionAITweaker=async (model: string, data: string)=>{
-      console.log('model used for getTheTopicOfPresentaionAI', model)
       const llm = new ChatOpenAI({
             openAIApiKey: process.env.OPENAI_API_KEY,
             temperature: 0.2,

@@ -14,6 +14,16 @@ export const publicRoutes = [
    '/flavours',
    '/pricing',
    '/about',
+   '/privacy-policy',
+   '/robots.txt',
+   '/opengraph-image.jpg',
+   '/favicon.ico',
+   '/manifest.webmanifest',
+   '/sitemap',
+   'robots.txt',
+   'opengraph-image.jpg',
+   'favicon.ico',
+   'manifest.webmanifest',
 ];
 
 /*

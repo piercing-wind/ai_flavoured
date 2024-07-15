@@ -100,7 +100,6 @@ const summaryRefinePrompt = PromptTemplate.fromTemplate(
   });
 
   const res = await chain.invoke({ input_documents: relevantChunks });
-  console.log(res);
   // Parse the response into the expected format
   const { text } = res;
 };

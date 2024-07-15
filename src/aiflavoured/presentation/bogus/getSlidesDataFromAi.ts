@@ -14,7 +14,6 @@ import {
 import { BaseLanguageModel, BaseLanguageModelCallOptions, BaseLanguageModelInterface } from "@langchain/core/language_models/base";
 
 export const getSlidesDataFromAi = async (docs?: any, aiModel?: string) => {
-  console.log("received text from docs and generating summary");
   const documents = []; //temprary storage for documents
 
 
@@ -52,6 +51,5 @@ export const getSlidesDataFromAi = async (docs?: any, aiModel?: string) => {
   });
 
   const summary = await summarizeChain.invoke({ input_documents: docText });
-  console.log(summary);
   return summary.output_text;
 };

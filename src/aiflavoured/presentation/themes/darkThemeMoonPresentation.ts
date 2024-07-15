@@ -1415,7 +1415,6 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
 }
 
 export const darkThemeMoonPresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink: PresentationImage) => {
-      console.log("presentaion function call");
       try {
 
         let templatePicker = Math.floor(Math.random() * 4);
@@ -1566,7 +1565,6 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
               });
               }
             } else {
-              console.log("bodyTAC is a string")
               // bodyTAC is a strin
               if (bodyTAC.length < maxCharCountForBody) {
               let bodyTACString = bodyTAC.replace(/\n/g, '\n\n');
@@ -1639,7 +1637,6 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
                 return `${index + 1}. ${item}`
               }
               }).join('\n');
-              console.log(lineSpacing)
               slideTC.addText(contentTCString, {
               color: colors.body,
               placeholder: "leftContent",
@@ -2133,7 +2130,6 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
             });
             break;
             default:
-            console.log(`No slide found for key : ${key}`)
         }  
         slideNumber++
         index++;
@@ -2143,12 +2139,10 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
       }
       // Generate a stream
       try {
-        console.log("Generating Stream");
         const streamData = await pptx.stream();
         const buffer = ArrayBuffer.isView(streamData) ? streamData.buffer : undefined;
         
         if (buffer) {
-            console.log("exiting")
             //temporarily saving the file
 
             fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
@@ -2182,7 +2176,6 @@ export const darkThemeMoonPresentation = async ({author, title, pptxData, imageS
               pptxBufferBase64,
               filePath
             }
-            console.log("exitng from presention")
             return data;
     
         } else {

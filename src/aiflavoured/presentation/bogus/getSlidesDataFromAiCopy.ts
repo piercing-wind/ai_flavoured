@@ -14,7 +14,6 @@ import { LLMChain, RefineDocumentsChain, loadSummarizationChain } from "langchai
 import { Input } from "@/components/ui/input";
 
 export const getSlidesDataFromAi2 = async (docs?: any, aiModel?: string) => {
-  console.log("received text from docs and generating summary");
   const splitter = new TokenTextSplitter({
     chunkSize: 16000,
     chunkOverlap: 300,
@@ -37,7 +36,7 @@ export const getSlidesDataFromAi2 = async (docs?: any, aiModel?: string) => {
   //   },
   //   {
   //     context : ({input}) => input.context,
-  //     numberOfSlides : ({input}) => input.numberOfSlides,
+  //     numberOfSlides : ({input}) => input.numberOfSlidzes,
   //     userPrompt : ({input}) => input.userPrompt,  
   //   },
   //   slideChain,

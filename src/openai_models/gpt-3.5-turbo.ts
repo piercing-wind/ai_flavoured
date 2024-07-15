@@ -18,7 +18,6 @@ export const ChatCompletion = async (message : string) => {
       messages: chat,
       model: "gpt-3.5-turbo",
     });
-    console.log(chat);
     return response;
   } catch (error) {
     console.log(error);

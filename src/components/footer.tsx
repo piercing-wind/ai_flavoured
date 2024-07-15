@@ -1,5 +1,5 @@
 import { Divider } from "./divider"
-import { LinkdinIcon, RedditIcon, TwitterIcon } from "./socialIcons";
+import { Instagram, Instagram2, LinkdinIcon, RedditIcon, TwitterIcon } from "./socialIcons";
 import Link from "next/link";
 import CSS from "@/app/frontpage.module.css"
 
@@ -12,9 +12,9 @@ export const Footer = ({fixedBgWhite = false}:{fixedBgWhite?:boolean}) => {
                   <Link href="/" className="font-bold glow whitespace-nowrap text-5xl m-4">Ai Flavoured</Link>
                   <p className="text-xs opacity-75 w-full text-left pl-10">Follow us</p>
                   <div className="flex space-x-4">
-                        <LinkdinIcon  classNameForBg="bg-aiflavoured dark:bg-none" color={fixedBgWhite ? "#ff0786" : "#ffffff"}/>
-                        <TwitterIcon classNameForBg="bg-aiflavoured dark:bg-none" color={fixedBgWhite ? "#ff0786" : "#ffffff"}/>
-                        <RedditIcon classNameForBg="bg-aiflavoured dark:bg-none" size={32} color={fixedBgWhite ? "#ff0786" : "#ffffff"}/>
+                        <Link href="https://www.linkedin.com/company/ai-flavoured" target="_blank"><LinkdinIcon  classNameForBg="bg-aiflavoured dark:bg-none" color={fixedBgWhite ? "#ff0786" : "#ffffff"}/></Link>
+                        <Link href="https://x.com/aiflavoured" target="_blank"> <TwitterIcon classNameForBg="bg-aiflavoured dark:bg-none" color={fixedBgWhite ? "#ff0786" : "#ffffff"}/></Link>
+                        <Link href="https://www.instagram.com/ai.flavoured/" target="_blank"><Instagram2  size={32} /></Link>
                   </div>
                </div>
              <div className="p-8 md:ml-12">
@@ -42,6 +42,7 @@ export const Footer = ({fixedBgWhite = false}:{fixedBgWhite?:boolean}) => {
              <div className="p-8 md:ml-12">
                 <h5 className="text-base font-semibold opacity-80">Others</h5>
                 <ul className="font-medium space-y-2 md:space-y-3 py-2 text-sm">
+                   <li className=""><a href="/privacy-policy">Privacy Policy</a></li>
                    <li className=""><a href="mailto:team@aiflavoure.com">Contact Us</a></li>
                    <li><a href="/support">Report Bug / Support</a></li>
                </ul>

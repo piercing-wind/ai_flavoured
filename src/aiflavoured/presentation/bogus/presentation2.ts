@@ -119,7 +119,6 @@ const titleAndContent = async (pptx: pptxgen, image : string, model : string) =>
   return pptx;
 };
 const titleSlide =async (pptx: pptxgen, image : string, model : string) => {
-  console.log('model', model)
   const dominantColors : string = await histogram(image);
   console.log("dominantColors", dominantColors);
   const colors = await getTheBestColorForTitleAndSubheading(model , dominantColors);

@@ -56,9 +56,6 @@ export const pptxToPdf = async (filePath: string, param : string, userId: string
           if (!exportTask || !exportTask.result?.files?.length) {
               throw new Error('Export task not completed successfully or no files found');
           }
-          console.log('Exported PDF file:', exportTask.result);
-          console.log('Exported PDF file:', exportTask.result.files[0]);
-          console.log('Exported PDF file:', exportTask.result.files[0].url);
           const file = exportTask.result.files[0];
   
           // Download the converted PDF file

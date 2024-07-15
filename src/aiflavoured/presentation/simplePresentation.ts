@@ -153,7 +153,6 @@ const titleAndContent = async (pptx: pptxgen, colors : any, model : string) => {
       return pptx;
     };
 export const spresentation = async () => {
-      console.log("Called")
       const colors  = {title: "ffb8ea", body: "f2e8ef"}; 
   let pptx = new pptxgen();
       pptx = await titleAndContent(pptx, colors, "gpt-4-turbo");
@@ -178,7 +177,6 @@ export const spresentation = async () => {
   const buffer = ArrayBuffer.isView(streamData) ? streamData.buffer : undefined;
   
   if (buffer) {
-      console.log("exiting")
       fs.writeFileSync("output/FPresentation.pptx", new Uint8Array(buffer));
   }
 };

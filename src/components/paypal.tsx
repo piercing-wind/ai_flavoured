@@ -40,7 +40,6 @@ const onApprove: PayPalButtonsComponentProps['onApprove'] = async (data) => {
       title : 'Subscription Created',
       description : 'You have successfully created subscription ' + data.subscriptionID,
    })
-   console.log(data)
    alert('You have successfully created subscription ' + data.subscriptionID);
 }
 const onError : PayPalButtonsComponentProps['onError'] = (error) => {

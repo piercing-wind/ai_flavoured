@@ -1410,7 +1410,6 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
     };
 
 export const facetThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink : PresentationImage, variant : string) => {
-      console.log("presentaion function call");
       try {
 
       //   const base64Images = await varientsToBase64(templates[templatePicker]) as Base64Image[] ; 
@@ -1663,7 +1662,6 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
               });
               }
               } else {
-              console.log("bodyTAC is a string")
               // bodyTAC is a strin
               if(bodyTAC.length < maxCharCountForBody){
                 let bodyTACString = bodyTAC.replace(/\n/g, '\n\n');
@@ -1729,7 +1727,6 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
                  return `${index + 1}. ${item}`
                 }
                 }).join('\n');
-                console.log(lineSpacing)
                 slideTC.addText(contentTCString, {
                 placeholder: "leftContent",
                 lineSpacing :lineSpacing,
@@ -2202,12 +2199,10 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
       }
       // Generate a stream
       try {
-        console.log("Generating Stream");
         const streamData = await pptx.stream();
         const buffer = ArrayBuffer.isView(streamData) ? streamData.buffer : undefined;
         
         if (buffer) {
-            console.log("exiting")
             fs.writeFileSync(`output/${title}.pptx`, new Uint8Array(buffer));
           const bufferString = Buffer.from(buffer)
           const pptxBufferBase64 = bufferString.toString('base64')
@@ -2223,7 +2218,6 @@ export const facetThemePresentation = async ({author, title, pptxData, imageSear
             pptxBufferBase64,
             filePath
           }
-          console.log("exitng from presention")
           return data;
     
         } else {

@@ -23,8 +23,6 @@ const Page: React.FC<PageProps> = ({ searchParams }) => {
 
   const INR = Math.round((InrRate * parseFloat(value) * 10)) * 10;
 
-  console.log(INR);
-   
    
    return (
       <div className="h-[100vh] w-full overflow-hidden flex bg-white text-black">

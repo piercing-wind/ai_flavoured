@@ -78,7 +78,7 @@ variant
             </DropdownMenuTrigger>
 
             <DropdownMenuContent 
-              className="relative p-4 backdrop-blur-3xl z-10 rounded focus:ring-0 focus:outline-none grid grid-cols-3 gap-4"
+              className="relative p-4 backdrop-blur-3xl z-20 rounded focus:ring-0 focus:outline-none grid grid-cols-3 gap-4"
               align="start"
               side="top"
               style={{
@@ -90,7 +90,6 @@ variant
                 <div className=" flex items-center flex-col justify-between border-b border-gray-400">
                   <div className=" h-24 w-44 rounded-md border border-black " onClick={(e)=>{
                     e.stopPropagation();
-                    console.log(theme.pathPdf)
                     setCurrentPdf(theme.pathPdf);
                     setIsOpen(true)
                   }}
@@ -152,7 +151,7 @@ variant
 
                     </DropdownMenuTrigger>
                       <DropdownMenuContent>         
-                        <div className="absolute h-16 p-2 space-x-2 backdrop-blur-lg border rounded-md -bottom-16 flex items-center justify-center"
+                        <div className="absolute z-20 h-16 p-2 space-x-2 backdrop-blur-lg border rounded-md -bottom-16 flex items-center justify-center"
                         onMouseOver={(e)=> e.stopPropagation()}
                         style={{
                           backgroundImage: 'linear-gradient(to top right, #ff6e7f, #bfe9ff)',
@@ -215,7 +214,7 @@ variant
            </div>
 
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="backdrop-blur-3xl bg-neutral-100 dark:bg-neutral-900 rounded">
+          <DropdownMenuContent className=" z-20 bg-neutral-100 dark:bg-neutral-900 rounded">
             <DropdownMenuItem onClick={()=>setSlides(7)}>
             <div className=" flex items-center justify-between m-2 border-b border-gray-400 w-28 px-2 h-8">
               <p>7</p>
@@ -250,7 +249,7 @@ variant
         </DropdownMenu>
         </div>
         {/* for word amounts */}
-        <div className="wordAmountsropDown backdrop-blur-lg">
+        <div className="wordAmountsropDown ">
         <p className="mx-4 text-center">
         Wording
         </p>
@@ -261,7 +260,7 @@ variant
            </div>
 
           </DropdownMenuTrigger>
-          <DropdownMenuContent className=" backdrop-blur-3xl bg-neutral-100 dark:bg-neutral-900 rounded">
+          <DropdownMenuContent className=" z-30  bg-neutral-100 dark:bg-neutral-900 rounded">
             <DropdownMenuItem onClick={() => setWordsAmount('Bullets')}>
             <div className=" flex items-center justify-between m-2 border-b border-gray-400 w-28 px-2 h-8">
               <p>Bullets</p> <PiListBullets/>
@@ -290,7 +289,7 @@ variant
         </DropdownMenu>
         </div>
         {/* Audience drop down */}
-        <div className="audienceDropDown backdrop-blur-lg">
+        <div className="audienceDropDown">
         <p className="mx-4 text-center">
         Audience
         </p>
@@ -300,7 +299,7 @@ variant
               {audience} <IoChevronDown />
            </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className={`h-52 overflow-auto backdrop-blur-3xl bg-neutral-100 dark:bg-neutral-900 rounded ${Styles.chatscroll}`}>
+          <DropdownMenuContent className={`h-52 z-20 overflow-auto bg-neutral-100 dark:bg-neutral-900 rounded ${Styles.chatscroll}`}>
             {audienceData.map((audienceList, index) => (
             <DropdownMenuItem key={index} onClick={() => setAudience(audienceList)}>
             <div className=" flex items-center justify-between m-2 border-b border-gray-400 w-36 px-2 h-8">
@@ -316,13 +315,13 @@ variant
         </DropdownMenu>
         </div>
       {/* Image Dropdown */}
-      <div className="imagedropdown backdrop-blur-lg">
+      <div className="imagedropdown">
         <p className="mx-4 text-center">
         Images Search
         </p>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>   
-           <div className=" flex items-center justify-between m-2 border border-gray-800 w-36 px-2 rounded-md h-8">
+           <div className=" flex items-center -z-10 justify-between m-2 border border-gray-800 w-40 px-2 rounded-md h-8">
               {imageSearch} <IoChevronDown />
            </div>
 

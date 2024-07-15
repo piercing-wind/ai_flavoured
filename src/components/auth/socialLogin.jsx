@@ -9,8 +9,6 @@ export const SocialLogin = ({ label, callbackUrl, plan }) => {
   const handleSignIn = async (formData) => {
     "use server";
     const provider = formData.get("provider");
-    console.log(provider);
-
     try {
       await signIn(provider, {
         redirectTo: callbackUrl ? plan  ? `${callbackUrl}?plan=${plan}` : callbackUrl : '/',

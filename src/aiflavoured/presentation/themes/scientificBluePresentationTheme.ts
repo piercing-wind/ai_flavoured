@@ -1715,7 +1715,6 @@ const pictureWithCaption = async (pptx: pptxgen , font : Font , waterMark : bool
     }
 
 export const scientificBluePresentationTheme = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink : PresentationImage) => {
-      console.log("presentaion function call");
       try {
         let index = 0;
         let templatePicker = Math.floor(Math.random() * 4);
@@ -1904,7 +1903,6 @@ export const scientificBluePresentationTheme = async ({author, title, pptxData, 
                 });
               }
               } else {
-                console.log("bodyTAC is a string")
                 // bodyTAC is a strin
                 if(bodyTAC.length < maxCharCountForBody){
                   let bodyTACString = bodyTAC.replace(/\n/g, '\n\n');
@@ -1985,7 +1983,6 @@ export const scientificBluePresentationTheme = async ({author, title, pptxData, 
                      return `${index + 1}. ${item}`
                     }
                   }).join('\n');
-                  console.log(lineSpacing)
                   slideO.addText(contentOString, {
                     color : colors.body,
                     placeholder: "body",
@@ -2531,12 +2528,10 @@ export const scientificBluePresentationTheme = async ({author, title, pptxData, 
       }
       // Generate a stream
       try {
-        console.log("Generating Stream");
         const streamData = await pptx.stream();
         const buffer = ArrayBuffer.isView(streamData) ? streamData.buffer : undefined;
         
         if (buffer) {
-            console.log("exiting")
             //temporarily saving the file
 
             fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
@@ -2570,7 +2565,6 @@ export const scientificBluePresentationTheme = async ({author, title, pptxData, 
               pptxBufferBase64,
               filePath
             }
-            console.log("exitng from presention")
             return data;
     
         } else {

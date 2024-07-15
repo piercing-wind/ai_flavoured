@@ -22,7 +22,6 @@ export async function POST(req:NextRequest){
   const session = body.session;
   const prevChat = body.prevChat;
   const aiModel = body.aiModel;
-  console.log(session)
   // s ?? [];
   // console.log("Messages",messages)
   // const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
@@ -149,7 +148,6 @@ Response:
   const retrieverChain = RunnableSequence.from([
     (prevResult) => {
       const standaloneQuestion = prevResult.standalone_question;
-      console.log(standaloneQuestion);
       return { standaloneQuestion };
     },
     async ({ standaloneQuestion }) => {

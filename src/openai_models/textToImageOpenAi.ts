@@ -17,7 +17,6 @@ export const textToImageOpenAI = async ({
    userId : string
 }) : Promise<Data[]> => {
    try{
-   console.log(samples, model, size, style, prompt, userId)  
    const openai = new OpenAI(
       {apiKey : process.env.OPENAI_API_KEY},
    ); 

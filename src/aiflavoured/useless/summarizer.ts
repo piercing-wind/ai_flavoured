@@ -166,6 +166,5 @@ const summarizeChain = loadSummarizationChain(llm, {
     const conclusionPromise = conclusionChain.invoke({ input_documents: documents });
     
     const results = await Promise.all([summaryPromise, conclusionPromise]);
-    console.log(results);
   
 }

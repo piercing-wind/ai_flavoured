@@ -19,10 +19,8 @@ export const loadDocument = async (fileKey: string) => {
       unstructuredAPIURL: "http://localhost:3000/",
       unstructuredAPIKey: "", // this will be soon required
     });
-    console.log("file downloaded");
     const docs = await loader.load();
 
-    console.log(docs);
     return docs;
   } catch (error) {
     console.log(error);

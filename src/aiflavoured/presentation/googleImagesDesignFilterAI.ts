@@ -22,8 +22,6 @@ export const googleImagesDesignFilterAI = async (
       try {
         const base64 = items.base64;
         const mime = items.mime;
-        console.log("base64 from ai", base64.substring(0, 100));
-        console.log("mime from ai", mime);
         const message = new HumanMessage({
           content: [
             {
@@ -42,7 +40,6 @@ export const googleImagesDesignFilterAI = async (
           ],
         });
         const response = await chat.invoke([message]);
-        console.log(response.content);
         filteredImageUrls.push(response.content.toString());
       } catch (e) {
         if (e instanceof Error) {

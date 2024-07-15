@@ -46,7 +46,6 @@ SUMMARIES AND EXAMPLE QUESTIONS:
   const res = await chain.invoke({
     input_document: documents,
   });
-  console.log({ res });
 };
 /*
 {

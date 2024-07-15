@@ -58,7 +58,6 @@ export const getAllPreviousSessionsWithOtherData = async (userId : string) => {
 
 //update the chatName
 export const updateChatName = async (session : string, newChatName: string) => {
-  console.log("updating chat name")
   const updatedChat = await db.session.update({
     where: { session: session },
     data: { chatName: newChatName },

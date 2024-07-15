@@ -106,7 +106,6 @@ export const chats = async (message : string) => {
   const retrieverChain = RunnableSequence.from([
     (prevResult) => {
       const standaloneQuestion = prevResult.standalone_question;
-      console.log(standaloneQuestion);
       return { standaloneQuestion };
     },
     async ({ standaloneQuestion }) => {

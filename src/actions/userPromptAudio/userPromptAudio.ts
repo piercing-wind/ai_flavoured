@@ -14,7 +14,6 @@ export type AudioData ={
 }
 
 export const addAudioDataToDB = async (data : AudioData) => {
-   console.log(data);
    try{const {id,userId, session,prompt ,audioUrl,fileKey,fileName,fileType} = data;
    const res = await db.userPromptAudio.create({
       data: {

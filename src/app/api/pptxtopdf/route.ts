@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
           body: pdfBuffer
         })
         if(res.ok){
-          console.log("upload success")
         }
       }catch(e){
         console.log("error upload", e);

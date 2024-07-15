@@ -2,7 +2,7 @@ name: Azure CI/CD Pipeline
 
 on:
   push:
-    branches: [ "azureProd" ]
+    branches: [ "Production" ]
 
 jobs:
   build:

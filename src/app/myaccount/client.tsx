@@ -27,7 +27,6 @@ export const NameChangeButton = ({
   const changeName = async () => {
     const res = await changeUserName(userId, newName);
     router.refresh();
-    console.log(res);
   };
 
   const handleButtonClick = () => {

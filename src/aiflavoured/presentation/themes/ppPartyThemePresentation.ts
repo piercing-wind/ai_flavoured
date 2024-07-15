@@ -1470,7 +1470,6 @@ const pictureWithCaption = async (pptx: pptxgen, font: Font, waterMark: boolean)
     }
 
 export const ppPartyThemePresentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData, photosWithLink : PresentationImage) => {
-      console.log("presentaion function call");
       try {
         let templatePicker = Math.floor(Math.random() * 4);
         const templates = [presentationTemplateBlue, presentationTemplatePink, presentationTemplatePurple,presentationTemplateGradientPink];
@@ -1606,7 +1605,6 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
                   });
                 }
               } else {
-                console.log("bodyTAC is a string")
                 // bodyTAC is a string
                 if (bodyTAC.length < maxCharCountForBody) {
                   let bodyTACString = bodyTAC.replace(/\n/g, '\n\n');
@@ -1669,7 +1667,6 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
                     return `${index + 1}. ${item}`
                   }
                 }).join('\n');
-                console.log(lineSpacing)
                 slideTC.addText(contentTCString, {
                   placeholder: "leftContent",
                   lineSpacing: lineSpacing,
@@ -2130,12 +2127,10 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
       }
       // Generate a stream
       try {
-        console.log("Generating Stream");
         const streamData = await pptx.stream();
         const buffer = ArrayBuffer.isView(streamData) ? streamData.buffer : undefined;
         
         if (buffer) {
-            console.log("exiting")
             //temporarily saving the file
 
           fs.writeFileSync(`output/${author}.pptx`, new Uint8Array(buffer));
@@ -2154,7 +2149,6 @@ export const ppPartyThemePresentation = async ({author, title, pptxData, imageSe
             pptxBufferBase64,
             filePath
           }
-          console.log("exitng from presention")
           return data;
     
         } else {

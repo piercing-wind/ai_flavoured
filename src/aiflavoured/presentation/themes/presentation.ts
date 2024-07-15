@@ -1203,7 +1203,6 @@ export type PresentationData = {
 }
 
 export const presentation = async ({author, title, pptxData, imageSearch, waterMark}: PresentationData) => {
-  console.log("presentaion function call");
   try {
     let templatePicker = Math.floor(Math.random() * 4);
     const templates = [presentationTemplateBlue, presentationTemplatePink, presentationTemplatePurple,presentationTemplateGradientPink];
@@ -1458,7 +1457,6 @@ export const presentation = async ({author, title, pptxData, imageSearch, waterM
         });
           }
           } else {
-        console.log("bodyTAC is a string")
         // bodyTAC is a strin
         if(bodyTAC.length < maxCharCountForBody){
           let bodyTACString = bodyTAC.replace(/\n/g, '\n\n');
@@ -1897,7 +1895,6 @@ export const presentation = async ({author, title, pptxData, imageSearch, waterM
   }
   // Generate a stream
   try {
-    console.log("Generating Stream");
     const streamData = await pptx.stream();
     const buffer = ArrayBuffer.isView(streamData) ? streamData.buffer : undefined;
     
@@ -1917,7 +1914,6 @@ export const presentation = async ({author, title, pptxData, imageSearch, waterM
         pptxBufferBase64,
         filePath
       }
-      console.log("exitng from presention")
       return data;
   
   //     const datapdf = await uploadToS3(fileName.replace(".pptx", ".pdf"), "application/pdf", pdfBuffer.byteLength, userId, param);

@@ -191,8 +191,6 @@ const slide = `[
  }
 
  const res = await storePresentationData(data, "clx8n25is00011ggo83qpnxhw", JSON.stringify(slideImage));
- // console.log("clickers")
- // //  await presentation(data);  *
  //   // await facetThemePresentation(data);   
    // const res =  await ppPartyThemePresentation(data,slideImage);  
  // //  await darkThemeMoonPresentation(data);  *

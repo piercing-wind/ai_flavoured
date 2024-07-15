@@ -11,7 +11,6 @@ export async function PUT(req:Request){
           const session = file.data.session;
           const fileType = file.data.fileType;
     
-          console.log("from route", fileName);
           try{
             
             await uploadFileCore(userId, fileKey, fileName, fileType, session); 

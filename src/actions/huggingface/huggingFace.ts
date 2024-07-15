@@ -4,7 +4,6 @@ import { Data, uploadImageToS3 } from '../userPromptImage/uploadImageToS3';
 
 export async function imageGenerator(data: { prompt: string, width?: number, height?: number },userId : string) :Promise<Data> {
    const { prompt, width = 768, height = 768 } = data;
-   console.log('Generating image...');
    let imageBlob;
    const inference = new HfInference(process.env.HUGGINGFACE_API_KEY);
    for (let i = 0; i < 5; i++) {

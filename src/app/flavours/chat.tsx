@@ -38,9 +38,6 @@ export const Chat = () => {
       console.error("Failed to fetch chat:", error);
     }
   };
-  const x = async (data:any) => {
-    console.log(data);
-  };
 
   return (
     <div>
