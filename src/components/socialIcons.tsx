@@ -323,7 +323,7 @@ return (
 
 export const Instagram2 =({size=32, color='#000000'}:{size?:number , color ?: string})=>{
    return (
-<svg version="1.1" id="Layer_1" height={size} width={size} className="dark:bg-white dark:fill-aiflavoured rounded-md overflow-hidden" fill={color} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<svg version="1.1" id="Layer_1" height={size} width={size} className="fill-aiflavoured rounded-md overflow-hidden" fill={color} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 56.7 56.7" enable-background="new 0 0 56.7 56.7" xmlSpace="preserve">
 <g>
 	<path d="M28.2,16.7c-7,0-12.8,5.7-12.8,12.8s5.7,12.8,12.8,12.8S41,36.5,41,29.5S35.2,16.7,28.2,16.7z M28.2,37.7
