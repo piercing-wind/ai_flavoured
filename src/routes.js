@@ -16,6 +16,7 @@ export const publicRoutes = [
    '/about',
    '/privacy-policy',
    '/contact-us',
+   '/terms',
    '/robots.txt',
    '/opengraph-image.jpg',
    '/favicon.ico',

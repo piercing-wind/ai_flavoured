@@ -48,6 +48,7 @@ export const Footer = ({fixedBgWhite = false}:{fixedBgWhite?:boolean}) => {
                 <h5 className="text-base font-semibold opacity-80">Others</h5>
                 <ul className="font-medium space-y-2 md:space-y-3 py-2 text-sm">
                    <li className=""><a href="/privacy-policy">Privacy Policy</a></li>
+                   <li className=""><a href="/terms">Terms & Condition</a></li>
                    <li className=""><a href="/contact-us">Contact Us</a></li>
                    <li><a href="/support">Report Bug / Support</a></li>
                </ul>
