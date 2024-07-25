@@ -59,8 +59,8 @@ const Page = () => {
         <p className="mb-4">We may update this Privacy Policy from time to time to reflect changes in our business practices or legal requirements. We will notify you of any significant changes by posting the new Privacy Policy on our website.</p>
 
         <h2 className="text-xl font-bold mt-8 mb-2">10. How to contact us</h2>
-        <p className="mb-4">If you have any questions or concerns about this Privacy Policy, please contact us here <Link href="mailto:sourabh@aiflavoured.com" className="underline">Contact Us</Link></p>
-        <p className="mb-4">Users can cancel your subscription at any time. Please note that you must cancel your subscription before it renews for a subsequent month in order to avoid being charged for the next month's subscription fee. If you cancel your subscription, the cancellation will become effective at the end of the current monthly subscription period.</p>
+        <p className="mb-4">If you have any questions or concerns about this Privacy Policy, please contact us here <Link href="mailto:contact@aiflavoured.com" className="underline">Contact Us</Link></p>
+        <p className="mb-4">Users can cancel their subscription at any time. Please note that you must cancel your subscription before it renews for a subsequent month in order to avoid being charged for the next month's subscription fee. If you cancel your subscription, the cancellation will become effective at the end of the current monthly subscription period.</p>
        
         <p className="mb-4">Thank you for choosing aiflavoured!</p>
       </div>

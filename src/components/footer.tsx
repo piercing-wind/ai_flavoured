@@ -1,5 +1,5 @@
 import { Divider } from "./divider"
-import { Instagram, Instagram2, LinkdinIcon, RedditIcon, TwitterIcon } from "./socialIcons";
+import { Instagram, Instagram2, LinkdinIcon, RedditIcon, TwitterIcon, Youtube } from "./socialIcons";
 import Link from "next/link";
 import CSS from "@/app/frontpage.module.css"
 
@@ -19,7 +19,8 @@ export const Footer = ({fixedBgWhite = false}:{fixedBgWhite?:boolean}) => {
                   <div className="flex space-x-4">
                         <Link href="https://www.linkedin.com/company/ai-flavoured" target="_blank"><LinkdinIcon  classNameForBg="bg-aiflavoured dark:bg-none" color={fixedBgWhite ? "#ff0786" : "#ffffff"}/></Link>
                         <Link href="https://x.com/aiflavoured" target="_blank"> <TwitterIcon classNameForBg="bg-aiflavoured dark:bg-none" color={fixedBgWhite ? "#ff0786" : "#ffffff"}/></Link>
-                        <Link href="https://www.instagram.com/ai.flavoured/" target="_blank"><Instagram2  size={25} /></Link>
+                        <Link href="https://www.instagram.com/aiflavoured_/" target="_blank" className="dark:bg-white rounded-full w-8 h-8 flex items-center justify-center"><Instagram2  size={28} /></Link>
+                        <Link href="https://www.youtube.com/@AI-Flavoured" target="_blank" className="dark:bg-white rounded-full flex items-center justify-center"><Youtube  size={32}  color="#ff0786"/></Link>
                   </div>
                </div>
              <div className="p-8 md:ml-12">
@@ -37,7 +38,6 @@ export const Footer = ({fixedBgWhite = false}:{fixedBgWhite?:boolean}) => {
                 <h5 className="text-base font-semibold opacity-80">Company</h5>
                 <ul className="font-medium space-y-2 md:space-y-3 py-2 text-sm">
                    <li><a href="/about">About</a></li>
-                   <li><a href="/security">Security</a></li>
                    <li><a href="/pricing" >FAQ</a></li>
                    <li><a href="/login">Login</a></li>
                    <li><a href="/pricing">Pricing</a></li>
@@ -47,9 +47,9 @@ export const Footer = ({fixedBgWhite = false}:{fixedBgWhite?:boolean}) => {
              <div className="p-8 md:ml-12">
                 <h5 className="text-base font-semibold opacity-80">Others</h5>
                 <ul className="font-medium space-y-2 md:space-y-3 py-2 text-sm">
-                   <li className=""><a href="/privacy-policy">Privacy Policy</a></li>
-                   <li className=""><a href="/terms">Terms & Condition</a></li>
-                   <li className=""><a href="/contact-us">Contact Us</a></li>
+                   <li><a href="/privacy-policy">Privacy Policy</a></li>
+                   <li><a href="/terms">Terms & Condition</a></li>
+                   <li><a href="/contact-us">Contact Us</a></li>
                    <li><a href="/support">Report Bug / Support</a></li>
                </ul>
              </div>

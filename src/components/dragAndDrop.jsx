@@ -32,7 +32,6 @@ export const DragAndDrop = ({userSession, quota}) => {
   const router = useRouter();
 
   const [remainingQuota, setRemainingQuota] = useState(quota);
-  console.log(remainingQuota);
   const [fileLengthError, setFileLengthError] = useState(false);
   const [pricing, setPricing] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
@@ -137,7 +136,7 @@ export const DragAndDrop = ({userSession, quota}) => {
       router.push("/login?callbackUrl=/chat");
       return;
    }
-   if(remainingQuota <= 0){
+   if(userSession.subscription === 'free' && remainingQuota <= 0){
       toast({
          variant: "destructive",
          title: "Insufficient Quota",
@@ -252,7 +251,7 @@ export const DragAndDrop = ({userSession, quota}) => {
       router.push("/login?callbackUrl=/chat");
       return;
    }
-   if(remainingQuota <= 0){
+   if(userSession.subscription === 'free' && remainingQuota <= 0){
       toast({
          variant: "destructive",
          title: "Insufficient Quota",

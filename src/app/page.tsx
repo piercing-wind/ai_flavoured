@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { Divider } from '@/components/divider';
 import { BlubIcon, ProfessionalIcon, ResearchIcon, StudentIcon } from '@/components/socialIcons';
 import { Footer } from '@/components/footer';
+import Link from 'next/link';
 
 
 const Page = () => {
@@ -26,14 +27,15 @@ const Page = () => {
       <Header/>
       <WelcomeContent />
     <div className="w-full mb-20 space-y-8 sm:space-y-14 xl:space-y-36 md:mt-24 xl:mt-40 flex flex-col items-center justify-center">
-
          <div className='w-[95%] sm:w-[80%] md:flex lg:flex-nowrap relative items-center justify-between sm:p-2'>
                 <div className='hidden md:flex absolute md:scale-75 -top-[55%]  xl:scale-125 left-[40%] lg:-top-[45%] xl:-top-[55%] rotate-[19deg] z-[1]'>
                    <DashedArrow h={'100%'} w={'100%'}   />
                 </div>
             <div className='w-full dark:bg-transparent bg-warm-white md:w-[50%] lg:w-[50%] xl:w-[40%] space-y-10 border p-4 rounded-xl relative overflow-hidden'>
                {/* <div className="top-5 left-5 w-28 h-28 absolute bg-pink-500 blur-xl dark:hidden"/> */}
+              <Link href='/aipresentation' className='w-full'>
                <h1 className={`${Styles.whiteGlow} text-4xl lg:text-6xl `}>Generate AI Presentation</h1>
+                </Link>
                <p className='text-xl lg:text-2xl ml-4'>Create stunning PowerPoint slides in minutes with our AI-powered tools. Transform any document into a professional presentation effortlessly.</p>                  
             </div>
             <DisplayPowerpointImages/>
@@ -51,8 +53,10 @@ const Page = () => {
          <ImageDisplayLoop images={dalleImages}/>
          <div className='w-[22rem] sm:w-[30rem] lg:w-[55%] h-full space-y-2 relative ml-5'> 
             <div className={`${CSS.whiteGlow} text-3xl sm:text-5xl `}>
-                <h1 className='pb-5 xl:py-5'>Generate AI Images with</h1>
-                <p className='flex justify-between items-center'><span className=''>DALL-E 3 </span> <ChatGPTIconGlow size={50}/></p>
+                  <Link href='/image'>
+                     <h1 className='pb-5 xl:py-5'>Generate AI Images with</h1>
+                      <p className='flex justify-between items-center'><span className=''>DALL-E 3 </span> <ChatGPTIconGlow size={50}/></p>
+                  </Link>
             </div>
             <p className='text-xl sm:text-2xl pt-5'>DALL·E 3 comprehends much more nuance and details, enabling you to effortlessly transform your ideas into highly accurate images.</p>
          </div>
@@ -61,8 +65,10 @@ const Page = () => {
       <div className='w-full lg:h-[19rem] px-5 xl:px-20 space-y-16 lg:space-y-0 flex lg:flex-row items-center flex-col justify-center lg:justify-between'>
          <div className='w-[22rem] sm:w-[30rem] lg:w-[55%] h-full space-y-2 relative ml-5 sm:mr-5'> 
             <div className={`${CSS.whiteGlow} text-3xl sm:text-5xl `}>
+               <Link href='/image'>
                 <h1 className='pb-5 xl:py-5'>Generate AI Images with</h1>
                 <p className='flex justify-between items-center'><span className=''>Stable Diffusion XL</span> <StableDiffusionIcon size={50}/></p>
+               </Link>
             </div>
             <p className='text-xl sm:text-2xl pt-5'>Unleashing Humanity&#39;s Potential Through Generative AI for everyone, everywhere.</p>
          </div>
@@ -84,7 +90,9 @@ const Page = () => {
 
          <div className='w-[22rem] sm:w-[30rem] lg:w-[55%] h-full space-y-2 relative ml-5'> 
             <div className={`${CSS.whiteGlow} text-3xl sm:text-5xl `}>
+               <Link href='/audio'>
                 <h1 className='pb-5 xl:py-5'>Generate AI Audio</h1>
+                </Link>
             </div>
             <p className='text-xl sm:text-2xl pt-5'>Powerful and Feature-Rich, Online Text-to-Voice Studio</p>
             <ol  className='text-xl ml-4 list-disc'>

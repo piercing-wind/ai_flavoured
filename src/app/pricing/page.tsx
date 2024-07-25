@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Divider } from "@/components/divider";
 import { Header } from "@/components/header/header";
 import { CheckIcon } from "@/components/socialIcons";
@@ -9,6 +10,10 @@ import {prices as price} from  "@/components/globalVariables";
 import { Metadata } from "next";
 import CSS from "./pricing.module.css";
 import { SeeMore } from "@/components/pricingPageSeeMore";
+import { redirect } from 'next/navigation'
+import { PremiumAnnualButton, PremiumMonthlyButton, UnlimitedAnnualButton, UnlimitedMonthlyButton } from "@/components/uiClients/purchseButton";
+import { getUserSession } from "@/actions/userSession";
+import Script from 'next/script'
 
 const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
 
@@ -55,7 +60,7 @@ export const metadata: Metadata = {
   };
 
 
-const Page = () => {
+const Page = async () => {
    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
    const currency = timezoneCurrencies[ timeZone as keyof typeof timezoneCurrencies];
    let currencyRateValue = getCurrentRate["INR"]; // default value
@@ -72,8 +77,10 @@ const Page = () => {
       annualPremium : '/checkout?plan=annual-premium',
       annualUnlimited : '/checkout?plan=annual-unlimited', 
    }
-
+   const user = await getUserSession();
   return (
+   <>
+   <Script src="https://checkout.razorpay.com/v1/checkout.js" />
   <div className="bg-white text-black">
    <Header/>
    <div className="flex flex-grow w-full h-[49rem] items-center justify-center text-center relative">
@@ -113,8 +120,8 @@ const Page = () => {
                <li className="flex gap-x-4 items-center" ><CheckIcon size={20} />Limited Access</li>
             </ul>
             <div className="w-full flex items-center justify-center pt-4">
-               <Link href={subscription.flavour}  className='flex items-center justify-center text-2xl font-bold my-2 sm:my-5 p-3 rounded-md brightness-90 w-[80%] shadow-lg border border-neutral-100 bg-background hover:bg-neutral-200 hover:text-accent-foreground text-black text-opacity-70 hover:scale-[1.01]'>
-                  Get Started
+               <Link href='/flavours' className='flex items-center justify-center text-2xl font-bold my-2 sm:my-5 h-14 p-3 rounded-md brightness-90 w-[80%] shadow-lg border border-neutral-100 bg-background hover:bg-neutral-200 hover:text-accent-foreground text-black text-opacity-70 hover:scale-[1.01]'>
+                    Get Started
                </Link>
             </div>
          </div>
@@ -141,9 +148,7 @@ const Page = () => {
                <li className="flex gap-x-4 items-center" ><CheckIcon size={20} />Full Access to 2 Image Models</li>
             </ul>
             <div className="w-full flex items-center justify-center pt-4">
-               <Link href={subscription.monthlyPremium} className='flex items-center justify-center text-2xl font-bold rounded-md my-2 sm:my-5 ml-3 p-3 w-[80%] shadow-sm hover:scale-[1.01] text-white bg-gradient-to-r from-pink-400 to-purple-800 hover:from-pink-300 hover:to-purple-700'>
-                  Get Started
-               </Link>
+            <PremiumMonthlyButton  user={user}/>
             </div>
          </div>
        </div>
@@ -169,9 +174,7 @@ const Page = () => {
                <li className="flex gap-x-4 items-center" ><CheckIcon size={20} />Unlimited Features</li>
             </ul>
             <div className="w-full flex items-center justify-center pt-4 sm:py-10">
-               <Link href={subscription.monthlyUnlimited} className='flex items-center justify-center text-2xl font-bold rounded-md my-2 sm:my-5 ml-3 p-3 w-[80%] shadow-sm hover:scale-[1.01] text-white bg-gradient-to-r from-neutral-800 to-neutral-600 hover:from-netural-600 hover:to-purple-700'>
-                  Get Started
-               </Link>
+            <UnlimitedMonthlyButton user={user}/>
             </div>
          </div>
        </div>
@@ -232,9 +235,7 @@ const Page = () => {
                <li className="flex gap-x-4 items-center" ><CheckIcon size={20} />Full Access to 2 Image Models</li>
             </ul>
             <div className="w-full flex items-center justify-center pt-4">
-               <Link href={subscription.annualPremium} className='flex items-center justify-center text-2xl font-bold rounded-md my-2 sm:my-5 ml-3 p-3 w-[80%] shadow-sm hover:scale-[1.01] text-white bg-gradient-to-r from-pink-400 to-purple-800 hover:from-pink-300 hover:to-purple-700'>
-                  Get Started
-               </Link>
+               <PremiumAnnualButton user={user}/>
             </div>
          </div>
        </div>
@@ -260,9 +261,7 @@ const Page = () => {
                <li className="flex gap-x-4 items-center" ><CheckIcon size={20} />Unlimited Features</li>
             </ul>
             <div className="w-full flex items-center justify-center pt-3 sm:py-10">
-               <Link href={subscription.annualUnlimited} className='flex items-center justify-center text-2xl font-bold rounded-md my-2 sm:my-5 ml-3 p-3 w-[80%] shadow-sm hover:scale-[1.01] text-white bg-gradient-to-r from-neutral-800 to-neutral-600 hover:from-netural-600 hover:to-purple-700'>
-                  Get Started
-               </Link>
+               <UnlimitedAnnualButton user={user}/>
             </div>
          </div>
        </div>
@@ -274,7 +273,7 @@ const Page = () => {
      </div>
      <Footer fixedBgWhite/>  
   </div>
-  
+  </> 
   );
 };
 

@@ -20,6 +20,7 @@ export const metadata = {
         url: "https://www.linkedin.com/in/sourabh-sharma-8987451a2/",
       },
     ],
+    name: 'AI Flavoured',
     generator: "AI Flavoured",
     keywords: [
       "AI",

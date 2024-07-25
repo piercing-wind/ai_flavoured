@@ -21,7 +21,7 @@ export default {
           }
         } catch (error) {
           return null;
-        }a
+        }
       },
     }),
     GithubProvider({

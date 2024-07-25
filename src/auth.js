@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getTwoFAConfirmationByUserId } from "./data/twoFAConfirmation";
 import { getSubscriptionQuota } from "./actions/subscriptionQuota/subscriptionQuota";
+import { checkUserSubscription } from "./lib/updateUserQuota";
 
 export const {
   handlers: { GET, POST },
@@ -66,7 +67,8 @@ export const {
           where: {
             id: twoFAConfirmation.id,
           },});
-      };       
+      }; 
+      checkUserSubscription(user).catch((e) => console.log("Error : ", e.message));
       }catch(e){
         if(e instanceof CredentialsSignin){
           console.log("Error : ", e.message);
@@ -81,16 +83,15 @@ export const {
          token.name = session.name;
       }
 
-      // console.log("User : ", user);
-      // console.log("Token : ", token);
-      if (!token.sub) return token; // if no user, return empty token
+      if (!token.sub) return token; 
       const existingUser = await getUserById(token.sub);
 
       //initializing the Base Quota for the new user
       if(user){
-      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      token.timeZone = timeZone;
+         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+         token.timeZone = timeZone;
       }
+
       if (!existingUser) return token; // if no user, return empty token
       token.role = existingUser.role;
       token.subscription = existingUser.subscription;

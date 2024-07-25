@@ -139,7 +139,7 @@ const Page = async () => {
                       <TableHead className="w-[20%] text-center">AI</TableHead>
                       <TableHead className="w-[5%] text-center">Remaing</TableHead>
                       <TableHead className="text-center">Usage</TableHead>
-                      <TableHead className="text-center w-[15%]">Free Tier</TableHead>
+                      <TableHead className="text-center w-[15%]">{user.subscription === 'free' && 'Free Tier'}{user.subscription === 'premium' && 'Premium'}{user.subscription === 'unlimited' && 'Unlimited'}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

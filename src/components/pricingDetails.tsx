@@ -46,14 +46,13 @@ export const MonthPricing = () => {
                   </ul>
             </li>
             <li>
-               <h1 className="font-bold text-xl">1 AI Presentation (.pptx)</h1>
             </li>
             <li>
                <h1 className="font-bold text-xl">Limited Features</h1>
                    <ul className="">
                      <li className="flex items-center leading-normal my-1">✓ 2 files uploads in Chat/Speak WithDoc /day</li>
                      <li className="flex items-center">✓ 2 Free Image Extraction /day</li>
-                     <li className="flex items-center">✓ 1 Voice Extraction</li>
+                     <li className="flex items-center">✓ 200 Voice Charcter&apos;s Extraction</li>
                   </ul>
             </li>
             <li>
@@ -85,12 +84,12 @@ export const MonthPricing = () => {
                <h1 className="font-bold text-xl">Large Usage</h1>
                   <ul className="">
                      <li className="flex items-center leading-normal my-1">✓ 2000 questions with Aiflavoured</li>
-                     <li className="flex items-center">✓ 100 Questions with GPT - 4o /day</li>
-                     <li className="flex items-center">✓ 100 Questions with GPT - 4 /day</li>
+                     <li className="flex items-center">✓ 100 Questions with GPT - 4o /mo</li>
+                     <li className="flex items-center">✓ 100 Questions with GPT - 4 /mo</li>
                   </ul>
             </li>
             <li className="my-2">
-               <h1 className="font-bold text-xl">Unlimited Access to Speak / Chat WithDoc.</h1>
+               <h1 className="font-bold text-xl">Unlimited Access to Chat With Doc.</h1>
                    <ul className="">
                      <li className="flex items-center">✓ Up to 2000 pages per PDF</li>
                      <li className="flex items-center ">✓ 3 Models availabe to switch for chat</li>
@@ -109,7 +108,7 @@ export const MonthPricing = () => {
             <li className="my-2">
                <h1 className="font-bold text-xl">Full Access to AI Image Generation</h1> 
                <ul className="">
-                     <li className="flex items-center leading-normal my-1">✓ 100 AI Images Generation (Text to Image)</li>
+                     <li className="flex items-center leading-normal my-1">✓ 150 AI Images Generation (Text to Image)</li>
                      <li className="flex items-center leading-normal my-1 ">✓ Icon creations</li> 
                      <li className="flex items-center ">✓ Upscale images to HD Quality </li>
                      <li className="flex items-center ">✓ 2 Images model Dall-E and SDXL &nbsp;<BsFillInfoCircleFill  data-tooltip-id="imageInfo" data-tooltip-content="Upscaling is supported in SDXL (stable diffusion extra lagre model. DALL-E-2 and DALL-E-3 Both Models are avaliable"/></li>
@@ -237,14 +236,13 @@ export const AnnualPricing = () => {
                   </ul>
             </li>
             <li>
-               <h1 className="font-bold text-xl">1 AI Presentation (.pptx)</h1>
             </li>
             <li>
                <h1 className="font-bold text-xl">Limited Features</h1>
                    <ul className="">
                      <li className="flex items-center leading-normal my-1">✓ 2 files uploads in Chat/Speak WithDoc /day</li>
                      <li className="flex items-center">✓ 2 Free Image Extraction /day</li>
-                     <li className="flex items-center">✓ 1 Voice Extraction</li>
+                     <li className="flex items-center">✓ 200 Voice Charcter&apos;s Extraction</li>
                   </ul>
             </li>
             <li>
@@ -276,12 +274,12 @@ export const AnnualPricing = () => {
                <h1 className="font-bold text-xl">Large Usage</h1>
                   <ul className="">
                      <li className="flex items-center leading-normal my-1">✓ 2000 questions with Aiflavoured</li>
-                     <li className="flex items-center">✓ 100 Questions with GPT - 4o /day</li>
-                     <li className="flex items-center">✓ 100 Questions with GPT - 4 /day</li>
+                     <li className="flex items-center">✓ 200 Questions with GPT - 4o /mo</li>
+                     <li className="flex items-center">✓ 100 Questions with GPT - 4 /mo</li>
                   </ul>
             </li>
             <li className="my-2">
-               <h1 className="font-bold text-xl">Unlimited Access to Speak / Chat WithDoc.</h1>
+               <h1 className="font-bold text-xl">Unlimited Access to Chat With Doc.</h1>
                    <ul className="">
                      <li className="flex items-center">✓ Up to 2000 pages per PDF</li>
                      <li className="flex items-center ">✓ 3 Models availabe to switch for chat</li>
@@ -300,7 +298,7 @@ export const AnnualPricing = () => {
             <li className="my-2">
                <h1 className="font-bold text-xl">Full Access to AI Image Generation</h1> 
                <ul className="">
-                     <li className="flex items-center leading-normal my-1">✓ 100 AI Images Generation (Text to Image)</li>
+                     <li className="flex items-center leading-normal my-1">✓ 150 AI Images Generation (Text to Image)</li>
                      <li className="flex items-center leading-normal my-1 ">✓ Icon creations</li> 
                      <li className="flex items-center ">✓ Upscale images to HD Quality </li>
                      <li className="flex items-center ">✓ 2 Images model Dall-E and SDXL &nbsp;<BsFillInfoCircleFill  data-tooltip-id="imageInfo" data-tooltip-content="Upscaling is supported in SDXL (stable diffusion extra lagre model. DALL-E-2 and DALL-E-3 Both Models are avaliable"/></li>

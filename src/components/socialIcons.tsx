@@ -324,7 +324,7 @@ return (
 export const Instagram2 =({size=32, color='#000000'}:{size?:number , color ?: string})=>{
    return (
 <svg version="1.1" id="Layer_1" height={size} width={size} className="fill-aiflavoured rounded-md overflow-hidden" fill={color} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 56.7 56.7" enable-background="new 0 0 56.7 56.7" xmlSpace="preserve">
+	 viewBox="0 0 56.7 56.7" xmlSpace="preserve">
 <g>
 	<path d="M28.2,16.7c-7,0-12.8,5.7-12.8,12.8s5.7,12.8,12.8,12.8S41,36.5,41,29.5S35.2,16.7,28.2,16.7z M28.2,37.7
 		c-4.5,0-8.2-3.7-8.2-8.2s3.7-8.2,8.2-8.2s8.2,3.7,8.2,8.2S32.7,37.7,28.2,37.7z"/>
@@ -337,4 +337,23 @@ export const Instagram2 =({size=32, color='#000000'}:{size?:number , color ?: st
 </svg>
 
    )
+}
+
+export const Youtube =({size=32, color="#000000"}:{size?:number, color?: string})=>{
+   return(
+      <svg
+      height={size}
+      width={size}
+      viewBox="0 0 512 512"
+      xmlSpace="preserve"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      style={{ fillRule: "evenodd", clipRule: "evenodd", strokeLinejoin: "round", strokeMiterlimit: 2 }}
+    >
+      <path
+        d="M501.303,132.765c-5.887,-22.03 -23.235,-39.377 -45.265,-45.265c-39.932,-10.7 -200.038,-10.7 -200.038,-10.7c0,0 -160.107,0 -200.039,10.7c-22.026,5.888 -39.377,23.235 -45.264,45.265c-10.697,39.928 -10.697,123.238 -10.697,123.238c0,0 0,83.308 10.697,123.232c5.887,22.03 23.238,39.382 45.264,45.269c39.932,10.696 200.039,10.696 200.039,10.696c0,0 160.106,0 200.038,-10.696c22.03,-5.887 39.378,-23.239 45.265,-45.269c10.696,-39.924 10.696,-123.232 10.696,-123.232c0,0 0,-83.31 -10.696,-123.238Zm-296.506,200.039l0,-153.603l133.019,76.802l-133.019,76.801Z"
+        style={{ fillRule: "nonzero", fill: color }}
+      />
+    </svg>
+   )  
 }

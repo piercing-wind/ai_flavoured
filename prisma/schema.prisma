@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("AZURE_PG_CONNECTION_STRIGN")
+  url      = env("POSTGRES_DATABASE_URL")
 }
 
 model User {
@@ -199,7 +199,7 @@ model subscriptionQuota {
   gpt4Question       Int                @default(0)
   gpt4oQuestion      Int                @default(2)
   aiImages           Int                @default(2)
-  textToSpeech       Int                @default(1)
+  textToSpeech       Int                @default(200)
   user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -211,6 +211,50 @@ model support {
   description String
   submittedBy String
   file        String[]
+}
+
+model subscriptionDetail {
+   id                    String    @id @default(cuid())
+   subscriptionId        String    @unique
+   planId                String
+   status                String
+   currentStart          BigInt?
+   currentEnd            BigInt?
+   userEmail             String
+   userId                String
+   chargeAT              Int?
+   startAt               Int?
+   endAt                 BigInt?
+   createdAt             Int?
+   expiresBy             BigInt?
+   updatedAt             DateTime @default(now()) 
+   paymentMethod         String
+
+}
+
+model transaction{
+   id String             @id @default(cuid())
+   currency              String
+   status                String
+   orderId               String
+   international         Boolean @default(false)
+   paymentMethod         String
+   vpa                   String?
+   email                 String?
+   contact               String?
+   cardId                String?
+   card                  Json?  
+   bank                  String?
+   wallet                String?
+   tokenId               String?
+   fee                   Int?
+   tax                   Int?
+   errorCode             String?
+   errorDes              String?
+   upiTnxID              String?
+   rrn                   String?
+   createdAt             Int
+   subscriptionId        String
 }
 
 enum UserRole {

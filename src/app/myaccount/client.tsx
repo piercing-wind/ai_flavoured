@@ -45,7 +45,7 @@ export const NameChangeButton = ({
           <h1 className="text-nowrap tracking-wide">{newName}</h1>
           <span className="flex gap-5">
             {subscription === "free" && <Free />}
-            {subscription === "pro" && <Pro />}
+            {subscription === "premium" && <Pro />}
             {subscription === "unlimited" && <Unlimited />}
           </span>
         </div>

@@ -8,7 +8,7 @@ export const Free = ({className}:{className?:string}) => {
 
 export const Pro = ({className}:{className?:string}) => {
    return (
-      <p className={cn(`${CSS.animate_charcter} ${className} uppercase flex items-center justify-center text-center tracking-wider`)} >Premium</p>
+      <p className={cn(`${CSS.animate_charcter} ${className} uppercase flex items-center tracking-wider`)} >Premium</p>
    )
 }
 export const Unlimited = ({className}:{className?:string}) => {
