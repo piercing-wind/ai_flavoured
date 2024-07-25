@@ -56,6 +56,14 @@ export const metadata = {
       follow: true,
     },
     alternates: { canonical: "/" },
+    openGraph: {
+      title: "AI Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization AI Chat with doc",
+      description:"Experience the best in AI with our comprehensive solutions. with chatgpt-4,chatgpt-4o, Generate stunning images with DALL-E and SDXL, create professional presentations from any document, transform text into high-quality audio, and quickly summarize PDFs. Enhance your productivity with our advanced AI tools.",
+      url: `${website}/flavours`,
+      type: "website",
+      locale: "en_IN",
+      site_name: "AI Flavoured - Flavours",    
+    }
   };
 
 const Page = async () => {

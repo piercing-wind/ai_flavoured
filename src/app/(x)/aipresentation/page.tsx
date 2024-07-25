@@ -28,6 +28,13 @@ export const metadata: Metadata = {
       follow: true,
     },
    alternates: { canonical: '/aipresentation' },
+   openGraph:{
+      type: 'website',
+      url: `${website}/aipresentation`,
+      title: 'AI Presentation Maker | PDF to PPTX | GPT-4 Document Summarizer',
+      siteName: 'AI Flavoured - AI Presentation',
+      description: 'Make ai presentations with our AI-powered tools. Utilize GPT-4o and GPT-4 models to effortlessly convert PDFs to PPTX and PPT formats. Create stunning AI presentations with our AI PPT and AI PPTX makers. Experience the power of cutting-edge AI presentation technology for unparalleled creativity and efficiency.',
+   }
  };
  
  

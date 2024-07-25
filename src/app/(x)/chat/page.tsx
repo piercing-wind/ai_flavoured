@@ -27,6 +27,14 @@ export const metadata: Metadata = {
    alternates: { canonical: '/chat' },
    category: 'Artificial Intelligence',
    classification: 'Chat Software',
+   openGraph:{
+      type: 'website',
+      url: `${website}/chat`,
+      title: 'AI Chat-chatbot Assistant AI PDF Summarizer | Powered by ChatGPT openai',
+      siteName: 'AI Flavoured - Chat With Doc',
+      description: 'Summarize PDF documents with AI and ask questions with our ChatGPT-powered software. Get instant, accurate summaries and answers using advanced GPT-4 technology.',
+ 
+   }
  };
  
 const Page=async ()=>{   

@@ -50,14 +50,19 @@ export const metadata: Metadata = {
       card : 'summary_large_image'
    },
    openGraph:{
-         images:[
-            {
-               url : "/opengraph-image.jpg",
-               height : 630,  
-               width : 1200,
-               alt : "Welcome to Ai Flavoured"
-            }
-         ]
+      type : 'website',
+      url : website,
+      title : "Ai Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization",
+      siteName : "AI Flavoured",
+      images:[
+         {
+            url : "/opengraph-image.jpg",
+            height : 630,  
+            width : 1200,
+            alt : "Welcome to Ai Flavoured"
+         }
+      ],
+      description : "Experience the best in AI with our comprehensive solutions. Generate stunning images with DALL-E and SDXL, create professional presentations from any document, transform text into high-quality audio, and quickly summarize PDFs. Enhance your productivity with our advanced AI tools.",
    }
  };
 export default function RootLayout({

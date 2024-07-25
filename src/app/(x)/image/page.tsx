@@ -67,6 +67,13 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: { canonical: "/image" },
+  openGraph: {
+      type: "website",
+      url: `${website}/image`,
+      title: "Generate AI Images Online with DALL-E 3 and SDXL | AI Image Generator",
+      siteName: "AI Image Generator",
+      description: "Generate stunning AI images with our powerful and popular AI Image Generator using SDXL and DALL-E 3. Explore stable diffusion online and OpenAI's generative AI tools. Create now!",
+   },
 };
 
 export default async function Page() {

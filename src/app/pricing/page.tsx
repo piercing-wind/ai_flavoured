@@ -18,7 +18,7 @@ import Script from 'next/script'
 const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
 
 export const metadata: Metadata = {
-   title: "Ai Flavoured | Pricing Best AI Tools",
+    title: "Ai Flavoured | Pricing Best AI Tools",
     metadataBase: new URL(`${website}/pricing`),
     description:"Best Value AI Services Pricing for AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization,Free Ai Images, Free Ai Audio, Free and Premium Plans available.",
     applicationName: "AI Flavoured", 
@@ -57,6 +57,13 @@ export const metadata: Metadata = {
       follow: true,
     },
     alternates: { canonical: "/pricing" },
+    openGraph:{
+      type : "website",
+      siteName: "AI Flavoured - Pricing",
+      title: "Ai Flavoured | Pricing Best AI Tools",
+      url: `${website}/pricing`,
+      description:"Best Value AI Services Pricing for AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization,Free Ai Images, Free Ai Audio, Free and Premium Plans available.",
+    }
   };
 
 

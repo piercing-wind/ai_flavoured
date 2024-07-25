@@ -40,17 +40,18 @@ export const PremiumMonthlyButton = ({user}:{user:UserSession}) => {
    const [loading, setLoading] = useState(false);
    const {toast} = useToast();
  
+   
    const handleClick = async () => {
       setLoading(true);
       try{
-          if (!user) return <div className="w-full h-screen overflow-hidden flex flex-col items-center justify-center"><h1 className="text-4xl font-bold">You are not logged in!</h1> <p>Please login here <Link href={'/login?callbackUrl=/checkout'}>Login</Link></p></div>
+         if (user === null){router.push('/login?callbackUrl=/pricing'); return;}
           const { email, id, subscription } = user;
 
           const currentDate = new Date();
           currentDate.setFullYear(currentDate.getFullYear() + 30);
           const expireByTimestamp = Math.floor(currentDate.getTime() / 1000);
-
-          const response = await fetch('/api/razorpaysubscription', {
+          console.log(process.env.NEXT_PUBLIC_WEBSITE_URL)
+          const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/razorpaysubscription`, {
              method : 'POST',
              headers: {
                 'Content-Type': 'application/json'
@@ -65,6 +66,7 @@ export const PremiumMonthlyButton = ({user}:{user:UserSession}) => {
              })
           })
           const res =await response.json();
+          console.log(res);
           if(res.response === 'ok'){
             const options: RazorpayOptions = {
                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
@@ -117,14 +119,14 @@ export const UnlimitedMonthlyButton = ({user}:{user:UserSession}) => {
    const handleClick = async () => {
       setLoading(true);
       try{
-          if (!user) return <div className="w-full h-screen overflow-hidden flex flex-col items-center justify-center"><h1 className="text-4xl font-bold">You are not logged in!</h1> <p>Please login here <Link href={'/login?callbackUrl=/checkout'}>Login</Link></p></div>
+         if (user === null){router.push('/login?callbackUrl=/pricing'); return;}
           const { email, id, subscription } = user;
 
           const currentDate = new Date();
           currentDate.setFullYear(currentDate.getFullYear() + 30);
           const expireByTimestamp = Math.floor(currentDate.getTime() / 1000);
 
-          const response = await fetch('/api/razorpaysubscription', {
+          const response = await  fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/razorpaysubscription`, {
              method : 'POST',
              headers: {
                 'Content-Type': 'application/json'
@@ -191,14 +193,15 @@ export const PremiumAnnualButton = ({user}:{user:UserSession}) => {
    const handleClick = async () => {
       setLoading(true);
       try{
-          if (!user) return <div className="w-full h-screen overflow-hidden flex flex-col items-center justify-center"><h1 className="text-4xl font-bold">You are not logged in!</h1> <p>Please login here <Link href={'/login?callbackUrl=/checkout'}>Login</Link></p></div>
+         if (user === null){router.push('/login?callbackUrl=/pricing'); return;}
+
           const { email, id, subscription } = user;
 
           const currentDate = new Date();
           currentDate.setFullYear(currentDate.getFullYear() + 30);
           const expireByTimestamp = Math.floor(currentDate.getTime() / 1000);
 
-          const response = await fetch('/api/razorpaysubscription', {
+          const response = await  fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/razorpaysubscription`, {
              method : 'POST',
              headers: {
                 'Content-Type': 'application/json'
@@ -265,14 +268,14 @@ export const UnlimitedAnnualButton = ({user}:{user:UserSession}) => {
    const handleClick = async () => {
       setLoading(true);
       try{
-          if (!user) return <div className="w-full h-screen overflow-hidden flex flex-col items-center justify-center"><h1 className="text-4xl font-bold">You are not logged in!</h1> <p>Please login here <Link href={'/login?callbackUrl=/checkout'}>Login</Link></p></div>
+         if (user === null){router.push('/login?callbackUrl=/pricing'); return;}
           const { email, id, subscription } = user;
 
           const currentDate = new Date();
           currentDate.setFullYear(currentDate.getFullYear() + 30);
           const expireByTimestamp = Math.floor(currentDate.getTime() / 1000);
 
-          const response = await fetch('/api/razorpaysubscription', {
+          const response = await  fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/razorpaysubscription`, {
              method : 'POST',
              headers: {
                 'Content-Type': 'application/json'

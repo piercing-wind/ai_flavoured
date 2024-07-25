@@ -46,6 +46,13 @@ export const metadata: Metadata = {
      follow: true,
    },
    alternates: { canonical: "/about" },
+   openGraph: {
+       type: "website",
+       url: `${website}/about`,
+       title: "AI Flavoured - About Us",
+       siteName: "AI Flavoured",
+       description: "AI Chat- Chatbot Discover AI Flavoured: your ultimate platform for creating engaging social content effortlessly. Whether you're a student or a professional, our AI-powered tools, including AI Image, ChatGPT, DALL-E, and Stable Diffusion XL, simplify the creation of standout presentations, images, audio, and more. Join us in making content creation accessible, efficient, and enjoyable for everyone.",
+    },
  };
 
 
