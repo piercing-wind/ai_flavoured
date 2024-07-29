@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import {cn} from "../lib/utils";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeSwitch";
-import path from "path";
+import head from "next/head";
 
 const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
 export const metadata: Metadata = {
@@ -17,6 +17,7 @@ export const metadata: Metadata = {
      },
    ],
    generator: "AI Flavoured",
+
    keywords: [
      "AI",
      "AI Flavoured",
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
    openGraph:{
       type : 'website',
       url : website,
-      title : "Ai Flavoured | AI Image Generation,AI Presentations,AI Audio Creation, and AI PDF Summarization",
+      title : "Ai Flavoured",
       siteName : "AI Flavoured",
       images:[
          {
@@ -63,6 +64,9 @@ export const metadata: Metadata = {
          }
       ],
       description : "Experience the best in AI with our comprehensive solutions. Generate stunning images with DALL-E and SDXL, create professional presentations from any document, transform text into high-quality audio, and quickly summarize PDFs. Enhance your productivity with our advanced AI tools.",
+   },  
+   other:{
+      ["bingbot"]: "noarchive",
    }
  };
 export default function RootLayout({
@@ -72,6 +76,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head><meta property="fb:app_id" content="124024574287414"/></head>
       <body className={cn("antialiased","font-helvetica")}>
        <ThemeProvider
             attribute="class"
