@@ -3,6 +3,7 @@ import {cn} from "../lib/utils";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeSwitch";
 import head from "next/head";
+import Script from 'next/script'
 
 const website = process.env.WEBSITE_URL || 'https://aiflavoured.com';
 export const metadata: Metadata = {
@@ -76,7 +77,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head><meta property="fb:app_id" content="124024574287414"/></head>
+      <head>
+         <meta property="fb:app_id" content="124024574287414"/>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "AI Flavoured",
+            "url": "https://aiflavoured.com/"
+          }
+        `}} />  
+      </head>
       <body className={cn("antialiased","font-helvetica")}>
        <ThemeProvider
             attribute="class"
