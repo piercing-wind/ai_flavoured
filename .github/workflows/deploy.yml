@@ -11,9 +11,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [21.6.1]
+        node-version: [22.6.0]
 
     steps:
+    - name : Truning Maintenance Mode on
+      run: sudo touch /var/www/html/maintenance.flag
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -29,3 +31,7 @@ jobs:
     - name: Change directory
       run: cd /home/aiflavaoured-sourabh/actions-runner/_work/ai_flavoured/ai_flavoured
     - run: pm2 restart 0 
+    - name : Truning Maintenance Mode off
+      run: sudo rm /var/www/html/maintenance.flag
+    - run: sudo systemctl restart nginx
+
