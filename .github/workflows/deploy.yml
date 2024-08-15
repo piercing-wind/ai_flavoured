@@ -29,10 +29,10 @@ jobs:
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build 
-   #  - name: Change directory
-   #    run: cd /home/aiflavaoured-sourabh/actions-runner/_work/ai_flavoured/ai_flavoured
-   #  - run: pm2 restart 0 
-   #  - name : Truning Maintenance Mode off
-   #    run: sudo rm /var/www/html/maintenance.flag
-   #  - run: sudo systemctl restart nginx
+    - name: Change directory
+      run: cd /home/aiflavaoured-sourabh/actions-runner/_work/ai_flavoured/ai_flavoured
+    - run: pm2 restart 0 
+    - name : Truning Maintenance Mode off
+      run: sudo rm /var/www/html/maintenance.flag
+    - run: sudo systemctl restart nginx
 

@@ -2,7 +2,8 @@ const { CronJob } = require('cron');
 
 console.log('Starting the cron job');
 const job = new CronJob('0 0 * * *', () => {
-  const res = fetch('https://aiflavoured/api/scheduler', {
+   console.log('Calling the scheduler API');
+  const res = fetch('https://aiflavoured.com/api/scheduler', {
      method: 'GET',
      headers: {
         'Content-Type': 'application/json',
