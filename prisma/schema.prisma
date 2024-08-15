@@ -2,9 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
+datasource db { 
   provider = "postgresql"
-  url      = env("AZURE_PG_CONNECTION_STRING")
+  url      = env("POSTGRESS_CONNECTION_STRING")
 }
 
 model User {

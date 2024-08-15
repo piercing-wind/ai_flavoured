@@ -29,6 +29,10 @@ jobs:
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build 
+    - name: Prisma Migration Deploy
+      run: npx run prisma generate
+    - run: npx run prisma migrate deploy
+
     - name: Change directory
       run: cd /home/ubuntu/actions-runner/_work/ai_flavoured/ai_flavoured
     - name: Install PM2

@@ -1,51 +1,16 @@
 import pg from "pg";
 
-// export const pool = new pg.Pool({
-//   host: process.env.HOST,
-//   user: process.env.USER_NAME,
-//   password: process.env.PASSWORD,
-//   port: 5432 || process.env.PORT,
-//   database: process.env.DATABASE_NAME,
-//   idleTimeoutMillis: 30000,
-// });
-// export const pool = new pg.Pool({
-//   host: process.env.SUPABASE_HOST,
-//   user: process.env.SUPABASE_USER,
-//   password: process.env.SUPABASE_PASSWORD,
-//   port: 6543 || process.env.SUPABASE_PORT,
-//   database: process.env.SUPABASE_DB_NAME,
-//   idleTimeoutMillis: 30000,
-// });
-// export const pool = new pg.Pool({
-//   host: process.env.NEON_HOST,
-//   user: process.env.NEON_USER,
-//   password: process.env.NEON_PASSWORD,
-//   port: 5432 || process.env.NEON_PORT,
-//   database: process.env.NEON_DB_NAME,
-//   idleTimeoutMillis: 30000,
-//   ssl: {
-//    rejectUnauthorized: false
-//   }
-// });
 export const pool = new pg.Pool({
-  host: process.env.AZURE_PGHOST,
-  user: process.env.AZURE_PGUSER,
-  password: process.env.AZURE_PGPASSWORD,
-  port: 5432 || process.env.AZURE_PGPORT,
-  database: process.env.AZURE_PGDATABASE,
+  host: process.env.PG_HOST,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  port: 5432 || process.env.PG_PORT,
+  database: process.env.PG_DATABASE,
   idleTimeoutMillis: 30000,
   ssl: {
    rejectUnauthorized: false
   }
 });
-// export const pool = new pg.Pool({
-//    host: process.env.RDS_DATABASE_HOST_AWS,
-//    database: process.env.PG_DATABASE_NAME_AWS,
-//    user: process.env.PG_USER_AWS,
-//    password: process.env.PG_PASSWORD_AWS,
-//    port: 5432 || process.env.PG_PORT_AWS,
-//    idleTimeoutMillis: 30000,
-//  });
 
 /**
  * **DataBase Query** 
