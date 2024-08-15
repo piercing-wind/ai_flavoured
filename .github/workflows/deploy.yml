@@ -34,9 +34,9 @@ jobs:
       run: cd /home/ubuntu/actions-runner/_work/ai_flavoured/ai_flavoured
 
     - name: Prisma Migration Deploy
-      run: npx run prisma generate
-    - run: npx run prisma migrate deploy
-    
+      run: npx prisma generate
+    - run: npx prisma migrate deploy
+
     - name: Install PM2
       run: npm install pm2 -g
     - run: pm2 restart 0 
