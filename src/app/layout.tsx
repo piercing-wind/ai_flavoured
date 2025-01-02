@@ -77,9 +77,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
          <meta property="fb:app_id" content="124024574287414"/>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `
+        <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `
           {
             "@context": "https://schema.org",
             "@type": "WebSite",
@@ -87,7 +86,6 @@ export default function RootLayout({
             "url": "https://aiflavoured.com/"
           }
         `}} />  
-      </head>
       <body className={cn("antialiased","font-helvetica")}>
        <ThemeProvider
             attribute="class"
